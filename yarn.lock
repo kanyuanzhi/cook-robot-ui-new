@@ -2646,6 +2646,16 @@ signal-exit@^3.0.2:
   resolved "https://registry.npmmirror.com/signal-exit/-/signal-exit-3.0.7.tgz"
   integrity sha512-wnD2ZE+l+SPC/uoS0vXeE9L1+0wuaMqKlfz9AMUo38JsyLSBWSFcHR1Rri62LZc12vLr1gb3jl7iwQhgwpAbGQ==
 
+simple-keyboard-layouts@^3.2.38:
+  version "3.2.38"
+  resolved "https://registry.npmmirror.com/simple-keyboard-layouts/-/simple-keyboard-layouts-3.2.38.tgz#f47b60445124fef33a4e76b90b534487e73b84a5"
+  integrity sha512-2r6kMbgbAGUueEboDjszxivgxozrLe55CJ4TGQO5YZbWv85bSgzuvgLTP0YYMY5aZ11TLeMEjWe1/vOkHVpgrw==
+
+simple-keyboard@^3.6.32:
+  version "3.6.32"
+  resolved "https://registry.npmmirror.com/simple-keyboard/-/simple-keyboard-3.6.32.tgz#61ff250f94ff9d59268285c628f268a6b9457025"
+  integrity sha512-jHyT2466bVel2rhNDhVLsUZgPSMF3yqz8AydGyoMoHOe6NpdLSKSnb2rul8h7sn3IaNt8G0r5m9k/n0UftgN1w==
+
 slice-ansi@^4.0.0:
   version "4.0.0"
   resolved "https://registry.npmmirror.com/slice-ansi/-/slice-ansi-4.0.0.tgz"
@@ -2654,6 +2664,11 @@ slice-ansi@^4.0.0:
     ansi-styles "^4.0.0"
     astral-regex "^2.0.0"
     is-fullwidth-code-point "^3.0.0"
+
+sortablejs@^1.15.0:
+  version "1.15.0"
+  resolved "https://registry.npmmirror.com/sortablejs/-/sortablejs-1.15.0.tgz#53230b8aa3502bb77a29e2005808ffdb4a5f7e2a"
+  integrity sha512-bv9qgVMjUMf89wAvM6AxVvS/4MX3sPeN0+agqShejLU5z5GX4C75ow1O2e5k4L6XItUyAK3gH6AxSbXrOM5e8w==
 
 source-map-js@^1.0.2:
   version "1.0.2"

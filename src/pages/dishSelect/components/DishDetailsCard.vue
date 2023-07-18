@@ -1,0 +1,93 @@
+<template>
+  <q-dialog v-model="shown" persistent transition-show="scale" transition-hide="scale">
+    <q-card class="bg-teal-6 text-white" style="width: 400px">
+      <q-card-section>
+        <div class="text-h6">{{ dish.name }}</div>
+      </q-card-section>
+      <q-card-section class="q-pt-none">
+        <span class="text-subtitle1 text-weight-bold">食材<br></span>
+        {{ ingredientIntro }}
+      </q-card-section>
+
+      <q-card-section class="q-pt-none">
+        <span class="text-subtitle1 text-weight-bold">调料<br></span>
+        {{ seasoningIntro }}
+      </q-card-section>
+
+      <q-card-actions align="right" class="bg-white text-teal-6">
+        <q-btn flat label="大厨编辑" v-close-popup/>
+        <q-btn flat label="调整口味" v-close-popup/>
+        <q-btn flat label="开始炒制" v-close-popup/>
+      </q-card-actions>
+    </q-card>
+  </q-dialog>
+</template>
+
+<script setup>
+import { onMounted, ref } from "vue";
+import { getDish } from "src/api/dish";
+import { getSeasonings } from "src/api/seasoning";
+import { sum } from "lodash";
+
+const props = defineProps([]);
+const dish = ref({});
+
+const shown = ref(false);
+const ingredientIntro = ref("");
+const seasoningIntro = ref("");
+
+const show = async (uuid) => {
+  shown.value = true;
+  const dishData = await getDish(uuid);
+  dish.value = dishData.data.data;
+  const seasoningData = await getSeasonings();
+  const seasoningMap = seasoningData.data.data;
+  ingredientFormat(dish.value.steps);
+  seasoningFormat(dish.value.steps, seasoningMap);
+};
+const ingredientFormat = (steps) => {
+  const ingredientList = []
+  for (let step of steps) {
+    if (step.type === "ingredient") {
+      ingredientList.push(step.name + step.weight + "克")
+    }
+  }
+  ingredientIntro.value = ingredientList.join("，")
+};
+
+const seasoningFormat = (steps, seasoningMap) => {
+  const seasoningInfo = {};
+  for (let pumpNumber in seasoningMap) {
+    seasoningInfo[pumpNumber] = {
+      label: seasoningMap[pumpNumber],
+      weight: []
+    };
+  }
+  console.log(steps);
+  for (let step of steps) {
+    if (step.type === "water" || step.type === "oil") {
+      seasoningInfo[step.pumpNumber].weight.push(step.weight);
+    }
+    if (step.type === "seasoning") {
+      for (let seasoning of step.seasonings) {
+        seasoningInfo[seasoning.pumpNumber].weight.push(seasoning.weight);
+      }
+    }
+  }
+  const seasoningList = [];
+  for (let pumpNumber in seasoningInfo) {
+    if (seasoningInfo[pumpNumber].weight.length !== 0) {
+      seasoningList.push(seasoningInfo[pumpNumber].label + sum(seasoningInfo[pumpNumber].weight) + "克");
+    }
+  }
+  seasoningIntro.value = seasoningList.join("，");
+};
+
+defineExpose({
+  show
+});
+</script>
+
+<style lang="scss" scoped>
+
+</style>
