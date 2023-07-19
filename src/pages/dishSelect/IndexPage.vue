@@ -1,6 +1,6 @@
 <template>
   <q-page>
-    <div class="q-pa-md">
+    <div class="q-pa-sm">
       <q-splitter
         v-model="splitterModel"
       >
@@ -12,10 +12,9 @@
             active-bg-color="teal-6"
             active-color="white"
           >
-            <q-tab v-for="cuisine in cuisines" :key="cuisine.uuid" :name="cuisine.id" :label="cuisine.name"
-                   style="height: 50px"/>
+            <q-tab v-for="cuisine in cuisines" :key="cuisine.uuid" :name="cuisine.id" :label="cuisine.name"/>
             <q-separator/>
-            <q-route-tab class="bg-teal-5 text-white" label="制作菜谱" style="height: 50px" to="/dishEdit"/>
+            <q-route-tab class="bg-teal-5 text-white" label="制作菜谱" to="/dishEdit"/>
           </q-tabs>
         </template>
 

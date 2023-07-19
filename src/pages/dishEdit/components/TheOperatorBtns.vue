@@ -1,13 +1,13 @@
 <template>
   <q-card bordered flat class="my-card" style="">
-    <q-card-section class="text-center">
+    <q-card-section class="text-center q-py-sm">
       <div class="text-subtitle1">添加操作</div>
     </q-card-section>
     <q-separator inset/>
     <q-card-section>
-      <div class="column justify-between" style="height: 350px">
+      <div class="column justify-between" style="height: 320px">
         <div class="col">
-          <div class="row justify-around" style="padding-top: 20px">
+          <div class="row justify-around" style="padding-top: 10px">
             <OperatorBtn label="食材" size="lg" color="green" icon="fa-solid fa-wheat-awn"
                          @click="theIngredientDialog.show()"/>
             <OperatorBtn label="调料" size="lg" color="teal" icon="mdi-shaker"
@@ -15,7 +15,7 @@
           </div>
         </div>
         <div class="col">
-          <div class="row justify-around" style="padding-top: 20px">
+          <div class="row justify-around" style="padding-top: 10px">
             <OperatorBtn label="火力" size="lg" color="red-7" icon="local_fire_department"
                          @click="theFireDialog.show()"/>
             <OperatorBtn label="翻炒" size="lg" color="brown-5" icon="mdi-pot-mix"
@@ -23,7 +23,7 @@
           </div>
         </div>
         <div class="col">
-          <div class="row justify-around" style="padding-top: 20px">
+          <div class="row justify-around" style="padding-top: 10px">
             <OperatorBtn label="水" size="lg" color="blue" icon="water_drop"
                          @click="theWaterDialog.show()"/>
             <OperatorBtn label="食用油" size="lg" color="orange" icon="fa-solid fa-bottle-droplet"
@@ -81,6 +81,6 @@ const onUpdate = () => {
 
 <style lang="scss" scoped>
 .my-card {
-  height: calc(100vh - 50px - 32px);
+  height: calc(100vh - 50px - 32px - 52px);
 }
 </style>

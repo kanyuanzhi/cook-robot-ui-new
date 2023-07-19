@@ -1,94 +1,94 @@
 <template>
   <q-card bordered flat class="my-card" style="width: 100%">
-    <q-card-section class="text-center">
+    <q-card-section class="text-center q-py-sm">
       <div class="text-subtitle1">步骤</div>
     </q-card-section>
     <q-separator inset/>
     <q-card-section>
-<!--      <q-scroll-area class="bg-green-1" style="height: 425px;">-->
-        <q-list class="scrollable-container" ref="stepList" bordered separator style="height: 425px;overflow-y: auto;">
-          <q-slide-item v-for="(step, index) in dish.steps" :key="step.key" class="text-black"
-                  @right="onDelete(index)" right-color="red">
-            <template v-slot:right>
-              <q-icon name="delete"/>
-            </template>
-            <q-item>
-              <template v-if="step.type==='ingredient'">
-                <q-item-section avatar>
-                  <q-avatar rounded color="green" text-color="white" icon="fa-solid fa-wheat-awn" size="md"/>
-                </q-item-section>
-                <q-item-section>
-                  <q-item-label>{{
-                      index + 1 + ". 加" + step.name + step.weight + "克，使用菜盒" + step.slotNumber
-                    }}
-                  </q-item-label>
-                </q-item-section>
-              </template>
-              <template v-if="step.type==='water'">
-                <q-item-section avatar>
-                  <q-avatar rounded color="blue" text-color="white" icon="water_drop" size="md"/>
-                </q-item-section>
-                <q-item-section>
-                  <q-item-label>{{
-                      index + 1 + ". 加" + step.name + step.weight + "克"
-                    }}
-                  </q-item-label>
-                </q-item-section>
-              </template>
-              <template v-if="step.type==='oil'">
-                <q-item-section avatar>
-                  <q-avatar rounded color="orange" text-color="white" icon="fa-solid fa-bottle-droplet" size="md"/>
-                </q-item-section>
-                <q-item-section>
-                  <q-item-label>{{
-                      index + 1 + ". 加" + step.name + step.weight + "克"
-                    }}
-                  </q-item-label>
-                </q-item-section>
-              </template>
-              <template v-if="step.type === 'heat'">
-                <q-item-section avatar>
-                  <q-avatar rounded color="red-7" text-color="white" icon="local_fire_department" size="md"/>
-                </q-item-section>
-                <q-item-section>
-                  <q-item-label>{{ index + 1 + ". " + step.name }}
-                    <template v-if="step.judgeType===1||step.judgeType===2">
-                      <span class="" style="font-size: 13px">，持续至{{ step.targetTemperature }}℃</span>
-                    </template>
-                    <template v-if="step.judgeType===3">
-                      <span class="" style="font-size: 13px">，持续{{ step.duration }}秒</span>
-                    </template>
-                    <template v-if="step.judgeType===4">
-                      <span class="" style="font-size: 13px">，无控制</span>
-                    </template>
-                  </q-item-label>
-                </q-item-section>
-              </template>
-              <template v-if="step.type==='stir_fry'">
-                <q-item-section avatar>
-                  <q-avatar rounded color="brown-5" text-color="white" icon="mdi-pot-mix" size="md"/>
-                </q-item-section>
-                <q-item-section>
-                  <q-item-label>{{ index + 1 + ". " + step.name }}
-                    <span class="" style="font-size: 13px">，持续{{ step.duration }}秒</span>
-                  </q-item-label>
-                </q-item-section>
-              </template>
-              <template v-if="step.type==='seasoning'">
-                <q-item-section avatar>
-                  <q-avatar rounded color="teal" text-color="white" icon="mdi-shaker" size="md"/>
-                </q-item-section>
-                <q-item-section>
-                  <q-item-label>{{ index + 1 + ". 加" + step.name }}
-                  </q-item-label>
-                </q-item-section>
-              </template>
+      <!--      <q-scroll-area class="bg-green-1" style="height: 425px;">-->
+      <q-list class="scrollable-container" ref="stepList" bordered separator style="height: 390px;overflow-y: auto;">
+        <q-slide-item v-for="(step, index) in dish.steps" :key="step.key" class="text-black"
+                      @right="onDelete(index)" right-color="red">
+          <template v-slot:right>
+            <q-icon name="delete"/>
+          </template>
+          <q-item>
+            <template v-if="step.type==='ingredient'">
               <q-item-section avatar>
-                <q-icon color="primary" name="drag_indicator" class="drag-item"/>
+                <q-avatar rounded color="green" text-color="white" icon="fa-solid fa-wheat-awn" size="md"/>
               </q-item-section>
-            </q-item>
-          </q-slide-item>
-        </q-list>
+              <q-item-section>
+                <q-item-label>{{
+                    index + 1 + ". 加" + step.name + step.weight + "克，使用菜盒" + step.slotNumber
+                  }}
+                </q-item-label>
+              </q-item-section>
+            </template>
+            <template v-if="step.type==='water'">
+              <q-item-section avatar>
+                <q-avatar rounded color="blue" text-color="white" icon="water_drop" size="md"/>
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>{{
+                    index + 1 + ". 加" + step.name + step.weight + "克"
+                  }}
+                </q-item-label>
+              </q-item-section>
+            </template>
+            <template v-if="step.type==='oil'">
+              <q-item-section avatar>
+                <q-avatar rounded color="orange" text-color="white" icon="fa-solid fa-bottle-droplet" size="md"/>
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>{{
+                    index + 1 + ". 加" + step.name + step.weight + "克"
+                  }}
+                </q-item-label>
+              </q-item-section>
+            </template>
+            <template v-if="step.type === 'heat'">
+              <q-item-section avatar>
+                <q-avatar rounded color="red-7" text-color="white" icon="local_fire_department" size="md"/>
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>{{ index + 1 + ". " + step.name }}
+                  <template v-if="step.judgeType===1||step.judgeType===2">
+                    <span class="" style="font-size: 13px">，持续至{{ step.targetTemperature }}℃</span>
+                  </template>
+                  <template v-if="step.judgeType===3">
+                    <span class="" style="font-size: 13px">，持续{{ step.duration }}秒</span>
+                  </template>
+                  <template v-if="step.judgeType===4">
+                    <span class="" style="font-size: 13px">，无控制</span>
+                  </template>
+                </q-item-label>
+              </q-item-section>
+            </template>
+            <template v-if="step.type==='stir_fry'">
+              <q-item-section avatar>
+                <q-avatar rounded color="brown-5" text-color="white" icon="mdi-pot-mix" size="md"/>
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>{{ index + 1 + ". " + step.name }}
+                  <span class="" style="font-size: 13px">，持续{{ step.duration }}秒</span>
+                </q-item-label>
+              </q-item-section>
+            </template>
+            <template v-if="step.type==='seasoning'">
+              <q-item-section avatar>
+                <q-avatar rounded color="teal" text-color="white" icon="mdi-shaker" size="md"/>
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>{{ index + 1 + ". 加" + step.name }}
+                </q-item-label>
+              </q-item-section>
+            </template>
+            <q-item-section avatar>
+              <q-icon color="primary" name="drag_indicator" class="drag-item"/>
+            </q-item-section>
+          </q-item>
+        </q-slide-item>
+      </q-list>
     </q-card-section>
   </q-card>
 </template>
@@ -116,7 +116,7 @@ onMounted(() => {
   });
 });
 
-const test = ref([1, 2, 3, 4, 5,7,8,9,10,11,12,13]);
+const test = ref([1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 12, 13]);
 
 const onSortEnd = (event) => {
   const draggedItem = props.dish.steps[event.oldIndex];
@@ -134,7 +134,7 @@ const onDelete = (index) => {
 
 <style lang="scss" scoped>
 .my-card {
-  height: calc(100vh - 50px - 32px);
+  height: calc(100vh - 50px - 32px - 52px);
 }
 
 .sortable-drag {

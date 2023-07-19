@@ -1,5 +1,5 @@
 <template>
-  <q-dialog v-model="shown" persistent transition-show="scale" transition-hide="scale">
+  <q-dialog v-model="shown" transition-show="scale" transition-hide="scale">
     <q-card class="bg-teal-6 text-white" style="width: 400px">
       <q-card-section>
         <div class="text-h6">{{ dish.name }}</div>
@@ -17,7 +17,7 @@
       <q-card-actions align="right" class="bg-white text-teal-6">
         <q-btn flat label="大厨编辑" v-close-popup/>
         <q-btn flat label="调整口味" v-close-popup/>
-        <q-btn flat label="开始炒制" v-close-popup/>
+        <q-btn flat label="开始炒制" v-close-popup @click="openRunningControlPage"/>
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -28,6 +28,11 @@ import { onMounted, ref } from "vue";
 import { getDish } from "src/api/dish";
 import { getSeasonings } from "src/api/seasoning";
 import { sum } from "lodash";
+import { UseControllerStore } from "stores/controllerStore";
+import { UseAppStore } from "stores/appStore";
+
+const useControllerStore = UseControllerStore();
+const useAppStore = UseAppStore();
 
 const props = defineProps([]);
 const dish = ref({});
@@ -46,13 +51,13 @@ const show = async (uuid) => {
   seasoningFormat(dish.value.steps, seasoningMap);
 };
 const ingredientFormat = (steps) => {
-  const ingredientList = []
+  const ingredientList = [];
   for (let step of steps) {
     if (step.type === "ingredient") {
-      ingredientList.push(step.name + step.weight + "克")
+      ingredientList.push(step.name + step.weight + "克");
     }
   }
-  ingredientIntro.value = ingredientList.join("，")
+  ingredientIntro.value = ingredientList.join("，");
 };
 
 const seasoningFormat = (steps, seasoningMap) => {
@@ -63,7 +68,6 @@ const seasoningFormat = (steps, seasoningMap) => {
       weight: []
     };
   }
-  console.log(steps);
   for (let step of steps) {
     if (step.type === "water" || step.type === "oil") {
       seasoningInfo[step.pumpNumber].weight.push(step.weight);
@@ -82,6 +86,11 @@ const seasoningFormat = (steps, seasoningMap) => {
   }
   seasoningIntro.value = seasoningList.join("，");
 };
+
+const openRunningControlPage = ()=>{
+  useControllerStore.setCurrentDish(dish.value)
+  useAppStore.showRunningControl()
+}
 
 defineExpose({
   show

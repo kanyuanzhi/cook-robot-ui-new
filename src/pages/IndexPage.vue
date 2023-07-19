@@ -31,7 +31,7 @@ const router = useRouter();
 
 <style lang="scss" scoped>
 .select-area {
-  height: calc(100vh - 50px - 40px);
+  height: calc(100vh - 50px - 50px - 40px);
 }
 
 .click-area {

@@ -62,7 +62,7 @@ const dishDetailsCard = ref(null);
 <style lang="scss" scoped>
 .cards-wrapper {
   //height: calc(100vh - 50px - 32px - 20px - 20px - 10px)
-  height: 480px
+  height: 450px
 }
 
 .pagination-wrapper {
