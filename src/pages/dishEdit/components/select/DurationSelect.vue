@@ -1,5 +1,5 @@
 <template>
-  <q-item dense>
+  <q-item>
     <q-item-section avatar>时间控制</q-item-section>
     <q-item-section>
       <div class="row q-col-gutter-md">

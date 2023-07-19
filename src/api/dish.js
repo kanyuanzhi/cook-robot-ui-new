@@ -29,3 +29,19 @@ export function createDish(dish) {
     data: dish,
   });
 }
+
+export function updateDish(dish) {
+  return api({
+    url: "/dish",
+    method: "put",
+    data: dish,
+  });
+}
+
+export function deleteDish(uuid) {
+  return api({
+    url: "/dish",
+    method: "DELETE",
+    params: { uuid },
+  });
+}

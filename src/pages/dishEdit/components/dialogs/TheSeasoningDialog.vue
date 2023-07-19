@@ -1,17 +1,19 @@
 <template>
   <div>
-    <q-dialog v-model="shown" persistent @hide="onHide">
+    <q-dialog v-model="shown" @hide="onHide">
       <!--      <q-card style="width: 400px" class="q-px-sm q-mt-md">-->
-      <q-card style="width: 600px" class="q-px-sm">
-        <q-card-section>
+      <q-card style="width: 600px" class="q-mt-md">
+        <q-card-section class="bg-teal-6 text-white">
           <div class="text-h6">添加调料</div>
         </q-card-section>
-        <TheSeasoningItem v-for="(seasoning,index) in seasonings" :key="seasoning.key"
-                          :seasoning="seasoning" :seasoning-options="seasoningOptions" @delete="onDelete(index)"/>
+        <q-card-section>
+          <TheSeasoningItem v-for="(seasoning,index) in seasonings" :key="seasoning.key"
+                            :seasoning="seasoning" :seasoning-options="seasoningOptions" @delete="onDelete(index)"/>
+        </q-card-section>
         <q-card-actions align="right">
-          <q-btn v-close-popup flat color="">取消</q-btn>
-          <q-btn flat color="primary" @click="onAdd">添加</q-btn>
-          <q-btn flat color="primary" @click="onSubmit">提交</q-btn>
+          <q-btn v-close-popup flat color="teal-6">取消</q-btn>
+          <q-btn color="teal-6" @click="onAdd">添加新调料</q-btn>
+          <q-btn color="teal-6" @click="onSubmit">提交</q-btn>
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -43,8 +45,15 @@ const seasonings = ref([
   cloneDeep(emptySeasoning)
 ]);
 
-const show = (step, index) => {
+const show = () => {
   shown.value = true;
+};
+
+const updateDialogShow = (step, index) => {
+  shown.value = true;
+  isUpdate = true;
+  stepIndex = index;
+  seasonings.value = step.seasonings;
 };
 
 const seasoningOptions = ref([]);
@@ -120,6 +129,7 @@ const onHide = () => {
 
 defineExpose({
   show,
+  updateDialogShow
 });
 </script>
 

@@ -1,5 +1,5 @@
 <template>
-  <q-item dense>
+  <q-item>
     <q-item-section avatar>{{ label }}</q-item-section>
     <q-item-section>
       <q-select

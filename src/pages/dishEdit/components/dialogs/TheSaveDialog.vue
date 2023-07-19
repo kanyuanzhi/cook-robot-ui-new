@@ -37,7 +37,8 @@
 
         <q-card-actions align="right">
           <q-btn v-close-popup flat color="">取消</q-btn>
-          <q-btn flat color="primary" @click="onSubmit">保存</q-btn>
+          <q-btn unelevated size="md" color="teal-6" @click="onSubmit('save')">保存</q-btn>
+          <q-btn unelevated color="teal-6" @click="onSubmit('create')">新建</q-btn>
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -50,29 +51,32 @@
       seamless
       full-width
     >
-      <CustomKeyboard ref="customKeyboard" @change="onChange" @enter="onSubmit"/>
+      <CustomKeyboard ref="customKeyboard" @change="onChange"/>
     </q-dialog>
   </div>
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
+import { ref } from "vue";
 import { Notify } from "quasar";
-import { createDish } from "src/api/dish";
+import { createDish, updateDish } from "src/api/dish";
 import CustomKeyboard from "pages/dishEdit/components/CustomKeyboard.vue";
 import { getCuisines } from "src/api/cuisine";
+import { UseAppStore } from "stores/appStore";
+import { cloneDeep } from "lodash/lang";
 
-const props = defineProps(["dish"]);
-const emits = defineEmits(["update", "submit"]);
+const useAppStore = UseAppStore();
 
 const shown = ref(false);
 
-const newName = ref(props.dish.name);
+const newName = ref("");
 const cuisineOptions = ref([]);
 const cuisineMap = ref({});
 const newCuisine = ref({});
 
-onMounted(async () => {
+const show = async () => {
+  shown.value = true;
+  newName.value = useAppStore.editingDish.name;
   const { data } = await getCuisines();
   const cuisines = data.data;
   cuisines.forEach(cuisine => {
@@ -83,16 +87,9 @@ onMounted(async () => {
     cuisineMap.value[cuisine.id] = cuisine.name;
   });
   newCuisine.value = {
-    label: cuisineMap.value[props.dish.cuisine],
-    value: props.dish.cuisine,
+    label: cuisineMap.value[useAppStore.editingDish.cuisine],
+    value: useAppStore.editingDish.cuisine,
   };
-});
-
-let isUpdate = false;
-let stepIndex = 0;
-
-const show = (step, index) => {
-  shown.value = true;
 };
 
 const inputNameToPara = {
@@ -115,7 +112,7 @@ const setDefaultName = (defaultName) => {
 const onChange = (input, inputName) => {
   inputNameToPara[inputName].value = input;
 };
-const onSubmit = async () => {
+const onSubmit = async (flag) => {
   if (newName.value.trim() === "") {
     Notify.create("请输入菜品名称");
     return;
@@ -123,13 +120,32 @@ const onSubmit = async () => {
   const newDish = {
     name: newName.value,
     cuisine: newCuisine.value.value,
-    steps: props.dish.steps
+    steps: useAppStore.editingDish.steps,
+    uuid: useAppStore.editingDish.uuid
   };
-  const res = await createDish(newDish);
-  // eslint-disable-next-line vue/no-mutating-props
-  props.dish.name = newName.value;
-  // eslint-disable-next-line vue/no-mutating-props
-  props.dish.cuisine = newCuisine.value;
+  if (useAppStore.editingDish.uuid === "" || flag === "create") {
+    const { data } = await createDish(newDish);
+    if (data.message === "success") {
+      useAppStore.editingDish.name = newName.value;
+      useAppStore.editingDish.cuisine = newCuisine.value.value;
+      useAppStore.editingDish.uuid = data.data;
+      useAppStore.originEditingDish = cloneDeep(useAppStore.editingDish);
+      Notify.create(flag === "create" ? "新建成功" : "保存成功");
+    } else {
+      Notify.create(flag === "create" ? "新建失败" : "保存失败");
+    }
+  } else {
+    const { data } = await updateDish(newDish);
+    if (data.message === "success") {
+      useAppStore.editingDish.name = newName.value;
+      useAppStore.editingDish.cuisine = newCuisine.value.value;
+      useAppStore.originEditingDish.name = newName.value;
+      useAppStore.originEditingDish.cuisine = newCuisine.value.value;
+      Notify.create("保存成功");
+    } else {
+      Notify.create("保存失败");
+    }
+  }
   shown.value = false;
 };
 

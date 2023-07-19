@@ -14,10 +14,14 @@
         {{ seasoningIntro }}
       </q-card-section>
 
-      <q-card-actions align="right" class="bg-white text-teal-6">
-        <q-btn flat label="大厨编辑" v-close-popup/>
-        <q-btn flat label="调整口味" v-close-popup/>
-        <q-btn flat label="开始炒制" v-close-popup @click="openRunningControlPage"/>
+      <q-card-actions align="around" class="bg-white text-teal-6">
+        <q-btn flat color="teal-6" label="大厨编辑" v-close-popup @click="openDishEditPage"/>
+        <q-btn flat color="teal-6" label="调整口味" v-close-popup/>
+        <q-btn flat color="teal-6" label="开始炒制" v-close-popup @click="openRunningControlPage"/>
+<!--        <q-btn-group spread outline class="full-width">-->
+
+<!--        </q-btn-group>-->
+
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -28,11 +32,11 @@ import { onMounted, ref } from "vue";
 import { getDish } from "src/api/dish";
 import { getSeasonings } from "src/api/seasoning";
 import { sum } from "lodash";
-import { UseControllerStore } from "stores/controllerStore";
 import { UseAppStore } from "stores/appStore";
+import { useRouter } from "vue-router";
 
-const useControllerStore = UseControllerStore();
 const useAppStore = UseAppStore();
+const router = useRouter()
 
 const props = defineProps([]);
 const dish = ref({});
@@ -88,8 +92,13 @@ const seasoningFormat = (steps, seasoningMap) => {
 };
 
 const openRunningControlPage = ()=>{
-  useControllerStore.setCurrentDish(dish.value)
+  useAppStore.setRunningDish(dish.value)
   useAppStore.showRunningControl()
+}
+
+const openDishEditPage = ()=>{
+  useAppStore.setEditingDish(dish.value)
+  router.push("/dishEdit")
 }
 
 defineExpose({

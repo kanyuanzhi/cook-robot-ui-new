@@ -40,7 +40,7 @@
           <div class="text-h6 text-white">运行控制</div>
         </q-card-section>
         <q-card-section class="text-center q-py-sm">
-          <span class="text-subtitle1 text-teal-6">{{ currentDishText }}</span>
+          <span class="text-subtitle1 text-teal-6">{{ runningDishText }}</span>
         </q-card-section>
         <q-card-section class="flex flex-center" style="height: 250px;">
           <template v-if="useControllerStore.isRunning">
@@ -51,7 +51,7 @@
           </template>
           <template v-else>
             <q-btn
-              v-if="useControllerStore.currentDish.name !== undefined"
+              v-if="useAppStore.runningDish.name !== undefined"
               padding="10px"
               size="35px"
               color="teal-6"
@@ -77,13 +77,13 @@
               <q-btn color="teal-6" label="开门" icon="lock_open" @click="startUnlock"/>
             </template>
             <template v-else>
-              <q-btn color="teal-6" label="复位" icon="restart_alt" @click="startReset"/>
+              <q-btn :disable="useControllerStore.isRunning" color="teal-6" label="复位" icon="restart_alt" @click="startReset"/>
               <q-separator vertical/>
-              <q-btn color="teal-6" label="清洗" icon="mdi-washing-machine"/>
+              <q-btn :disable="useControllerStore.isRunning" color="teal-6" label="清洗" icon="mdi-washing-machine"/>
               <q-separator vertical/>
               <q-btn color="teal-6" label="开门" icon="lock_open" @click="startUnlock"/>
               <q-separator vertical/>
-              <q-btn color="teal-6" label="出菜" icon="fa-solid fa-plate-wheat" @click="startDishOut"/>
+              <q-btn :disable="useControllerStore.isRunning" color="teal-6" label="出菜" icon="fa-solid fa-plate-wheat" @click="startDishOut"/>
             </template>
           </q-btn-group>
         </q-card-actions>
@@ -107,7 +107,7 @@ const router = useRouter();
 const statusBarText = computed(() => {
   switch (useControllerStore.runningCommandName) {
     case "cook":
-      return useControllerStore.isPausing ? "暂停中" : "炒制" + useControllerStore.currentDish.name + "中";
+      return useControllerStore.isPausing ? "暂停中" : "炒制" + useAppStore.runningDish.name + "中";
     case "wash":
       return "清洗中";
     case "reset":
@@ -121,14 +121,14 @@ const statusBarText = computed(() => {
   }
 });
 
-const currentDishText = computed(() => {
-  return useControllerStore.currentDish.name === undefined ? "未选择菜品" : useControllerStore.currentDish.name;
+const runningDishText = computed(() => {
+  return useAppStore.runningDish.name === undefined ? "未选择菜品" : useAppStore.runningDish.name;
 });
 
-setInterval(useControllerStore.fetchStatus, 500);
+setInterval(useControllerStore.fetchStatus, 200);
 
 const startCook = async () => {
-  await execute("multiple", "cook", useControllerStore.currentDish.uuid);
+  await execute("multiple", "cook", useAppStore.runningDish.uuid);
 };
 const startReset = async () => {
   const { data } = await execute("multiple", "reset");

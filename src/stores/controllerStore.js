@@ -3,19 +3,15 @@ import { fetchStatus } from "src/api/controller";
 
 export const UseControllerStore = defineStore("controller", {
   state: () => ({
-    currentDish: {},
     isCooking: false,
     isRunning: false,
     isPausing: false,
     runningCommandName: ""
   }),
   getters: {
-    getCurrentDish: (state) => state.currentDish,
+    getRunningDish: (state) => state.runningDish,
   },
   actions: {
-    setCurrentDish(dish) {
-      this.currentDish = dish;
-    },
     setCookingStatus(status) {
       this.isCooking = status;
     },

@@ -1,7 +1,7 @@
 <template>
   <q-card bordered flat class="my-card" style="">
-    <q-card-section class="text-center q-py-sm">
-      <div class="text-subtitle1">添加操作</div>
+    <q-card-section class="text-center q-py-sm bg-teal-6 text-white">
+      <div class="text-subtitle1">操作</div>
     </q-card-section>
     <q-separator inset/>
     <q-card-section>
@@ -35,8 +35,15 @@
     </q-card-section>
     <q-separator inset/>
     <q-card-actions class="justify-around" style="padding-top: 15px">
-      <q-btn unelevated color="teal-6" label="保存" @click="theSaveDialog.show()"/>
-      <q-btn unelevated color="teal-6" label="取消"/>
+      <q-btn-group spread unelevated class="full-width">
+        <q-btn color="teal-6" label="保存" @click="theSaveDialog.show()"/>
+        <q-separator vertical/>
+        <q-btn color="teal-6" label="恢复" @click="useAppStore.resetEditingDish()"/>
+        <q-separator vertical/>
+        <q-btn color="teal-6" label="清空" @click="useAppStore.newEditingDish()"/>
+        <q-separator vertical/>
+        <q-btn color="red-6" label="删除" @click="theDeleteDialog.show()"/>
+      </q-btn-group>
     </q-card-actions>
     <TheIngredientDialog ref="theIngredientDialog" @submit="onSubmit" @update="onUpdate"/>
     <TheSeasoningDialog ref="theSeasoningDialog" @submit="onSubmit" @update="onUpdate"/>
@@ -45,7 +52,8 @@
     <TheWaterDialog ref="theWaterDialog" @submit="onSubmit" @update="onUpdate"/>
     <TheOilDialog ref="theOilDialog" @submit="onSubmit" @update="onUpdate"/>
 
-    <TheSaveDialog ref="theSaveDialog" :dish="dish"/>
+    <TheSaveDialog ref="theSaveDialog"/>
+    <TheDeleteDialog ref="theDeleteDialog"/>
   </q-card>
 </template>
 
@@ -59,8 +67,10 @@ import TheWaterDialog from "pages/dishEdit/components/dialogs/TheWaterDialog.vue
 import { ref } from "vue";
 import TheSaveDialog from "pages/dishEdit/components/dialogs/TheSaveDialog.vue";
 import OperatorBtn from "pages/dishEdit/components/dialogs/OperatorBtn.vue";
+import { UseAppStore } from "stores/appStore";
+import TheDeleteDialog from "pages/dishEdit/components/dialogs/TheDeleteDialog.vue";
 
-const props = defineProps(["dish"]);
+const useAppStore = UseAppStore();
 
 const theIngredientDialog = ref(null);
 const theSeasoningDialog = ref(null);
@@ -70,12 +80,15 @@ const theWaterDialog = ref(null);
 const theOilDialog = ref(null);
 
 const theSaveDialog = ref(null);
-
+const theDeleteDialog = ref(null)
 const onSubmit = (val) => {
-  // eslint-disable-next-line vue/no-mutating-props
-  props.dish.steps.push(val);
+  useAppStore.editingDish.steps.push(val);
 };
 const onUpdate = () => {
+};
+
+const resetEditingDish = () => {
+  useAppStore.resetEditingDish();
 };
 </script>
 

@@ -6,7 +6,7 @@
           <TheStepList :dish="dish"/>
         </div>
         <div class="col-4">
-          <TheOperatorBtns :dish="dish"/>
+          <TheOperatorBtns/>
         </div>
       </div>
     </div>
@@ -17,12 +17,11 @@
 import { ref } from "vue";
 import TheStepList from "pages/dishEdit/components/TheStepList.vue";
 import TheOperatorBtns from "pages/dishEdit/components/TheOperatorBtns.vue";
+import { UseAppStore } from "stores/appStore";
 
-const dish = ref({
-  steps: [],
-  name: "",
-  cuisine: 1,
-});
+const useAppStore = UseAppStore();
+
+const dish = ref(useAppStore.editingDish);
 
 </script>
 

@@ -1,17 +1,18 @@
 <template>
   <div>
-    <q-dialog v-model="shown" persistent @hide="onHide">
-      <q-card style="width: 400px" class="q-px-sm">
-        <q-card-section>
+    <q-dialog v-model="shown" @hide="onHide">
+      <q-card style="width: 400px" class="q-mt-md">
+        <q-card-section class="bg-teal-6 text-white">
           <div class="text-h6">添加食用油</div>
         </q-card-section>
-
-        <NumberSelect ref="numberSelect" label="分量" unit="克（毫升）" :min="0" :max="220" :step="5"
-                      :number="weight" @update="(v)=>weight=v"/>
+        <q-card-section>
+          <NumberSelect ref="numberSelect" label="分量" unit="克（毫升）" :min="0" :max="220" :step="5"
+                        :number="weight" @update="(v)=>weight=v"/>
+        </q-card-section>
 
         <q-card-actions align="right">
-          <q-btn v-close-popup flat color="">取消</q-btn>
-          <q-btn flat color="primary" @click="onSubmit">提交</q-btn>
+          <q-btn v-close-popup flat color="teal-6">取消</q-btn>
+          <q-btn color="teal-6" @click="onSubmit">提交</q-btn>
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -31,19 +32,15 @@ const weight = ref(0);
 let isUpdate = false;
 let stepIndex = 0;
 
-const show = (step, index) => {
+const show = () => {
   shown.value = true;
-  // setTimeout(() => {
-  //   if (step !== undefined) {
-  //     isUpdate = true;
-  //     stepIndex = index;
-  //     name.value = step.name;
-  //     shape.value = step.shape;
-  //     weightSelect.value.setWeight(step.weight);
-  //     slotRadio.value.setSlot(step.slot);
-  //     timeSelect.value.setTime(step.time);
-  //   }
-  // }, 100);
+};
+
+const updateDialogShow = (step, index) => {
+  shown.value = true;
+  isUpdate = true;
+  stepIndex = index;
+  weight.value = step.weight;
 };
 
 const onSubmit = () => {
@@ -74,6 +71,7 @@ const onHide = () => {
 
 defineExpose({
   show,
+  updateDialogShow
 });
 </script>
 
