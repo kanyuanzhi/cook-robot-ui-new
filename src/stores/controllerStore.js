@@ -6,6 +6,8 @@ export const UseControllerStore = defineStore("controller", {
     isCooking: false,
     isRunning: false,
     isPausing: false,
+    isPausingWithMovingFinished: false,
+    isPausingWithMovingBackFinished: false,
     runningCommandName: ""
   }),
   getters: {
@@ -18,9 +20,11 @@ export const UseControllerStore = defineStore("controller", {
     async fetchStatus() {
       const { data } = await fetchStatus();
       this.runningCommandName = data.data["currentCommandName"];
-      this.isCooking = data.data["currentCommandName"] === "cook";
-      this.isRunning = data.data["currentCommandName"] !== "";
+      this.isCooking = data.data["isCooking"];
+      this.isRunning = data.data["isRunning"];
       this.isPausing = data.data["isPausing"];
+      this.isPausingWithMovingFinished = data.data["isPausingWithMovingFinished"];
+      this.isPausingWithMovingBackFinished = data.data["isPausingWithMovingBackFinished"];
     }
   },
 });

@@ -1,8 +1,8 @@
 <template>
   <div>
-    <q-dialog v-model="shown" @hide="onHide">
+    <q-dialog v-model="shown" @hide="onHide" position="top">
       <q-card style="width: 400px" class="q-mt-md">
-        <q-card-section class="bg-teal-6 text-white">
+        <q-card-section class="bg-teal-6 text-white q-py-sm">
           <div class="text-h6">添加食材</div>
         </q-card-section>
         <q-card-section>
@@ -13,6 +13,8 @@
                 v-model="name"
                 filled
                 dense
+                @blur="onInputBlur($event, 'name')"
+                @focus="onInputFocus($event, 'name')"
               >
                 <template v-slot:after>
                   <q-btn round dense flat icon="toc" @click="theIngredientNameSelectionDialog.show()"/>
@@ -28,6 +30,8 @@
                 v-model="shape"
                 filled
                 dense
+                @blur="onInputBlur($event, 'shape')"
+                @focus="onInputFocus($event, 'shape')"
               >
                 <template v-slot:after>
                   <q-btn round dense flat icon="toc" @click="theIngredientShapeSelectionDialog.show()"/>
@@ -43,21 +47,21 @@
         </q-card-section>
         <q-card-actions align="right">
           <q-btn v-close-popup flat color="teal-6">取消</q-btn>
-          <q-btn color="teal-6" @click="onSubmit">提交</q-btn>
+          <q-btn color="teal-6" unelevated @click="onSubmit">提交</q-btn>
         </q-card-actions>
       </q-card>
     </q-dialog>
-    <!--    <q-dialog-->
-    <!--      v-model="shown"-->
-    <!--      persistent-->
-    <!--      position="bottom"-->
-    <!--      no-focus-->
-    <!--      no-refocus-->
-    <!--      seamless-->
-    <!--      full-width-->
-    <!--    >-->
-    <!--      <CustomKeyboard ref="customKeyboard" @change="onChange" @enter="onSubmit"/>-->
-    <!--    </q-dialog>-->
+    <q-dialog
+      v-model="shown"
+      persistent
+      position="bottom"
+      no-focus
+      no-refocus
+      seamless
+      full-width
+    >
+      <CustomKeyboard ref="customKeyboard" @change="onChange" @enter="onSubmit"/>
+    </q-dialog>
     <TheIngredientNameSelectionDialog ref="theIngredientNameSelectionDialog" @select="(val)=>name=val"/>
     <TheIngredientShapeSelectionDialog ref="theIngredientShapeSelectionDialog" @select="(val)=>shape=val"/>
   </div>
@@ -65,6 +69,7 @@
 
 <script setup>
 import { ref } from "vue";
+import CustomKeyboard from "pages/dishEdit/components/CustomKeyboard.vue";
 import TheIngredientNameSelectionDialog from "pages/dishEdit/components/dialogs/TheIngredientNameSelectionDialog.vue";
 import TheIngredientShapeSelectionDialog
   from "pages/dishEdit/components/dialogs/TheIngredientShapeSelectionDialog.vue";
@@ -96,6 +101,24 @@ const updateDialogShow = (step, index) => {
   shape.value = step.shape;
   weight.value = step.weight;
   slotNumber.value = step.slotNumber;
+};
+
+const inputNameToPara = {
+  name,
+  shape,
+};
+
+const customKeyboard = ref(null);
+const onInputFocus = (e, inputName) => {
+  customKeyboard.value.setInputName(inputName);
+  customKeyboard.value.setInput(e.target.value, inputName);
+};
+
+const onInputBlur = (e, inputName) => {
+};
+
+const onChange = (input, inputName) => {
+  inputNameToPara[inputName].value = input;
 };
 
 const theIngredientNameSelectionDialog = ref(null);

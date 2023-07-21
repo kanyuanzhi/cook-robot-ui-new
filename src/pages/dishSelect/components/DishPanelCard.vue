@@ -3,12 +3,13 @@
     <q-card-section horizontal>
       <q-img
         class="col-6"
-        src="https://cdn.quasar.dev/img/parallax2.jpg"
+        :src="'data:image/png;base64,'+dishImage"
         height="95px"
+        fit="fill"
       />
       <q-card-section style="padding: 0">
         <q-card-section style="height: 60px;width: 120px;padding-top: 10px">
-          <div class="text-subtitle2" style="">{{ nameDisplay }}</div>
+          <div class="text-subtitle2 text-grey-8" style="">{{ nameDisplay }}</div>
         </q-card-section>
         <q-separator inset/>
         <q-card-section style="height: 20px; padding-top: 10px; text-align: right">
@@ -22,7 +23,7 @@
 <script setup>
 import { computed, ref } from "vue";
 
-const props = defineProps(["dishName"]);
+const props = defineProps(["dishImage", "dishName"]);
 
 const nameDisplay = computed(() => {
   return props.dishName.length > 12 ? props.dishName.substring(0, 12) + "..." : props.dishName;

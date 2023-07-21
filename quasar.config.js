@@ -214,7 +214,7 @@ module.exports = configure(function(/* ctx */) {
         // Windows only
         // win32metadata: { ... }
         // platform: "linux",
-        // arch: "armv7l" // ia32, x64, armv7l, arm64, mips64el, universal
+        // arch: "arm64" // ia32, x64, armv7l, arm64, mips64el, universal
       },
 
       builder: {

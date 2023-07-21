@@ -1,45 +1,56 @@
 <template>
   <div>
-    <q-dialog v-model="shown" persistent @hide="onHide" position="top">
-      <q-card style="width: 400px;margin-top: 100px" class="q-px-sm q-mt-md">
-        <q-card-section>
+    <q-dialog v-model="shown" @hide="onHide" position="top">
+      <q-card style="width: 400px;margin-top: 50px" class="q-mt-md">
+        <q-card-section class="bg-teal-6 text-white q-py-sm">
           <div class="text-h6">保存菜品</div>
         </q-card-section>
-        <q-item dense>
-          <q-item-section avatar>名称</q-item-section>
-          <q-item-section>
-            <q-input
-              v-model="newName"
-              filled
-              dense
-              autofocus
-              @blur="onInputBlur($event, 'newName')"
-              @focus="onInputFocus($event, 'newName')"
-            >
-            </q-input>
-          </q-item-section>
-        </q-item>
-        <q-item dense>
-          <q-item-section avatar>菜系</q-item-section>
-          <q-item-section>
-            <q-select
-              dense
-              options-dense
-              filled
-              v-model="newCuisine"
-              :options="cuisineOptions"
-              options-cover
-              stack-label
-            >
-            </q-select>
-          </q-item-section>
-        </q-item>
-
+        <q-card-section>
+          <q-item>
+            <q-item-section avatar>名称</q-item-section>
+            <q-item-section>
+              <q-input
+                v-model="newName"
+                filled
+                dense
+                autofocus
+                @blur="onInputBlur($event, 'newName')"
+                @focus="onInputFocus($event, 'newName')"
+              >
+              </q-input>
+            </q-item-section>
+          </q-item>
+          <q-item>
+            <q-item-section avatar>菜系</q-item-section>
+            <q-item-section>
+              <q-select
+                dense
+                options-dense
+                filled
+                v-model="newCuisine"
+                :options="cuisineOptions"
+                options-cover
+                stack-label
+              >
+              </q-select>
+            </q-item-section>
+          </q-item>
+          <q-item dense>
+            <q-item-section avatar></q-item-section>
+            <q-item-section>
+            <span class="text-grey-7" style="font-size: 12px">
+              <span class="text-red">*</span>
+              保存操作将会重置该菜品已有的三种自定义口味
+            </span>
+            </q-item-section>
+          </q-item>
+        </q-card-section>
         <q-card-actions align="right">
           <q-btn v-close-popup flat color="">取消</q-btn>
           <q-btn unelevated size="md" color="teal-6" @click="onSubmit('save')">保存</q-btn>
           <q-btn unelevated color="teal-6" @click="onSubmit('create')">新建</q-btn>
         </q-card-actions>
+
       </q-card>
     </q-dialog>
     <q-dialog

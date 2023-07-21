@@ -3,7 +3,7 @@
     <div class="cards-wrapper">
       <div class="row q-col-gutter-md">
         <div class="col-4" v-for="dish in dishes" :key="dish.uuid">
-          <DishPanelCard :dish-name="dish.name" @click="dishDetailsCard.show(dish.uuid)"/>
+          <DishPanelCard :dish-image="dish.image" :dish-name="dish.name" @click="dishDetailsCard.show(dish.uuid)"/>
         </div>
       </div>
     </div>

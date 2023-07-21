@@ -11,8 +11,10 @@
     "test": "echo \"No test specified\" && exit 0",
     "dev": "quasar dev",
     "dev:electron": "quasar dev -m electron",
+    "dev:capacitor": "quasar dev -m capacitor -T andriod",
     "build": "quasar build",
-    "build:electron": "quasar build -m electron"
+    "build:electron": "quasar build -m electron",
+    "build:capacitor": "quasar build -m capacitor -T andriod"
   },
   "dependencies": {
     "@quasar/extras": "^1.16.4",
@@ -31,6 +33,8 @@
     "@intlify/vite-plugin-vue-i18n": "^3.3.1",
     "@quasar/app-vite": "^1.3.0",
     "autoprefixer": "^10.4.2",
+    "electron": "^25.3.1",
+    "electron-packager": "^17.1.1",
     "eslint": "^8.10.0",
     "eslint-config-prettier": "^8.1.0",
     "eslint-plugin-vue": "^9.0.0",

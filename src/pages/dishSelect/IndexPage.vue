@@ -14,7 +14,7 @@
           >
             <q-tab v-for="cuisine in cuisines" :key="cuisine.uuid" :name="cuisine.id" :label="cuisine.name"/>
             <q-separator/>
-            <q-route-tab class="bg-teal-5 text-white" label="制作菜谱" to="/dishEdit"/>
+            <q-route-tab class="bg-teal-5 text-white" label="菜品制作" to="/dishEdit"/>
           </q-tabs>
         </template>
 

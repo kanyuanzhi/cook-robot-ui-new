@@ -2,7 +2,7 @@
   <div>
     <q-dialog v-model="shown" @hide="onHide">
       <q-card style="width: 600px" class="q-mt-md">
-        <q-card-section class="bg-teal-6 text-white">
+        <q-card-section class="bg-teal-6 text-white q-py-sm">
           <div class="text-h6">添加火力</div>
         </q-card-section>
         <q-card-section>
@@ -52,11 +52,13 @@
               />
             </q-item-section>
           </q-item>
-          <q-item>
+          <q-item dense>
             <q-item-section avatar><span style="color: rgba(0,0,0,0%)">四个汉字</span></q-item-section>
             <q-item-section>
-            <span class="text-grey-7" style="font-size: 11px">
-              <span class="text-red">*</span>控制加热达到以下设定温度或时间后，继续下一步骤，选择无则加热后直接开始下一步骤</span>
+            <span class="text-grey-7" style="font-size: 12px">
+              <span class="text-red">*</span>
+              控制加热达到以下设定温度或时间后，继续下一步骤，选择无则加热后直接开始下一步骤
+            </span>
             </q-item-section>
           </q-item>
 
@@ -70,7 +72,7 @@
         </q-card-section>
         <q-card-actions align="right">
           <q-btn v-close-popup flat color="teal-6">取消</q-btn>
-          <q-btn color="teal-6" @click="onSubmit">提交</q-btn>
+          <q-btn color="teal-6" unelevated @click="onSubmit">提交</q-btn>
         </q-card-actions>
       </q-card>
     </q-dialog>

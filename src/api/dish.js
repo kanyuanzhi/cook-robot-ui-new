@@ -45,3 +45,13 @@ export function deleteDish(uuid) {
     params: { uuid },
   });
 }
+
+export function getCustomDishes(dishUuid) {
+  return api({
+    url: "/customDishes",
+    method: "get",
+    params: {
+      dishUuid,
+    },
+  });
+}
