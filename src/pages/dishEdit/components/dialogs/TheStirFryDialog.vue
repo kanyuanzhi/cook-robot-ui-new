@@ -73,8 +73,8 @@ const onSubmit = () => {
 };
 
 const onHide = () => {
-  gear.value = 0;
-  duration.value = 0;
+  // gear.value = 0;
+  // duration.value = 0;
 };
 
 defineExpose({

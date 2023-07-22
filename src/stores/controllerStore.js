@@ -1,14 +1,19 @@
 import { defineStore } from "pinia";
 import { fetchStatus } from "src/api/controller";
+import { floor } from "lodash";
 
 export const UseControllerStore = defineStore("controller", {
   state: () => ({
+    runningCommandName: "",
     isCooking: false,
     isRunning: false,
     isPausing: false,
     isPausingWithMovingFinished: false,
     isPausingWithMovingBackFinished: false,
-    runningCommandName: ""
+    isStirFrying: false,
+    bottomTemperature: 0,
+    infraredTemperature: 0,
+    cookingTime: 0,
   }),
   getters: {
     getRunningDish: (state) => state.runningDish,
@@ -25,6 +30,10 @@ export const UseControllerStore = defineStore("controller", {
       this.isPausing = data.data["isPausing"];
       this.isPausingWithMovingFinished = data.data["isPausingWithMovingFinished"];
       this.isPausingWithMovingBackFinished = data.data["isPausingWithMovingBackFinished"];
+      this.isStirFrying = data.data["isStirFrying"];
+      this.bottomTemperature = data.data["bottomTemperature"] / 10;
+      this.infraredTemperature = data.data["infraredTemperature"] / 10;
+      this.cookingTime = floor(data.data["cookingTime"] / 1000);
     }
   },
 });

@@ -8,12 +8,21 @@
       <q-card-section class="text-center q-py-sm">
         <span class="text-subtitle1 text-teal-6">{{ runningDishDisplay }}</span>
       </q-card-section>
-      <q-card-section class="flex flex-center" style="height: 250px;">
+      <q-card-section class="flex flex-center column" style="height: 250px;">
         <template v-if="useControllerStore.isRunning">
-          <q-spinner-bars
-            color="teal-6"
-            size="4em"
-          />
+          <div>
+            <q-spinner-hourglass
+              v-if="useControllerStore.isPausing"
+              color="teal-6"
+              size="4em"
+            />
+            <q-spinner-bars
+              v-else
+              color="teal-6"
+              size="4em"
+            />
+          </div>
+          <div v-if="useControllerStore.isCooking" class="text-teal-6 text-weight-bold" style="padding-top: 10px">{{ cookingTimeDisplay }}</div>
         </template>
         <template v-else>
           <q-btn
@@ -33,15 +42,31 @@
             @click="router.push('/dishSelect')" v-close-popup/>
         </template>
       </q-card-section>
+      <q-card-section class="no-padding">
+        <div class="row justify-around">
+          <q-chip :color="bottomTemperatureColor" text-color="white" icon="thermostat">
+            锅底温度<span class="text-center" style="width: 40px">{{ useControllerStore.bottomTemperature }}</span>℃
+          </q-chip>
+          <q-chip :color="infraredTemperatureColor" text-color="white" icon="thermostat">
+            红外温度<span class="text-center" style="width: 40px">{{ useControllerStore.infraredTemperature }}</span>℃
+          </q-chip>
+        </div>
+      </q-card-section>
       <q-card-actions align="around">
         <q-btn-group spread unelevated class="full-width">
           <template v-if="useControllerStore.isCooking">
-            <q-btn v-if="!useControllerStore.isPausing" :disable="!useControllerStore.isPausingWithMovingBackFinished"
+            <q-btn v-if="!useControllerStore.isPausing"
                    color="teal-6" label="中途加料" icon="mdi-shaker"
                    @click="sendCommand('pause_to_add')"/>
-            <q-btn v-else :disable="!useControllerStore.isPausingWithMovingFinished"
+            <q-btn v-else
                    color="teal-6" label="继续炒制" icon="fa-solid fa-play"
                    @click="sendCommand('resume')"/>
+            <!--            <q-btn v-if="!useControllerStore.isPausing" :disable="!useControllerStore.isPausingWithMovingBackFinished"-->
+            <!--                   color="teal-6" label="中途加料" icon="mdi-shaker"-->
+            <!--                   @click="sendCommand('pause_to_add')"/>-->
+            <!--            <q-btn v-else :disable="!useControllerStore.isPausingWithMovingFinished"-->
+            <!--                   color="teal-6" label="继续炒制" icon="fa-solid fa-play"-->
+            <!--                   @click="sendCommand('resume')"/>-->
             <q-separator vertical/>
             <q-btn color="teal-6" label="开门" icon="lock_open"
                    @click="sendCommand('door_unlock')"/>
@@ -70,6 +95,7 @@ import { useRouter } from "vue-router";
 import { computed } from "vue";
 import { execute } from "src/api/controller";
 import { Notify } from "quasar";
+import { secondsToMMSS } from "src/utils/timeFormat";
 
 const useAppStore = UseAppStore();
 const useControllerStore = UseControllerStore();
@@ -96,6 +122,10 @@ const sendCommand = async (commandName) => {
       commandData = "";
       break;
     case "pause_to_add":
+      if (!useControllerStore.isStirFrying) {
+        Notify.create("为确保安全，请在机器运行至翻炒位时中途加料");
+        return;
+      }
       commandType = "single";
       commandData = "";
       break;
@@ -114,6 +144,27 @@ const sendCommand = async (commandName) => {
   const { data } = await execute(commandType, commandName, commandData);
   if (data.message === "error") {
     Notify.create("机器正在执行其他命令，请稍后");
+  }
+};
+
+const cookingTimeDisplay = computed(() => {
+  return (useControllerStore.isPausing ? "暂停中" : "运行中") + "，已用时" + secondsToMMSS(useControllerStore.cookingTime);
+});
+
+const bottomTemperatureColor = computed(() => {
+  return temperatureColorCompute(useControllerStore.bottomTemperature);
+});
+const infraredTemperatureColor = computed(() => {
+  return temperatureColorCompute(useControllerStore.infraredTemperature);
+});
+
+const temperatureColorCompute = (temperature) => {
+  if (temperature <= 35) {
+    return "teal-6";
+  } else if (temperature <= 100) {
+    return "orange-7";
+  } else {
+    return "red-6";
   }
 };
 </script>

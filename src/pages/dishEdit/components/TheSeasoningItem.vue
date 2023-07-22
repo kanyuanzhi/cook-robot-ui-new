@@ -25,14 +25,14 @@ const maxWeight = ref(10);
 const weightStep = ref(1);
 
 const generateWeightSelectInfo = (pumpNumber) => {
-  if ([2, 3, 4, 5, 6].indexOf(pumpNumber) > -1) {
+  if ([1, 2, 3, 4, 5, 6].indexOf(pumpNumber) > -1) {
     minWeight.value = 1;
-    maxWeight.value = 20;
+    maxWeight.value = 100;
     weightStep.value = 1;
-  } else if ([1, 7, 8].indexOf(pumpNumber) > -1) {
-    minWeight.value = 10;
+  } else if ([7, 8].indexOf(pumpNumber) > -1) {
+    minWeight.value = 5;
     maxWeight.value = 150;
-    weightStep.value = 10;
+    weightStep.value = 5;
   } else {
     minWeight.value = 1;
     maxWeight.value = 10;

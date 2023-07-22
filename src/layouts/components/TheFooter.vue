@@ -1,7 +1,8 @@
 <template>
   <q-footer bordered class="bg-white text-primary">
     <q-toolbar @click="useAppStore.showRunningControl()">
-      <q-space/>
+      <q-img fit="fill" src="~/assets/logo.png" style="width: 120px; height: 34px"></q-img>
+<!--      <q-space/>-->
       <q-toolbar-title class="text-center">
         <q-spinner-dots
           v-if="useControllerStore.isRunning"
@@ -15,7 +16,7 @@
           size="2em"
         />
       </q-toolbar-title>
-      <q-space/>
+<!--      <q-space/>-->
     </q-toolbar>
   </q-footer>
 </template>

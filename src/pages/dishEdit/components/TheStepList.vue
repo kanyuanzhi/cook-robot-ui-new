@@ -54,8 +54,11 @@
               </q-item-section>
               <q-item-section>
                 <q-item-label>{{ index + 1 + ". " + step.name }}
-                  <template v-if="step.judgeType===1||step.judgeType===2">
-                    <span class="" style="font-size: 13px">，持续至{{ step.targetTemperature }}℃</span>
+                  <template v-if="step.judgeType===1">
+                    <span class="" style="font-size: 13px">，持续监测锅底温度至{{ step.targetTemperature }}℃</span>
+                  </template>
+                  <template v-if="step.judgeType===2">
+                    <span class="" style="font-size: 13px">，持续监测红外温度至{{ step.targetTemperature }}℃</span>
                   </template>
                   <template v-if="step.judgeType===3">
                     <span class="" style="font-size: 13px">，持续{{ step.duration }}秒</span>

@@ -62,7 +62,7 @@
             </q-item-section>
           </q-item>
 
-          <NumberSelect ref="numberSelect" label="温度控制" unit="摄氏度（℃）" :min="0" :max="220" :step="5"
+          <NumberSelect ref="numberSelect" label="温度监测" unit="摄氏度（℃）" :min="0" :max="220" :step="5"
                         :number="targetTemperature" :disable="judgeType===3||judgeType === 4"
                         @update="(v)=>targetTemperature=v"/>
 

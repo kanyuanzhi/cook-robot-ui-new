@@ -26,15 +26,6 @@ const routes = [
         component: () => import("pages/dishEdit/IndexPage.vue")
       },
     ],
-  }, {
-    path: "/runningControl",
-    component: () => import("layouts/MainLayout.vue"),
-    children: [
-      {
-        path: "",
-        component: () => import("pages/runningControl/IndexPage.vue")
-      },
-    ],
   },
   // Always leave this as last one,
   // but you can also remove it
