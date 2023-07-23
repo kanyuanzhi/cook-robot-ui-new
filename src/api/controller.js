@@ -7,7 +7,7 @@ export function execute(commandType, commandName, commandData) {
     data: {
       commandType,
       commandName,
-      commandData
+      commandData,
     }
   });
 }

@@ -21,6 +21,7 @@
 <script setup>
 import { ref } from "vue";
 import NumberSelect from "pages/dishEdit/components/select/NumberSelect.vue";
+import { newWaterStep } from "pages/dishEdit/components/dialogs/newStep";
 
 const emits = defineEmits(["update", "submit"]);
 
@@ -43,13 +44,7 @@ const updateDialogShow = (step, index) => {
 };
 const onSubmit = () => {
   try {
-    const newStep = {
-      name: "水",
-      weight: weight.value,
-      pumpNumber: 7,
-      key: Date.now(),
-      type: "water"
-    };
+    const newStep = newWaterStep(weight.value);
     if (isUpdate) {
       emits("update", newStep, stepIndex);
     } else {

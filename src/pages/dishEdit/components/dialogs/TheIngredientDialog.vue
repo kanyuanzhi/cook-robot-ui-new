@@ -76,6 +76,7 @@ import TheIngredientShapeSelectionDialog
 import SlotRadio from "pages/dishEdit/components/SlotRadio.vue";
 import NumberSelect from "pages/dishEdit/components/select/NumberSelect.vue";
 import { Notify } from "quasar";
+import { newIngredientStep } from "pages/dishEdit/components/dialogs/newStep";
 
 const emits = defineEmits(["update", "submit"]);
 
@@ -130,14 +131,7 @@ const onSubmit = () => {
     return;
   }
   try {
-    const newStep = {
-      name: name.value.trim(),
-      shape: shape.value.trim(),
-      weight: weight.value,
-      slotNumber: slotNumber.value,
-      key: Date.now(),
-      type: "ingredient"
-    };
+    const newStep = newIngredientStep(name.value.trim(), shape.value.trim(), weight.value, slotNumber.value);
     if (isUpdate) {
       emits("update", newStep, stepIndex);
     } else {

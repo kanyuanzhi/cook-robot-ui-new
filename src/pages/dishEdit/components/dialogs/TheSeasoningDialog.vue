@@ -26,6 +26,7 @@ import TheSeasoningItem from "pages/dishEdit/components/TheSeasoningItem.vue";
 import { cloneDeep } from "lodash/lang";
 import { Notify } from "quasar";
 import { getSeasonings } from "src/api/seasoning";
+import { newSeasoningStep } from "pages/dishEdit/components/dialogs/newStep";
 
 const emits = defineEmits(["update", "submit"]);
 
@@ -45,20 +46,10 @@ const seasonings = ref([
   cloneDeep(emptySeasoning)
 ]);
 
-const show = () => {
-  shown.value = true;
-};
-
-const updateDialogShow = (step, index) => {
-  shown.value = true;
-  isUpdate = true;
-  stepIndex = index;
-  seasonings.value = step.seasonings;
-};
-
 const seasoningOptions = ref([]);
 
-onMounted(async () => {
+const show = async () => {
+  shown.value = true;
   const { data } = await getSeasonings();
   const seasoningMap = data.data;
   for (let i in seasoningMap) {
@@ -69,9 +60,24 @@ onMounted(async () => {
       }
     );
   }
-});
+};
 
-const theSeasonNameSelectionDialog = ref(null);
+const updateDialogShow = async (step, index) => {
+  shown.value = true;
+  isUpdate = true;
+  stepIndex = index;
+  seasonings.value = step.seasonings;
+  const { data } = await getSeasonings();
+  const seasoningMap = data.data;
+  for (let i in seasoningMap) {
+    seasoningOptions.value.push(
+      {
+        label: seasoningMap[i],
+        pumpNumber: Number(i)
+      }
+    );
+  }
+};
 
 const onAdd = () => {
   if (seasonings.value.length > 4) {
@@ -93,23 +99,8 @@ const onDelete = (index) => {
 
 const onSubmit = () => {
   try {
-    const newSeasonings = [];
-    let names = [];
-    for (let i = 0; i < seasonings.value.length; i++) {
-      if (seasonings.value[i].label === "") continue;
-      newSeasonings.push(cloneDeep(seasonings.value[i]));
-      names.push(seasonings.value[i].label + seasonings.value[i].weight + "克");
-    }
-    if (newSeasonings.length === 0) {
-      Notify.create("至少添加1种调料");
-      return;
-    }
-    const newStep = {
-      name: names.join("，"),
-      seasonings: newSeasonings,
-      key: Date.now(),
-      type: "seasoning"
-    };
+    const newStep = newSeasoningStep(seasonings.value);
+    if (newStep === null) return; // 至少添加1中调料
     if (isUpdate) {
       emits("update", newStep, stepIndex);
     } else {
@@ -125,6 +116,7 @@ const onSubmit = () => {
 
 const onHide = () => {
   seasonings.value = [cloneDeep(emptySeasoning)];
+  seasoningOptions.value = [];
 };
 
 defineExpose({

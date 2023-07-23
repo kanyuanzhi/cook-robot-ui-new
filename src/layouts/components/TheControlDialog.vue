@@ -22,7 +22,16 @@
               size="4em"
             />
           </div>
-          <div v-if="useControllerStore.isCooking" class="text-teal-6 text-weight-bold" style="padding-top: 10px">{{ cookingTimeDisplay }}</div>
+          <template v-if="useControllerStore.isCooking">
+            <div class="text-teal-6 text-weight-bold text-subtitle1 text-center q-pt-lg">
+              <span>{{ useControllerStore.currentInstructionInfo.name }}</span><br>
+              <span>{{
+                  "" + useControllerStore.currentInstructionInfo.index + "/" + (useAppStore.runningDish.steps.length + 2)
+                }}</span><br>
+              <span>{{ cookingTimeDisplay }}</span>
+            </div>
+          </template>
+
         </template>
         <template v-else>
           <q-btn
@@ -148,7 +157,7 @@ const sendCommand = async (commandName) => {
 };
 
 const cookingTimeDisplay = computed(() => {
-  return (useControllerStore.isPausing ? "暂停中" : "运行中") + "，已用时" + secondsToMMSS(useControllerStore.cookingTime);
+  return (useControllerStore.isPausing ? "暂停中，已用时" : "") + secondsToMMSS(useControllerStore.cookingTime);
 });
 
 const bottomTemperatureColor = computed(() => {

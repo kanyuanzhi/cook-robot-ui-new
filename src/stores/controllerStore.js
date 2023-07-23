@@ -1,11 +1,22 @@
 import { defineStore } from "pinia";
 import { fetchStatus } from "src/api/controller";
 import { floor } from "lodash";
+import { UseAppStore } from "stores/appStore";
+import { getDish } from "src/api/dish";
 
 export const UseControllerStore = defineStore("controller", {
   state: () => ({
-    runningCommandName: "",
+    currentCommandName: "",
+    currentDishUuid: "",
+    currentInstructionInfo: {
+      type: "",
+      name: "",
+      index: 0,
+      actionNumber: 0
+    },
     isCooking: false,
+    lastIsCooking: false,
+    isCookFinished: true,
     isRunning: false,
     isPausing: false,
     isPausingWithMovingFinished: false,
@@ -24,8 +35,17 @@ export const UseControllerStore = defineStore("controller", {
     },
     async fetchStatus() {
       const { data } = await fetchStatus();
-      this.runningCommandName = data.data["currentCommandName"];
+      this.currentCommandName = data.data["currentCommandName"];
+      this.currentInstructionInfo = data.data["currentInstructionInfo"];
       this.isCooking = data.data["isCooking"];
+      if (this.isCooking) {
+        this.currentDishUuid = data.data["currentDishUuid"];
+        if (this.currentDishUuid !== UseAppStore().runningDish.uuid) {
+          const dishData = await getDish(this.currentDishUuid);
+          UseAppStore()
+            .setRunningDish(dishData.data.data);
+        }
+      }
       this.isRunning = data.data["isRunning"];
       this.isPausing = data.data["isPausing"];
       this.isPausingWithMovingFinished = data.data["isPausingWithMovingFinished"];
@@ -34,6 +54,13 @@ export const UseControllerStore = defineStore("controller", {
       this.bottomTemperature = data.data["bottomTemperature"] / 10;
       this.infraredTemperature = data.data["infraredTemperature"] / 10;
       this.cookingTime = floor(data.data["cookingTime"] / 1000);
+
+      if (!this.isCooking && this.lastIsCooking) {
+        this.isCookFinished = true;
+      } else {
+        this.lastIsCooking = data.data["isCooking"];
+        this.isCookFinished = false;
+      }
     }
   },
 });

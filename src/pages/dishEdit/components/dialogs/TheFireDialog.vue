@@ -83,6 +83,7 @@
 import { ref } from "vue";
 import DurationSelect from "pages/dishEdit/components/select/DurationSelect.vue";
 import NumberSelect from "pages/dishEdit/components/select/NumberSelect.vue";
+import { newHeatStep } from "pages/dishEdit/components/dialogs/newStep";
 
 const emits = defineEmits(["update", "submit"]);
 
@@ -112,15 +113,7 @@ const updateDialogShow = (step, index) => {
 
 const onSubmit = () => {
   try {
-    const newStep = {
-      name: "加热" + temperature.value + "℃",
-      temperature: temperature.value,
-      targetTemperature: targetTemperature.value,
-      duration: duration.value,
-      judgeType: judgeType.value,
-      key: Date.now(),
-      type: "heat"
-    };
+    const newStep = newHeatStep(temperature.value, judgeType.value, targetTemperature.value, duration.value);
     if (isUpdate) {
       emits("update", newStep, stepIndex);
     } else {

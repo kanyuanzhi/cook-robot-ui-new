@@ -22,6 +22,7 @@
 <script setup>
 import { onUnmounted, ref } from "vue";
 import NumberSelect from "pages/dishEdit/components/select/NumberSelect.vue";
+import { newOilStep } from "pages/dishEdit/components/dialogs/newStep";
 
 const emits = defineEmits(["update", "submit"]);
 
@@ -45,13 +46,7 @@ const updateDialogShow = (step, index) => {
 
 const onSubmit = () => {
   try {
-    const newStep = {
-      name: "食用油",
-      weight: weight.value,
-      pumpNumber: 1,
-      key: Date.now(),
-      type: "oil"
-    };
+    const newStep = newOilStep(weight.value);
     if (isUpdate) {
       emits("update", newStep, stepIndex);
     } else {

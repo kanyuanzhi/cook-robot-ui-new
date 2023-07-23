@@ -17,77 +17,13 @@
             </div>
           </template>
           <q-item>
-            <template v-if="step.type==='ingredient'">
-              <q-item-section avatar>
-                <q-avatar rounded color="green" text-color="white" icon="fa-solid fa-wheat-awn" size="md"/>
-              </q-item-section>
-              <q-item-section>
-                <q-item-label>{{ index + 1 + ingredientNameText(step) }}
-                </q-item-label>
-              </q-item-section>
-            </template>
-            <template v-if="step.type==='water'">
-              <q-item-section avatar>
-                <q-avatar rounded color="blue" text-color="white" icon="water_drop" size="md"/>
-              </q-item-section>
-              <q-item-section>
-                <q-item-label>{{
-                    index + 1 + ". 加" + step.name + step.weight + "克"
-                  }}
-                </q-item-label>
-              </q-item-section>
-            </template>
-            <template v-if="step.type==='oil'">
-              <q-item-section avatar>
-                <q-avatar rounded color="orange" text-color="white" icon="fa-solid fa-bottle-droplet" size="md"/>
-              </q-item-section>
-              <q-item-section>
-                <q-item-label>{{
-                    index + 1 + ". 加" + step.name + step.weight + "克"
-                  }}
-                </q-item-label>
-              </q-item-section>
-            </template>
-            <template v-if="step.type === 'heat'">
-              <q-item-section avatar>
-                <q-avatar rounded color="red-7" text-color="white" icon="local_fire_department" size="md"/>
-              </q-item-section>
-              <q-item-section>
-                <q-item-label>{{ index + 1 + ". " + step.name }}
-                  <template v-if="step.judgeType===1">
-                    <span class="" style="font-size: 13px">，持续监测锅底温度至{{ step.targetTemperature }}℃</span>
-                  </template>
-                  <template v-if="step.judgeType===2">
-                    <span class="" style="font-size: 13px">，持续监测红外温度至{{ step.targetTemperature }}℃</span>
-                  </template>
-                  <template v-if="step.judgeType===3">
-                    <span class="" style="font-size: 13px">，持续{{ step.duration }}秒</span>
-                  </template>
-                  <template v-if="step.judgeType===4">
-                    <span class="" style="font-size: 13px">，无控制</span>
-                  </template>
-                </q-item-label>
-              </q-item-section>
-            </template>
-            <template v-if="step.type==='stir_fry'">
-              <q-item-section avatar>
-                <q-avatar rounded color="brown-5" text-color="white" icon="mdi-pot-mix" size="md"/>
-              </q-item-section>
-              <q-item-section>
-                <q-item-label>{{ index + 1 + ". " + step.name }}
-                  <span class="" style="font-size: 13px">，持续{{ step.duration }}秒</span>
-                </q-item-label>
-              </q-item-section>
-            </template>
-            <template v-if="step.type==='seasoning'">
-              <q-item-section avatar>
-                <q-avatar rounded color="teal" text-color="white" icon="mdi-shaker" size="md"/>
-              </q-item-section>
-              <q-item-section>
-                <q-item-label>{{ index + 1 + ". 加" + step.name }}
-                </q-item-label>
-              </q-item-section>
-            </template>
+            <q-item-section avatar>
+              <q-avatar rounded :color="instructionTypeToColor[step.instructionType]"
+                        text-color="white" :icon="instructionTypeToIcon[step.instructionType]" size="md"/>
+            </q-item-section>
+            <q-item-section>
+              <q-item-label>{{ index + 1 + ". " + step.instructionName }}</q-item-label>
+            </q-item-section>
             <q-item-section avatar>
               <q-icon color="teal-6" name="drag_indicator" class="drag-item"/>
             </q-item-section>
@@ -106,7 +42,7 @@
 
 <script setup>
 
-import { onMounted, onUnmounted, ref } from "vue";
+import { computed, onMounted, onUnmounted, ref } from "vue";
 import Sortable from "sortablejs";
 import { UseAppStore } from "stores/appStore";
 import TheIngredientDialog from "pages/dishEdit/components/dialogs/TheIngredientDialog.vue";
@@ -146,10 +82,23 @@ const onDelete = (index) => {
   useAppStore.editingDish.steps.splice(index, 1);
 };
 
-const ingredientNameText = (step) => {
-  return step.shape === ""
-    ? ". 加" + step.name + step.weight + "克，使用菜盒" + step.slotNumber
-    : ". 加" + step.name + "（" + step.shape + "）" + step.weight + "克，使用菜盒" + step.slotNumber;
+// 前端叫step，后端叫instruction
+const instructionTypeToColor = {
+  "ingredient": "green",
+  "water": "blue",
+  "oil": "orange",
+  "heat": "red-7",
+  "stir_fry": "brown-5",
+  "seasoning": "teal",
+};
+
+const instructionTypeToIcon = {
+  "ingredient": "fa-solid fa-wheat-awn",
+  "water": "water_drop",
+  "oil": "fa-solid fa-bottle-droplet",
+  "heat": "local_fire_department",
+  "stir_fry": "mdi-pot-mix",
+  "seasoning": "mdi-shaker",
 };
 
 const theIngredientDialog = ref(null);
@@ -160,7 +109,7 @@ const theWaterDialog = ref(null);
 const theOilDialog = ref(null);
 
 const onStepListItemClick = (step, index) => {
-  switch (step.type) {
+  switch (step.instructionType) {
     case "ingredient":
       theIngredientDialog.value.updateDialogShow(step, index);
       break;

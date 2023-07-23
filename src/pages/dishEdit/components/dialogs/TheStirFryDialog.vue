@@ -6,10 +6,10 @@
           <div class="text-h6">添加翻炒</div>
         </q-card-section>
         <q-card-section>
-        <GearSlider ref="gearSlider" :gear="gear" label="档位" color="amber-10" :gear-min="0" :gear-max="5"
-                    @update="(v)=>{gear=v}"/>
+          <GearSlider ref="gearSlider" :gear="gear" label="档位" color="amber-10" :gear-min="0" :gear-max="5"
+                      @update="(v)=>{gear=v}"/>
 
-        <DurationSelect ref="durationSelect" :duration="duration" @update="(v)=>{duration=v}"/>
+          <DurationSelect ref="durationSelect" :duration="duration" @update="(v)=>{duration=v}"/>
         </q-card-section>
         <q-card-actions align="right">
           <q-btn v-close-popup flat color="teal-6">取消</q-btn>
@@ -24,6 +24,7 @@
 import { ref } from "vue";
 import GearSlider from "pages/dishEdit/components/select/GearSlider.vue";
 import DurationSelect from "pages/dishEdit/components/select/DurationSelect.vue";
+import { newStirFryStep } from "pages/dishEdit/components/dialogs/newStep";
 
 const emits = defineEmits(["update", "submit"]);
 
@@ -52,13 +53,7 @@ const updateDialogShow = (step, index) => {
 
 const onSubmit = () => {
   try {
-    const newStep = {
-      name: "翻炒" + gear.value + "档",
-      gear: gear.value,
-      duration: duration.value,
-      key: Date.now(),
-      type: "stir_fry"
-    };
+    const newStep = newStirFryStep(gear.value, duration.value);
     if (isUpdate) {
       emits("update", newStep, stepIndex);
     } else {
