@@ -117,6 +117,7 @@ const runningDishDisplay = computed(() => {
 const sendCommand = async (commandName) => {
   let commandType,
     commandData;
+  // cook型命令会在commandData中携带菜品uuid，其他commandData为空
   switch (commandName) {
     case "cook":
       commandType = "multiple";

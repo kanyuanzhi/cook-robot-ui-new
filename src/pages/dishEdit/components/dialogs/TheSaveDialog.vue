@@ -25,7 +25,6 @@
             <q-item-section>
               <q-select
                 dense
-                options-dense
                 filled
                 v-model="newCuisine"
                 :options="cuisineOptions"
@@ -88,6 +87,7 @@ const newCuisine = ref({});
 const show = async () => {
   shown.value = true;
   newName.value = useAppStore.editingDish.name;
+  cuisineOptions.value = [];
   const { data } = await getCuisines();
   const cuisines = data.data;
   cuisines.forEach(cuisine => {

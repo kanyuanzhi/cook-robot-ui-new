@@ -6,7 +6,7 @@
           <div class="text-h6">添加食用油</div>
         </q-card-section>
         <q-card-section>
-          <NumberSelect ref="numberSelect" label="分量" unit="克（毫升）" :min="0" :max="150" :step="5"
+          <NumberSelect ref="numberSelect" label="分量" unit="克" :min="0" :max="150" :step="5"
                         :number="weight" @update="(v)=>weight=v"/>
         </q-card-section>
 

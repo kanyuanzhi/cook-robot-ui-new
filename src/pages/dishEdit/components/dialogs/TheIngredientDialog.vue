@@ -7,7 +7,7 @@
         </q-card-section>
         <q-card-section>
           <q-item>
-            <q-item-section avatar>种类</q-item-section>
+            <q-item-section avatar>食材</q-item-section>
             <q-item-section>
               <q-input
                 v-model="name"
@@ -40,7 +40,7 @@
             </q-item-section>
           </q-item>
 
-          <NumberSelect ref="numberSelect" label="分量" unit="克（毫升）" :min="0" :max="220" :step="5"
+          <NumberSelect ref="numberSelect" label="分量" unit="克" :min="0" :max="220" :step="5"
                         :number="weight" @update="(v)=>weight=v"/>
 
           <SlotRadio ref="slotRadio" :slotNumber="slotNumber" label="菜盒" :slot-count="4" @update="(v)=>slotNumber=v"/>
@@ -127,7 +127,7 @@ const theIngredientShapeSelectionDialog = ref(null);
 
 const onSubmit = () => {
   if (name.value.trim() === "") {
-    Notify.create("请输入添加食材种类");
+    Notify.create("请添加食材");
     return;
   }
   try {
