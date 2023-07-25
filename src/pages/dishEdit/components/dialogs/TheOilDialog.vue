@@ -6,7 +6,7 @@
           <div class="text-h6">添加食用油</div>
         </q-card-section>
         <q-card-section>
-          <NumberSelect ref="numberSelect" label="分量" unit="克" :min="0" :max="150" :step="5"
+          <NumberSelect ref="numberSelect" label="分量" unit="克" :min="1" :max="100" :step="1"
                         :number="weight" @update="(v)=>weight=v"/>
         </q-card-section>
 
@@ -33,8 +33,9 @@ const weight = ref(0);
 let isUpdate = false;
 let stepIndex = 0;
 
-const show = () => {
+const show = (index = -1) => {
   shown.value = true;
+  stepIndex = index;
 };
 
 const updateDialogShow = (step, index) => {
@@ -47,11 +48,7 @@ const updateDialogShow = (step, index) => {
 const onSubmit = () => {
   try {
     const newStep = newOilStep(weight.value);
-    if (isUpdate) {
-      emits("update", newStep, stepIndex);
-    } else {
-      emits("submit", newStep);
-    }
+    emits(isUpdate ? "update" : "submit", newStep, stepIndex);
   } catch (e) {
     return;
   }

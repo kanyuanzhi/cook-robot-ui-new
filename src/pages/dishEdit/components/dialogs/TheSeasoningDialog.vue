@@ -48,8 +48,9 @@ const seasonings = ref([
 
 const seasoningOptions = ref([]);
 
-const show = async () => {
+const show = async (index = -1) => {
   shown.value = true;
+  stepIndex = index;
   const { data } = await getSeasonings();
   const seasoningMap = data.data;
   for (let i in seasoningMap) {
@@ -101,11 +102,7 @@ const onSubmit = () => {
   try {
     const newStep = newSeasoningStep(seasonings.value);
     if (newStep === null) return; // 至少添加1中调料
-    if (isUpdate) {
-      emits("update", newStep, stepIndex);
-    } else {
-      emits("submit", newStep);
-    }
+    emits(isUpdate ? "update" : "submit", newStep, stepIndex);
   } catch (e) {
     return;
   }

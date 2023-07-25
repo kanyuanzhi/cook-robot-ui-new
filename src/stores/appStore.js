@@ -18,6 +18,8 @@ export const UseAppStore = defineStore("app", {
       uuid: ""
     },
     runningDish: {},
+    useEasyStepList: false,
+    lastStirFryGear: 0,
   }),
   getters: {
     // getCurrentDish: (state) => state.runningDish,
@@ -52,6 +54,12 @@ export const UseAppStore = defineStore("app", {
     },
     setRunningDish(dish) {
       this.runningDish = dish;
+    },
+    shiftUseEasyStepList() {
+      this.useEasyStepList = !this.useEasyStepList;
+    },
+    setLastStirFryGear(gear) {
+      this.lastStirFryGear = gear;
     },
   },
 });

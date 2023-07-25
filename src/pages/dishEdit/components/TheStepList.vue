@@ -16,7 +16,7 @@
               <q-icon name="delete"/>
             </div>
           </template>
-          <q-item>
+          <q-item class="q-px-sm">
             <q-item-section avatar>
               <q-avatar rounded :color="instructionTypeToColor[step.instructionType]"
                         text-color="white" :icon="instructionTypeToIcon[step.instructionType]" size="md"/>
@@ -69,8 +69,6 @@ onMounted(() => {
     sortable.destroy();
   });
 });
-
-const test = ref([1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 12, 13]);
 
 const onSortEnd = (event) => {
   const draggedItem = useAppStore.editingDish.steps[event.oldIndex];

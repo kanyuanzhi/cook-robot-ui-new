@@ -25,6 +25,9 @@ import { ref } from "vue";
 import GearSlider from "pages/dishEdit/components/select/GearSlider.vue";
 import DurationSelect from "pages/dishEdit/components/select/DurationSelect.vue";
 import { newStirFryStep } from "pages/dishEdit/components/dialogs/newStep";
+import { UseAppStore } from "stores/appStore";
+
+const useAppStore = UseAppStore()
 
 const emits = defineEmits(["update", "submit"]);
 
@@ -39,8 +42,9 @@ const timeSelect = ref(null);
 let isUpdate = false;
 let stepIndex = 0;
 
-const show = () => {
+const show = (index = -1) => {
   shown.value = true;
+  stepIndex = index;
 };
 
 const updateDialogShow = (step, index) => {
@@ -52,13 +56,10 @@ const updateDialogShow = (step, index) => {
 };
 
 const onSubmit = () => {
+  useAppStore.setLastStirFryGear(gear.value)
   try {
     const newStep = newStirFryStep(gear.value, duration.value);
-    if (isUpdate) {
-      emits("update", newStep, stepIndex);
-    } else {
-      emits("submit", newStep);
-    }
+    emits(isUpdate ? "update" : "submit", newStep, stepIndex);
   } catch (e) {
     return;
   }

@@ -1,6 +1,9 @@
 import { app, BrowserWindow, nativeTheme } from 'electron'
 import path from 'path'
 import os from 'os'
+import { initialize, enable } from "@electron/remote/main";
+
+initialize();
 
 // needed in case process is undefined under Linux
 const platform = process.platform || os.platform()
@@ -26,10 +29,13 @@ function createWindow () {
     disableAutoHideCursor: true,
     webPreferences: {
       contextIsolation: true,
+      sandbox: false,
       // More info: https://v2.quasar.dev/quasar-cli-vite/developing-electron-apps/electron-preload-script
       preload: path.resolve(__dirname, process.env.QUASAR_ELECTRON_PRELOAD)
     }
   })
+
+  enable(mainWindow.webContents);
 
   mainWindow.loadURL(process.env.APP_URL)
 

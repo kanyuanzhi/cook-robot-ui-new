@@ -90,8 +90,9 @@ const slotNumber = ref("1");
 let isUpdate = false;
 let stepIndex = 0;
 
-const show = () => {
+const show = (index = -1) => {
   shown.value = true;
+  stepIndex = index;
 };
 
 const updateDialogShow = (step, index) => {
@@ -132,11 +133,7 @@ const onSubmit = () => {
   }
   try {
     const newStep = newIngredientStep(name.value.trim(), shape.value.trim(), weight.value, slotNumber.value);
-    if (isUpdate) {
-      emits("update", newStep, stepIndex);
-    } else {
-      emits("submit", newStep);
-    }
+    emits(isUpdate ? "update" : "submit", newStep, stepIndex);
   } catch (e) {
     return;
   }

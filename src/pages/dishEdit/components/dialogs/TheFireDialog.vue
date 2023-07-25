@@ -97,8 +97,9 @@ const judgeType = ref(4);
 let isUpdate = false;
 let stepIndex = 0;
 
-const show = () => {
+const show = (index = -1) => {
   shown.value = true;
+  stepIndex = index;
 };
 
 const updateDialogShow = (step, index) => {
@@ -114,11 +115,7 @@ const updateDialogShow = (step, index) => {
 const onSubmit = () => {
   try {
     const newStep = newHeatStep(temperature.value, judgeType.value, targetTemperature.value, duration.value);
-    if (isUpdate) {
-      emits("update", newStep, stepIndex);
-    } else {
-      emits("submit", newStep);
-    }
+    emits(isUpdate ? "update" : "submit", newStep, stepIndex);
   } catch (e) {
     return;
   }

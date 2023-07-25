@@ -1,5 +1,6 @@
 import { boot } from "quasar/wrappers";
 import axios from "axios";
+import { Platform } from "quasar";
 
 // Be careful when using SSR for cross-request state pollution
 // due to creating a Singleton instance here;
@@ -8,11 +9,11 @@ import axios from "axios";
 // "export default () => {}" function below (which runs individually
 // for each client)
 const api = axios.create({
-  // baseURL: (Platform.is.cros || Platform.is.electron) ? "http://localhost:8888" : "http://169.254.70.55:8888",
+  // baseURL: Platform.is.electron ? "http://localhost:8889/api/v1" : "http://192.168.6.10:8888",
   // baseURL: (Platform.is.cros || Platform.is.electron) ? "http://localhost:8888" : "http://169.254.216.164:8888",
   // baseURL: "http://192.168.0.34:8888",
-  baseURL: "http://localhost:8889/api/v1",
-  // baseURL: "http://192.168.6.10:8889/api/v1",
+  // baseURL: "http://localhost:8889/api/v1",
+  baseURL: "http://192.168.6.10:8889/api/v1",
   // baseURL: "http://192.168.149.235:8889/api/v1",
   // baseURL: "http://127.0.0.1:8888",
   // baseURL: "http://192.168.31.168:8888",

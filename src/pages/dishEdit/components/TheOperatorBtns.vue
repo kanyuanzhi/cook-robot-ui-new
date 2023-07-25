@@ -69,6 +69,7 @@ import TheSaveDialog from "pages/dishEdit/components/dialogs/TheSaveDialog.vue";
 import OperatorBtn from "pages/dishEdit/components/dialogs/OperatorBtn.vue";
 import { UseAppStore } from "stores/appStore";
 import TheDeleteDialog from "pages/dishEdit/components/dialogs/TheDeleteDialog.vue";
+import { newStirFryStep } from "pages/dishEdit/components/dialogs/newStep";
 
 const useAppStore = UseAppStore();
 
@@ -80,9 +81,16 @@ const theWaterDialog = ref(null);
 const theOilDialog = ref(null);
 
 const theSaveDialog = ref(null);
-const theDeleteDialog = ref(null)
-const onSubmit = (val) => {
-  useAppStore.editingDish.steps.push(val);
+const theDeleteDialog = ref(null);
+const onSubmit = (val, index) => {
+  if (index === -1) {
+    useAppStore.editingDish.steps.push(val);
+  } else {
+    useAppStore.editingDish.steps.splice(index + 1, 0, val);
+  }
+  if (val.instructionType !== "stir_fry" && useAppStore.useEasyStepList) {
+    useAppStore.editingDish.steps.push(newStirFryStep(useAppStore.lastStirFryGear, 0));
+  }
 };
 const onUpdate = () => {
 };

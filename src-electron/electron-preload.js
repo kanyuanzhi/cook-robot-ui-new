@@ -27,3 +27,29 @@
  *   }
  * }
  */
+
+import { contextBridge } from "electron";
+import { BrowserWindow } from "@electron/remote";
+
+contextBridge.exposeInMainWorld("myWindowAPI", {
+  minimize:()=> {
+    BrowserWindow.getFocusedWindow()
+      .minimize();
+  },
+
+  isFullscreen:()=> {
+    const win = BrowserWindow.getFocusedWindow();
+    return win.isFullScreen()
+  },
+
+  toggle:()=> {
+    const win = BrowserWindow.getFocusedWindow();
+    const isFullscreen = win.isFullScreen();
+    win.setFullScreen(!isFullscreen);
+  },
+
+  close:()=> {
+    BrowserWindow.getFocusedWindow()
+      .close();
+  }
+});

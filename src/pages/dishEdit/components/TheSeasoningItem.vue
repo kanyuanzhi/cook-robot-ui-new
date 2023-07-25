@@ -35,7 +35,7 @@ const generateWeightSelectInfo = (pumpNumber) => {
     weightStep.value = 5;
   } else {
     minWeight.value = 1;
-    maxWeight.value = 10;
+    maxWeight.value = 20;
     weightStep.value = 1;
   }
 };
