@@ -80,7 +80,6 @@ watch(min, (v) => {
 
 watch(sec, (v) => {
   emits("update", min.value.value * 60 + v.value);
-  console.log(v);
 });
 </script>
 

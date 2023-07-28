@@ -11,9 +11,9 @@
         options-cover
         stack-label
       >
-        <!--        <template v-slot:selected>-->
-        <!--          {{seasoning.label}}-->
-        <!--        </template>-->
+<!--        <template v-slot:selected>-->
+<!--          {{ seasoning.pumpNumber === 0 ? "" : (seasoning.pumpNumber + "号泵：" + seasoning.label) }}-->
+<!--        </template>-->
       </q-select>
     </q-item-section>
   </q-item>
@@ -24,6 +24,8 @@ import { ref, watch } from "vue";
 
 const props = defineProps(["seasoning", "seasoningOptions"]);
 const emits = defineEmits(["update"]);
+
+console.log(props.seasoning)
 
 const selectedSeasoning = ref(props.seasoning);
 

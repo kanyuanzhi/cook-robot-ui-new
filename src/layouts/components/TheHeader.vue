@@ -12,13 +12,13 @@
       <q-btn stretch flat label="菜品选择" @click="router.push('/dishSelect')"/>
       <q-separator dark vertical/>
       <q-btn stretch flat label="菜品制作" @click="router.push('/dishEdit')"/>
-      <q-toggle
-        class="q-pr-md"
-        color="orange"
-        dense
-        :label="useAppStore.useEasyStepList?`简易模式`:`普通模式`"
-        v-model="useAppStore.useEasyStepList"
-      />
+<!--      <q-toggle-->
+<!--        class="q-pr-md"-->
+<!--        color="orange"-->
+<!--        dense-->
+<!--        :label="useAppStore.useEasyStepList?`简易模式`:`普通模式`"-->
+<!--        v-model="useAppStore.useEasyStepList"-->
+<!--      />-->
       <q-separator dark vertical/>
 <!--      <q-btn flat round dense icon="menu" class="q-ml-sm"/>-->
       <TheSystemSetting class="q-ml-sm"/>

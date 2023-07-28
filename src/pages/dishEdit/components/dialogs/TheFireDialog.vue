@@ -16,16 +16,6 @@
                 :step="1"
                 color="red-6"
               />
-              <!--            <q-slider-->
-              <!--              v-model="temperature"-->
-              <!--              :min="0"-->
-              <!--              :max="220"-->
-              <!--              :step="1"-->
-              <!--              label-->
-              <!--              :label-value="temperature + '摄氏度（℃）'"-->
-              <!--              label-always-->
-              <!--              color="red-6"-->
-              <!--            />-->
             </q-item-section>
             <q-item-section side style="width: 130px;"><span class="text-black"><span>{{
                 temperature
@@ -47,7 +37,7 @@
                 :options="[
                 {label: '锅底温度', value: 1},
                 {label: '红外温度', value: 2},
-                {label: '时间', value: 3},
+                // {label: '时间', value: 3},
                 {label: '无', value: 4}]"
               />
             </q-item-section>
@@ -66,9 +56,9 @@
                         :number="targetTemperature" :disable="judgeType===3||judgeType === 4"
                         @update="(v)=>targetTemperature=v"/>
 
-          <DurationSelect ref="durationSelect" :duration="duration"
-                          :disable="judgeType===1||judgeType===2||judgeType === 4"
-                          @update="(v)=>{duration=v}"/>
+<!--          <DurationSelect ref="durationSelect" :duration="duration"-->
+<!--                          :disable="judgeType===1||judgeType===2||judgeType === 4"-->
+<!--                          @update="(v)=>{duration=v}"/>-->
         </q-card-section>
         <q-card-actions align="right">
           <q-btn v-close-popup flat color="teal-6">取消</q-btn>

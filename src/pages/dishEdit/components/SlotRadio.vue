@@ -28,7 +28,6 @@ const selectedSlot = ref(props.slotNumber);
 
 onMounted(() => {
   selectedSlot.value = props.slotNumber;
-  console.log(selectedSlot.value);
 });
 
 const slotOptions = [];

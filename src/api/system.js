@@ -6,3 +6,10 @@ export function shutdown() {
     method: "get"
   });
 }
+
+export function checkUpdatePermission() {
+  return api({
+    url: "/system/checkUpdatePermission",
+    method: "get"
+  });
+}

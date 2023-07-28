@@ -13,18 +13,18 @@ import { onMounted, ref } from "vue";
 import TheSeasoningSelect from "pages/dishEdit/components/select/TheSeasoningSelect.vue";
 import NumberSelect from "pages/dishEdit/components/select/NumberSelect.vue";
 
-const props = defineProps(["seasoning", "seasoningOptions"]);
-const emits = defineEmits(["delete"]);
+const props = defineProps(["seasoning", "seasoningOptions", "index"]);
+const emits = defineEmits(["delete", "seasoning-select", "weight-select"]);
 
 onMounted(() => {
-  generateWeightSelectInfo(props.seasoning.pumpNumber);
+  generateWeightSelection(props.seasoning.pumpNumber);
 });
 
 const minWeight = ref(1);
 const maxWeight = ref(10);
 const weightStep = ref(1);
 
-const generateWeightSelectInfo = (pumpNumber) => {
+const generateWeightSelection = (pumpNumber) => {
   if ([1, 2, 3, 4, 5, 6].indexOf(pumpNumber) > -1) {
     minWeight.value = 1;
     maxWeight.value = 100;
@@ -41,16 +41,12 @@ const generateWeightSelectInfo = (pumpNumber) => {
 };
 
 const onSeasoningUpdate = (val) => {
-  // eslint-disable-next-line vue/no-mutating-props
-  props.seasoning.label = val.label;
-  // eslint-disable-next-line vue/no-mutating-props
-  props.seasoning.pumpNumber = val.pumpNumber;
-  generateWeightSelectInfo(val.pumpNumber);
+  generateWeightSelection(val.pumpNumber);
+  emits("seasoning-select", val, props.index)
 };
 
 const onWeightUpdate = (val) => {
-  // eslint-disable-next-line vue/no-mutating-props
-  props.seasoning.weight = val;
+  emits("weight-select", val, props.index)
 };
 </script>
 

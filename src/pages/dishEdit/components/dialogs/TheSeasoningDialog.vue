@@ -7,8 +7,10 @@
           <div class="text-h6">添加调料</div>
         </q-card-section>
         <q-card-section>
-          <TheSeasoningItem v-for="(seasoning,index) in seasonings" :key="seasoning.key"
-                            :seasoning="seasoning" :seasoning-options="seasoningOptions" @delete="onDelete(index)"/>
+          <TheSeasoningItem v-for="(seasoning,index) in seasonings" :key="seasoning.key" :index="index"
+                            :seasoning="seasoning" :seasoning-options="seasoningOptions"
+                            @delete="onDelete(index)" @seasoning-select="onSeasoningSelect"
+                            @weight-select="onWeightSelect"/>
         </q-card-section>
         <q-card-actions align="right">
           <q-btn v-close-popup flat color="teal-6">取消</q-btn>
@@ -21,7 +23,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
+import { ref } from "vue";
 import TheSeasoningItem from "pages/dishEdit/components/TheSeasoningItem.vue";
 import { cloneDeep } from "lodash/lang";
 import { Notify } from "quasar";
@@ -46,6 +48,7 @@ const seasonings = ref([
   cloneDeep(emptySeasoning)
 ]);
 
+const seasoningOptionsTpl = [];
 const seasoningOptions = ref([]);
 
 const show = async (index = -1) => {
@@ -54,13 +57,14 @@ const show = async (index = -1) => {
   const { data } = await getSeasonings();
   const seasoningMap = data.data;
   for (let i in seasoningMap) {
-    seasoningOptions.value.push(
+    seasoningOptionsTpl.push(
       {
         label: seasoningMap[i],
         pumpNumber: Number(i)
       }
     );
   }
+  seasoningOptions.value = seasoningOptionsTpl;
 };
 
 const updateDialogShow = async (step, index) => {
@@ -71,13 +75,14 @@ const updateDialogShow = async (step, index) => {
   const { data } = await getSeasonings();
   const seasoningMap = data.data;
   for (let i in seasoningMap) {
-    seasoningOptions.value.push(
+    seasoningOptionsTpl.push(
       {
         label: seasoningMap[i],
         pumpNumber: Number(i)
       }
     );
   }
+  generateSeasoningOptions();
 };
 
 const onAdd = () => {
@@ -111,9 +116,36 @@ const onSubmit = () => {
   shown.value = false;
 };
 
+const onSeasoningSelect = (val, index) => {
+  seasonings.value[index].label = val.label;
+  seasonings.value[index].pumpNumber = val.pumpNumber;
+  generateSeasoningOptions();
+};
+
+const onWeightSelect = (val, index) => {
+  seasonings.value[index].weight = val;
+};
+
 const onHide = () => {
   seasonings.value = [cloneDeep(emptySeasoning)];
   seasoningOptions.value = [];
+  seasoningOptionsTpl.length = 0;
+};
+
+const generateSeasoningOptions = () => {
+  seasoningOptions.value = [];
+  for (let i = 0; i < seasoningOptionsTpl.length; i++) {
+    let isSelected = false;
+    for (let j = 0; j < seasonings.value.length; j++) {
+      if (seasoningOptionsTpl[i].pumpNumber === seasonings.value[j].pumpNumber) {
+        isSelected = true;
+        break;
+      }
+    }
+    if (!isSelected) {
+      seasoningOptions.value.push(seasoningOptionsTpl[i]);
+    }
+  }
 };
 
 defineExpose({

@@ -40,7 +40,7 @@
             </q-item-section>
           </q-item>
 
-          <NumberSelect ref="numberSelect" label="分量" unit="克" :min="0" :max="220" :step="5"
+          <NumberSelect ref="numberSelect" label="分量" unit="克" :min="0" :max="500" :step="5"
                         :number="weight" @update="(v)=>weight=v"/>
 
           <SlotRadio ref="slotRadio" :slotNumber="slotNumber" label="菜盒" :slot-count="4" @update="(v)=>slotNumber=v"/>

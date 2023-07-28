@@ -42,7 +42,7 @@
             round
             unelevated
             icon="play_arrow"
-            @click="sendCommand('cook')"/>
+            @click="sendCommand('cook',useAppStore.runningDish.uuid)"/>
           <q-btn
             v-else
             color="teal-6"
@@ -51,12 +51,14 @@
             @click="router.push('/dishSelect')" v-close-popup/>
         </template>
       </q-card-section>
-      <q-card-section class="no-padding">
+      <q-card-section class="q-py-sm">
         <div class="row justify-around">
-          <q-chip :color="bottomTemperatureColor" text-color="white" icon="thermostat">
+          <q-chip :color="getTemperatureColor(useControllerStore.bottomTemperature)" text-color="white" icon="thermostat">
             锅底温度<span class="text-center" style="width: 40px">{{ useControllerStore.bottomTemperature }}</span>℃
           </q-chip>
-          <q-chip :color="infraredTemperatureColor" text-color="white" icon="thermostat">
+          <q-btn v-if="useControllerStore.isCooking" :color="getTemperatureColor(useControllerStore.currentHeatingTemperature)" rounded unelevated label="加热控制"
+                 @click="openTemperatureControlDialog()"/>
+          <q-chip :color="getTemperatureColor(useControllerStore.infraredTemperature)" text-color="white" icon="thermostat">
             红外温度<span class="text-center" style="width: 40px">{{ useControllerStore.infraredTemperature }}</span>℃
           </q-chip>
         </div>
@@ -94,6 +96,7 @@
         </q-btn-group>
       </q-card-actions>
     </q-card>
+    <TheHeatingTemperatureControlDialog ref="theHeatingTemperatureControlDialog"/>
   </q-dialog>
 </template>
 
@@ -101,10 +104,10 @@
 import { UseAppStore } from "stores/appStore";
 import { UseControllerStore } from "stores/controllerStore";
 import { useRouter } from "vue-router";
-import { computed } from "vue";
-import { execute } from "src/api/controller";
-import { Notify } from "quasar";
+import { computed, ref } from "vue";
 import { secondsToMMSS } from "src/utils/timeFormat";
+import TheHeatingTemperatureControlDialog from "layouts/components/TheHeatingTemperatureControlDialog.vue";
+import { sendCommand } from "layouts/components/command";
 
 const useAppStore = UseAppStore();
 const useControllerStore = UseControllerStore();
@@ -114,61 +117,11 @@ const runningDishDisplay = computed(() => {
   return useAppStore.runningDish.name === undefined ? "未选择菜品" : useAppStore.runningDish.name;
 });
 
-const sendCommand = async (commandName) => {
-  let commandType,
-    commandData;
-  // cook型命令会在commandData中携带菜品uuid，其他commandData为空
-  switch (commandName) {
-    case "cook":
-      commandType = "multiple";
-      commandData = useAppStore.runningDish.uuid;
-      break;
-    case "prepare":
-      commandType = "multiple";
-      commandData = "";
-      break;
-    case "dish_out":
-      commandType = "multiple";
-      commandData = "";
-      break;
-    case "pause_to_add":
-      if (!useControllerStore.isStirFrying) {
-        Notify.create("为确保安全，请在机器运行至翻炒位时中途加料");
-        return;
-      }
-      commandType = "single";
-      commandData = "";
-      break;
-    case "resume":
-      commandType = "single";
-      commandData = "";
-      break;
-    case "door_unlock":
-      commandType = "single";
-      commandData = "";
-      break;
-    default:
-      Notify.create("命令名称错误");
-      return;
-  }
-  const { data } = await execute(commandType, commandName, commandData);
-  if (data.message === "error") {
-    Notify.create("机器正在执行其他命令，请稍后");
-  }
-};
-
 const cookingTimeDisplay = computed(() => {
   return (useControllerStore.isPausing ? "暂停中，已用时" : "") + secondsToMMSS(useControllerStore.cookingTime);
 });
 
-const bottomTemperatureColor = computed(() => {
-  return temperatureColorCompute(useControllerStore.bottomTemperature);
-});
-const infraredTemperatureColor = computed(() => {
-  return temperatureColorCompute(useControllerStore.infraredTemperature);
-});
-
-const temperatureColorCompute = (temperature) => {
+const getTemperatureColor = (temperature) => {
   if (temperature <= 35) {
     return "teal-6";
   } else if (temperature <= 100) {
@@ -176,6 +129,12 @@ const temperatureColorCompute = (temperature) => {
   } else {
     return "red-6";
   }
+};
+
+const theHeatingTemperatureControlDialog = ref(null);
+
+const openTemperatureControlDialog = () => {
+  theHeatingTemperatureControlDialog.value.show();
 };
 </script>
 

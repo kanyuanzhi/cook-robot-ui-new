@@ -12,6 +12,18 @@ export function getDishes(pageIndex, pageSize, cuisineID) {
   });
 }
 
+export function getAllDishes(pageIndex, pageSize, cuisineID) {
+  return api({
+    url: "/allDishes",
+    method: "get",
+    params: {
+      pageIndex,
+      pageSize,
+      cuisineID
+    },
+  });
+}
+
 export function getDish(uuid) {
   return api({
     url: "/dish",

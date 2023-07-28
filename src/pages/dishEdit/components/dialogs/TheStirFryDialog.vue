@@ -1,23 +1,21 @@
 <template>
-  <div>
-    <q-dialog v-model="shown" @hide="onHide">
-      <q-card style="width: 600px" class="q-mt-md">
-        <q-card-section class="bg-teal-6 text-white q-py-sm">
-          <div class="text-h6">添加翻炒</div>
-        </q-card-section>
-        <q-card-section>
-          <GearSlider ref="gearSlider" :gear="gear" label="档位" color="amber-10" :gear-min="0" :gear-max="5"
-                      @update="(v)=>{gear=v}"/>
+  <q-dialog v-model="shown" @hide="onHide">
+    <q-card style="width: 600px" class="q-mt-md">
+      <q-card-section class="bg-teal-6 text-white q-py-sm">
+        <div class="text-h6">添加翻炒</div>
+      </q-card-section>
+      <q-card-section>
+        <GearSlider ref="gearSlider" :gear="gear" label="档位" color="amber-10" :gear-min="0" :gear-max="5"
+                    @update="(v)=>{gear=v}"/>
 
-          <DurationSelect ref="durationSelect" :duration="duration" @update="(v)=>{duration=v}"/>
-        </q-card-section>
-        <q-card-actions align="right">
-          <q-btn v-close-popup flat color="teal-6">取消</q-btn>
-          <q-btn color="teal-6" unelevated @click="onSubmit">提交</q-btn>
-        </q-card-actions>
-      </q-card>
-    </q-dialog>
-  </div>
+        <DurationSelect ref="durationSelect" :duration="duration" @update="(v)=>{duration=v}"/>
+      </q-card-section>
+      <q-card-actions align="right">
+        <q-btn v-close-popup flat color="teal-6">取消</q-btn>
+        <q-btn color="teal-6" unelevated @click="onSubmit">提交</q-btn>
+      </q-card-actions>
+    </q-card>
+  </q-dialog>
 </template>
 
 <script setup>
@@ -27,7 +25,7 @@ import DurationSelect from "pages/dishEdit/components/select/DurationSelect.vue"
 import { newStirFryStep } from "pages/dishEdit/components/dialogs/newStep";
 import { UseAppStore } from "stores/appStore";
 
-const useAppStore = UseAppStore()
+const useAppStore = UseAppStore();
 
 const emits = defineEmits(["update", "submit"]);
 
@@ -45,6 +43,7 @@ let stepIndex = 0;
 const show = (index = -1) => {
   shown.value = true;
   stepIndex = index;
+  gear.value = useAppStore.lastStirFryGear;
 };
 
 const updateDialogShow = (step, index) => {
@@ -56,7 +55,7 @@ const updateDialogShow = (step, index) => {
 };
 
 const onSubmit = () => {
-  useAppStore.setLastStirFryGear(gear.value)
+  useAppStore.setLastStirFryGear(gear.value);
   try {
     const newStep = newStirFryStep(gear.value, duration.value);
     emits(isUpdate ? "update" : "submit", newStep, stepIndex);
@@ -69,8 +68,8 @@ const onSubmit = () => {
 };
 
 const onHide = () => {
-  // gear.value = 0;
-  // duration.value = 0;
+  gear.value = 0;
+  duration.value = 0;
 };
 
 defineExpose({

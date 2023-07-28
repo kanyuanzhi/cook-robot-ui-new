@@ -7,10 +7,9 @@
     </q-card-section>
     <q-separator inset/>
     <q-card-section>
-      <!--      <q-scroll-area class="bg-green-1" style="height: 425px;">-->
       <q-list class="scrollable-container" ref="stepList" bordered separator style="height: 390px;overflow-y: auto;">
-        <q-slide-item v-for="item in newSteps" :key="item.key" class="text-black"
-                      @right="onDeleteCouple(item)" right-color="red">
+        <q-slide-item v-for="item in newSteps" :key="item.key" class="text-black" @right="onDeleteCouple(item)"
+                      right-color="red">
           <template v-slot:right>
             <div class="flex">
               <q-icon name="delete"/>
@@ -55,7 +54,6 @@
                 <q-icon color="teal-6" name="drag_indicator" class="drag-item"/>
               </q-item-section>
             </div>
-
           </q-item>
         </q-slide-item>
       </q-list>
@@ -71,7 +69,7 @@
 
 <script setup>
 
-import { computed, onMounted, onUnmounted, ref, watch } from "vue";
+import { onMounted, onUnmounted, ref, watch } from "vue";
 import Sortable from "sortablejs";
 import { UseAppStore } from "stores/appStore";
 import TheIngredientDialog from "pages/dishEdit/components/dialogs/TheIngredientDialog.vue";
@@ -85,7 +83,7 @@ import { random, range, sampleSize } from "lodash";
 const useAppStore = UseAppStore();
 
 const generateNewSteps = () => {
-  const steps = [];
+  const newSteps = [];
   for (let i = 0, len = useAppStore.editingDish.steps.length; i < len;) {
     const item = [];
     const indexes = [];
@@ -107,7 +105,7 @@ const generateNewSteps = () => {
     } else {
       i += 1;
     }
-    steps.push({
+    newSteps.push({
       key: 0,
       indexes: indexes,
       coupleSteps: item
@@ -115,22 +113,29 @@ const generateNewSteps = () => {
   }
   // 生成一组不重复的整数赋给key
   const keys = range(100, 10000);
-  const candidateKeys = sampleSize(keys, steps.length);
-  for (let j = 0, len = steps.length; j < len; j++) {
-    steps[j].key = candidateKeys[j];
+  const candidateKeys = sampleSize(keys, newSteps.length);
+  for (let j = 0, len = newSteps.length; j < len; j++) {
+    newSteps[j].key = candidateKeys[j];
   }
-  return steps;
+  return newSteps;
 };
 
 const newSteps = ref(generateNewSteps());
 
 watch(
-  () => useAppStore.editingDish.steps,
+  () => useAppStore.editingDishChangedFlag,
   () => {
     newSteps.value = generateNewSteps();
   },
-  { deep: true }
 );
+
+// watch(
+//   () => useAppStore.editingDish.steps,
+//   () => {
+//     newSteps.value = generateNewSteps();
+//   },
+//   { deep: true }
+// );
 
 const stepList = ref(null);
 
@@ -157,6 +162,7 @@ const onSortEnd = (event) => {
 
   useAppStore.editingDish.steps.splice(draggedIndexes[0], draggedIndexes.length === 1 ? 1 : 2);
   useAppStore.editingDish.steps.splice(insertedIndexes[0], 0, ...draggedCoupleSteps);
+  useAppStore.shiftEditingDishChangedFlag();
 };
 
 // 前端叫step，后端叫instruction
@@ -212,6 +218,7 @@ const onStepListItemClick = (step, index) => {
 
 const onUpdate = (step, index) => {
   useAppStore.editingDish.steps[index] = step;
+  useAppStore.shiftEditingDishChangedFlag();
 };
 
 const onSubmit = (val, index) => {
@@ -220,14 +227,17 @@ const onSubmit = (val, index) => {
   } else {
     useAppStore.editingDish.steps.splice(index + 1, 0, val);
   }
+  useAppStore.shiftEditingDishChangedFlag();
 };
 
 const onDelete = (index) => {
   useAppStore.editingDish.steps.splice(index, 1);
+  useAppStore.shiftEditingDishChangedFlag();
 };
 
 const onDeleteCouple = (item) => {
   useAppStore.editingDish.steps.splice(item.indexes[0], item.indexes.length === 1 ? 1 : 2);
+  useAppStore.shiftEditingDishChangedFlag();
 };
 </script>
 

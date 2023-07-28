@@ -45,12 +45,12 @@
         <q-btn color="red-6" label="删除" @click="theDeleteDialog.show()"/>
       </q-btn-group>
     </q-card-actions>
-    <TheIngredientDialog ref="theIngredientDialog" @submit="onSubmit" @update="onUpdate"/>
-    <TheSeasoningDialog ref="theSeasoningDialog" @submit="onSubmit" @update="onUpdate"/>
-    <TheFireDialog ref="theFireDialog" @submit="onSubmit" @update="onUpdate"/>
-    <TheStirFryDialog ref="theStirFryDialog" @submit="onSubmit" @update="onUpdate"/>
-    <TheWaterDialog ref="theWaterDialog" @submit="onSubmit" @update="onUpdate"/>
-    <TheOilDialog ref="theOilDialog" @submit="onSubmit" @update="onUpdate"/>
+    <TheIngredientDialog ref="theIngredientDialog" @submit="onSubmit"/>
+    <TheSeasoningDialog ref="theSeasoningDialog" @submit="onSubmit"/>
+    <TheFireDialog ref="theFireDialog" @submit="onSubmit"/>
+    <TheStirFryDialog ref="theStirFryDialog" @submit="onSubmit"/>
+    <TheWaterDialog ref="theWaterDialog" @submit="onSubmit"/>
+    <TheOilDialog ref="theOilDialog" @submit="onSubmit"/>
 
     <TheSaveDialog ref="theSaveDialog"/>
     <TheDeleteDialog ref="theDeleteDialog"/>
@@ -91,12 +91,7 @@ const onSubmit = (val, index) => {
   if (val.instructionType !== "stir_fry" && useAppStore.useEasyStepList) {
     useAppStore.editingDish.steps.push(newStirFryStep(useAppStore.lastStirFryGear, 0));
   }
-};
-const onUpdate = () => {
-};
-
-const resetEditingDish = () => {
-  useAppStore.resetEditingDish();
+  useAppStore.shiftEditingDishChangedFlag()
 };
 </script>
 
