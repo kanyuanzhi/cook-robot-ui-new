@@ -1,9 +1,13 @@
 <template>
-  <q-tab-panel style="padding-bottom: 0" :name="name">
+  <q-tab-panel style="padding-bottom: 0" :name="name" class="right-tab-panel">
     <div class="cards-wrapper">
       <div class="row q-col-gutter-md">
-        <div class="col-4" v-for="dish in dishes" :key="dish.uuid">
-          <DishPanelCard :dish-image="dish.image" :dish-name="dish.name" @click="dishDetailsCard.show(dish.uuid)"/>
+        <div class="col-12" v-for="dish in dishes" :key="dish.uuid">
+          <DishPanelCard
+            :dish-image="dish.image"
+            :dish-name="dish.name"
+            @click="dishDetailsCard.show(dish.uuid)"
+          />
         </div>
       </div>
     </div>
@@ -23,7 +27,7 @@
         boundary-numbers
       />
     </div>
-    <DishDetailsCard ref="dishDetailsCard"/>
+    <DishDetailsCard ref="dishDetailsCard" />
   </q-tab-panel>
 </template>
 
@@ -48,21 +52,19 @@ onMounted(async () => {
   count.value = data.data.count;
   pageMax.value = ceil(count.value / pageSize);
 
-  watch(pageCurrent,
-    async (value) => {
-      const { data } = await getDishes(value, pageSize, props.name);
-      dishes.value = data.data.dishes;
-    });
+  watch(pageCurrent, async (value) => {
+    const { data } = await getDishes(value, pageSize, props.name);
+    dishes.value = data.data.dishes;
+  });
 });
 
 const dishDetailsCard = ref(null);
-
 </script>
 
 <style lang="scss" scoped>
 .cards-wrapper {
   //height: calc(100vh - 50px - 32px - 20px - 20px - 10px)
-  height: 450px
+  height: calc(100% - 45px);
 }
 
 .pagination-wrapper {
@@ -75,4 +77,7 @@ const dishDetailsCard = ref(null);
   align-items: center;
 }
 
+.right-tab-panel {
+  height: 100%;
+}
 </style>

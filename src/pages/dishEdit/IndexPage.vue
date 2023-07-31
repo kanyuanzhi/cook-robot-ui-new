@@ -1,14 +1,16 @@
 <template>
   <q-page>
-    <div class="q-pa-md">
-      <div class="row q-col-gutter-md">
+    <div class="q-pa-xs">
+      <TheOperatorBtns />
+      <TheStepList :dish="dish" />
+      <!-- <div class="row q-col-gutter-md">
         <div class="col-8">
           <TheStepList :dish="dish"/>
         </div>
         <div class="col-4">
-          <TheOperatorBtns/>
+          
         </div>
-      </div>
+      </div> -->
     </div>
   </q-page>
 </template>
@@ -22,10 +24,6 @@ import { UseAppStore } from "stores/appStore";
 const useAppStore = UseAppStore();
 
 const dish = ref(useAppStore.editingDish);
-
 </script>
 
-<style lang="scss" scoped>
-
-
-</style>
+<style lang="scss" scoped></style>

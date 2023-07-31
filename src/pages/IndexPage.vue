@@ -1,8 +1,11 @@
 <template>
   <q-page class="flex flex-center">
-    <div class="row q-pa-md full-width">
-      <div class="col-5 q-pr-md">
-        <div class="bg-blue-3 flex flex-center select-area click-area" @click="router.push('/dishSelect')">
+    <div class="col q-pa-md full-width">
+      <div class="col-5">
+        <div
+          class="bg-blue-3 flex flex-center click-area q-mb-md"
+          @click="router.push('/dishSelect')"
+        >
           <span class="text-blue-8 text-weight-bold text-h4">菜品选择</span>
         </div>
       </div>
@@ -26,7 +29,6 @@
 <script setup>
 import { useRouter } from "vue-router";
 const router = useRouter();
-
 </script>
 
 <style lang="scss" scoped>

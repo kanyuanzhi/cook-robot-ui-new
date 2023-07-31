@@ -27,16 +27,19 @@
               <!--              color="red-6"-->
               <!--            />-->
             </q-item-section>
-            <q-item-section side style="width: 130px;"><span class="text-black"><span>{{
-                temperature
-              }}</span>摄氏度（℃）</span></q-item-section>
+            <q-item-section side style="width: 130px"
+              ><span class="text-black"
+                ><span>{{ temperature }}</span
+                >摄氏度（℃）</span
+              ></q-item-section
+            >
           </q-item>
-
 
           <q-item>
             <q-item-section avatar>控制方式</q-item-section>
             <q-item-section>
               <q-btn-toggle
+                class="my-btn-toggle"
                 v-model="judgeType"
                 no-caps
                 size="md"
@@ -45,30 +48,50 @@
                 color="white"
                 text-color="grey-7"
                 :options="[
-                {label: '锅底温度', value: 1},
-                {label: '红外温度', value: 2},
-                {label: '时间', value: 3},
-                {label: '无', value: 4}]"
+                  { label: '锅底温度', value: 1 },
+                  { label: '红外温度', value: 2 },
+                  { label: '时间', value: 3 },
+                  { label: '无', value: 4 },
+                ]"
               />
             </q-item-section>
           </q-item>
           <q-item dense>
-            <q-item-section avatar><span style="color: rgba(0,0,0,0%)">四个汉字</span></q-item-section>
+            <q-item-section avatar
+              ><span style="color: rgba(0, 0, 0, 0%)"
+                >四个汉字</span
+              ></q-item-section
+            >
             <q-item-section>
-            <span class="text-grey-7" style="font-size: 12px">
-              <span class="text-red">*</span>
-              控制加热达到以下设定温度或时间后，继续下一步骤，选择无则加热后直接开始下一步骤
-            </span>
+              <span class="text-grey-7" style="font-size: 12px">
+                <span class="text-red">*</span>
+                控制加热达到以下设定温度或时间后，继续下一步骤，选择无则加热后直接开始下一步骤
+              </span>
             </q-item-section>
           </q-item>
 
-          <NumberSelect ref="numberSelect" label="温度监测" unit="摄氏度（℃）" :min="0" :max="220" :step="5"
-                        :number="targetTemperature" :disable="judgeType===3||judgeType === 4"
-                        @update="(v)=>targetTemperature=v"/>
+          <NumberSelect
+            ref="numberSelect"
+            label="温度监测"
+            unit="摄氏度（℃）"
+            :min="0"
+            :max="220"
+            :step="5"
+            :number="targetTemperature"
+            :disable="judgeType === 3 || judgeType === 4"
+            @update="(v) => (targetTemperature = v)"
+          />
 
-          <DurationSelect ref="durationSelect" :duration="duration"
-                          :disable="judgeType===1||judgeType===2||judgeType === 4"
-                          @update="(v)=>{duration=v}"/>
+          <DurationSelect
+            ref="durationSelect"
+            :duration="duration"
+            :disable="judgeType === 1 || judgeType === 2 || judgeType === 4"
+            @update="
+              (v) => {
+                duration = v;
+              }
+            "
+          />
         </q-card-section>
         <q-card-actions align="right">
           <q-btn v-close-popup flat color="teal-6">取消</q-btn>
@@ -113,7 +136,12 @@ const updateDialogShow = (step, index) => {
 
 const onSubmit = () => {
   try {
-    const newStep = newHeatStep(temperature.value, judgeType.value, targetTemperature.value, duration.value);
+    const newStep = newHeatStep(
+      temperature.value,
+      judgeType.value,
+      targetTemperature.value,
+      duration.value
+    );
     if (isUpdate) {
       emits("update", newStep, stepIndex);
     } else {
@@ -140,4 +168,9 @@ defineExpose({
 });
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.my-btn-toggle {
+  display: flex;
+  flex-direction: column;
+}
+</style>
