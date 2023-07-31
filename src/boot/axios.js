@@ -1,7 +1,9 @@
 import { boot } from "quasar/wrappers";
 import axios from "axios";
 import { Platform } from "quasar";
+import { UseSettingStore } from "stores/settingStore";
 
+const useSettingStore = UseSettingStore();
 // Be careful when using SSR for cross-request state pollution
 // due to creating a Singleton instance here;
 // If any client changes this (global) instance, it might be a
@@ -12,11 +14,8 @@ const api = axios.create({
   // baseURL: Platform.is.electron ? "http://localhost:8889/api/v1" : "http://192.168.6.10:8888",
   // baseURL: (Platform.is.cros || Platform.is.electron) ? "http://localhost:8888" : "http://169.254.216.164:8888",
   // baseURL: "http://192.168.0.34:8888",
-  baseURL: "http://localhost:8889/api/v1",
+  baseURL: (useSettingStore.useSSL ? "https" : "http") + "://" + useSettingStore.middlePlatformIPAddress + ":8889/api/v1",
   // baseURL: "http://192.168.6.10:8889/api/v1",
-  // baseURL: "http://192.168.149.235:8889/api/v1",
-  // baseURL: "http://127.0.0.1:8888",
-  // baseURL: "http://192.168.31.168:8888",
   // baseURL: process.env.env_API,
   // baseURL: process.env.test_API,
   // withCredentials: true,

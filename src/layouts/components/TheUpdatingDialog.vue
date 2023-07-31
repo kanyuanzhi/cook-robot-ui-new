@@ -10,7 +10,7 @@
             <q-item-label class="text-subtitle1 text-teal-6">下载速度</q-item-label>
           </q-item-section>
           <q-item-section>
-            <q-badge class="text-subtitle2" color="white" text-color="teal-6" :label="downloadSpeedDisplay" />
+            <q-badge class="text-subtitle2" color="white" text-color="teal-6" :label="downloadSpeedDisplay"/>
           </q-item-section>
         </q-item>
         <q-item>
@@ -43,13 +43,14 @@
         </q-item>
       </q-card-section>
       <q-card-actions align="center">
-        <q-btn  color="teal-6" unelevated :disable="!isInstallFinished" @click="closeApp">
+        <q-btn color="teal-6" unelevated :disable="!isInstallFinished" @click="closeApp">
           <q-spinner-ios
             v-if="!isInstallFinished"
             color="white"
             size="0.7em"
             class="q-mr-md"
-          />{{isInstallFinished?"退出重启":"正在升级"}}
+          />
+          {{ isInstallFinished ? "退出重启" : "正在升级" }}
         </q-btn>
       </q-card-actions>
     </q-card>
@@ -63,8 +64,10 @@ import { Notify } from "quasar";
 import { round, toString } from "lodash";
 import { UseAppStore } from "stores/appStore";
 import { Platform } from "quasar";
+import { UseSettingStore } from "stores/settingStore";
 
 const useAppStore = UseAppStore();
+const useSettingStore = UseSettingStore();
 
 const shown = ref(false);
 const isPersistent = ref(false);
@@ -98,18 +101,18 @@ const unzipProgressDisplay = computed(() => {
 });
 
 const downloadSpeedDisplay = computed(() => {
-  return downloadSpeed.value<1.024 ? toString(round(downloadSpeed.value * 1024, 0))+ "KB/s" :
-    toString(round(downloadSpeed.value , 2))+ "MB/s"
+  return downloadSpeed.value < 1.024 ? toString(round(downloadSpeed.value * 1024, 0)) + "KB/s" :
+    toString(round(downloadSpeed.value, 2)) + "MB/s";
 });
 
 const isInstallFinished = computed(() => {
-  return isDownloadFinished.value && isUnzipFinished.value
+  return isDownloadFinished.value && isUnzipFinished.value;
 });
 
 const beginUpdate = () => {
   isUpdating.value = true;
-  ws = new WebSocket("ws://localhost:8889/api/v1/system/update");
-  // ws = new WebSocket("ws://192.168.6.10:8889/api/v1/system/update");
+  const wsUrl = (useSettingStore.useSSL ? "wss" : "ws") + "://" + useSettingStore.middlePlatformIPAddress + ":8889/api/v1/system/update";
+  ws = new WebSocket(wsUrl);
 
   ws.onopen = function (event) {
     console.log("WebSocket连接已建立");
@@ -119,8 +122,8 @@ const beginUpdate = () => {
     const data = JSON.parse(event.data);
     isDownloadFinished.value = data.isDownloadFinished;
     isUnzipFinished.value = data.isUnzipFinished;
-    downloadProgress.value = round(data.downloadProgress, 2);
-    unzipProgress.value = round(data.unzipProgress, 2);
+    downloadProgress.value = data.downloadProgress;
+    unzipProgress.value = data.unzipProgress;
     downloadSpeed.value = data.downloadSpeed;
   };
 
@@ -138,8 +141,8 @@ const closeApp = () => {
   if (Platform.is.electron) {
     shutdown();
     window.myWindowAPI.close();
-  }else {
-    Notify.create("非electron平台无法重启软件")
+  } else {
+    Notify.create("非electron平台无法重启软件");
   }
 };
 

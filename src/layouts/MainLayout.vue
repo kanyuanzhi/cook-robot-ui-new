@@ -20,5 +20,5 @@ import TheControlDialog from "layouts/components/TheControlDialog.vue";
 
 const useControllerStore = UseControllerStore();
 
-// setInterval(useControllerStore.fetchStatus, 200);
+setInterval(useControllerStore.fetchStatus, 200);
 </script>
