@@ -1,7 +1,7 @@
 <template>
   <q-page>
-    <div class="q-pa-sm">
-      <q-splitter v-model="splitterModel">
+    <div class="q-pa-sm dish-select-wrap">
+      <q-splitter v-model="splitterModel" class="my-splitter">
         <template v-slot:before>
           <q-tabs
             v-model="tab"
@@ -33,6 +33,7 @@
             vertical
             transition-prev="jump-up"
             transition-next="jump-up"
+            class="my-tab-panels-right"
           >
             <DishesPanel :name="0" :cuisine-id="0"></DishesPanel>
             <DishesPanel
@@ -79,9 +80,9 @@ onMounted(async () => {
 }
 
 :deep(.q-tab__label) {
-  font-weight: 600;
-  font-size: 20px;
-  letter-spacing: 10px;
+  font-weight: 500;
+  font-size: 16px;
+  letter-spacing: 1px;
   padding-top: 0px;
   padding-bottom: 0;
 }

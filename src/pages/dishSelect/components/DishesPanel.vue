@@ -1,5 +1,9 @@
 <template>
-  <q-tab-panel style="padding-bottom: 0; padding-top: 0" :name="cuisineId">
+  <q-tab-panel
+    style="padding-bottom: 0; padding-top: 0"
+    :name="cuisineId"
+    class="right-tab-panel"
+  >
     <div class="cards-wrapper">
       <div class="row q-col-gutter-md">
         <div class="col-12" v-for="dish in dishes" :key="dish.uuid">
