@@ -25,23 +25,23 @@
               </p>
             </div>
 
-<!--            <q-item>-->
-<!--              <q-item-section avatar class="text-weight-bold">食材</q-item-section>-->
-<!--              <q-item-section>-->
-<!--               -->
-<!--              </q-item-section>-->
-<!--            </q-item>-->
-<!--            <q-item>-->
-<!--              <q-item-section avatar class="text-weight-bold">调料</q-item-section>-->
-<!--              <q-item-section>-->
-<!--                {{ seasoningSummary }}-->
-<!--              </q-item-section>-->
-<!--            </q-item>-->
+            <!--            <q-item>-->
+            <!--              <q-item-section avatar class="text-weight-bold">食材</q-item-section>-->
+            <!--              <q-item-section>-->
+            <!--               -->
+            <!--              </q-item-section>-->
+            <!--            </q-item>-->
+            <!--            <q-item>-->
+            <!--              <q-item-section avatar class="text-weight-bold">调料</q-item-section>-->
+            <!--              <q-item-section>-->
+            <!--                {{ seasoningSummary }}-->
+            <!--              </q-item-section>-->
+            <!--            </q-item>-->
 
           </div>
         </div>
 
-        <q-item>
+        <q-item style="padding:15px 0 0 0">
           <q-item-section avatar class="text-weight-bold">选择口味</q-item-section>
           <q-item-section class="q-gutter-sm">
             <q-option-group
@@ -76,7 +76,10 @@ import { getSeasonings } from "src/api/seasoning";
 import { sum } from "lodash";
 import { UseAppStore } from "stores/appStore";
 import { useRouter } from "vue-router";
+import { UseControllerStore } from "stores/controllerStore";
+import { Notify } from "quasar";
 
+const useControllerStore = UseControllerStore();
 const useAppStore = UseAppStore();
 const router = useRouter();
 
@@ -143,7 +146,7 @@ const show = async (uuid) => {
 const ingredientFormat = (steps) => {
   const ingredientList = [];
   for (let step of steps) {
-    if (step.type === "ingredient") {
+    if (step.instructionType === "ingredient") {
       ingredientList.push(step.name + step.weight + "克");
     }
   }
@@ -159,10 +162,10 @@ const seasoningFormat = (steps) => {
     };
   }
   for (let step of steps) {
-    if (step.type === "water" || step.type === "oil") {
+    if (step.instructionType === "water" || step.instructionType === "oil") {
       seasoningInfo[step.pumpNumber].weight.push(step.weight);
     }
-    if (step.type === "seasoning") {
+    if (step.instructionType === "seasoning") {
       for (let seasoning of step.seasonings) {
         seasoningInfo[seasoning.pumpNumber].weight.push(seasoning.weight);
       }
@@ -178,8 +181,12 @@ const seasoningFormat = (steps) => {
 };
 
 const openRunningControlPage = () => {
-  dish.value.steps = customDishUUIDToSteps[taste.value]
-  useAppStore.setRunningDish(dish.value);
+  dish.value.steps = customDishUUIDToSteps[taste.value];
+  if (useControllerStore.isCooking) {
+    Notify.create("当前有菜品正在炒制，请稍后");
+  } else {
+    useAppStore.setRunningDish(dish.value);
+  }
   useAppStore.showRunningControl();
 };
 

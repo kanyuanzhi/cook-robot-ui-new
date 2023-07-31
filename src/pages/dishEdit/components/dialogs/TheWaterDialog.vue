@@ -6,7 +6,7 @@
           <div class="text-h6">添加水</div>
         </q-card-section>
         <q-card-section>
-          <NumberSelect ref="numberSelect" label="分量" unit="克（毫升）" :min="0" :max="220" :step="5"
+          <NumberSelect ref="numberSelect" label="分量" unit="克" :min="5" :max="150" :step="5"
                         :number="weight" @update="(v)=>weight=v"/>
         </q-card-section>
         <q-card-actions align="right">
@@ -32,8 +32,9 @@ const weight = ref(0);
 let isUpdate = false;
 let stepIndex = 0;
 
-const show = () => {
+const show = (index = -1) => {
   shown.value = true;
+  stepIndex = index;
 };
 
 const updateDialogShow = (step, index) => {
@@ -45,11 +46,7 @@ const updateDialogShow = (step, index) => {
 const onSubmit = () => {
   try {
     const newStep = newWaterStep(weight.value);
-    if (isUpdate) {
-      emits("update", newStep, stepIndex);
-    } else {
-      emits("submit", newStep);
-    }
+    emits(isUpdate ? "update" : "submit", newStep, stepIndex);
   } catch (e) {
     return;
   }

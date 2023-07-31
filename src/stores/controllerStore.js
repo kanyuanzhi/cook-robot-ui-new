@@ -15,16 +15,17 @@ export const UseControllerStore = defineStore("controller", {
       actionNumber: 0
     },
     isCooking: false,
-    lastIsCooking: false,
+    lastIsCooking: false, // 钱一个收到的isCooking的值
     isCookFinished: true,
     isRunning: false,
     isPausing: false,
     isPausingWithMovingFinished: false,
     isPausingWithMovingBackFinished: false,
-    isStirFrying: false,
+    isPausePermitted: false,
     bottomTemperature: 0,
     infraredTemperature: 0,
     cookingTime: 0,
+    currentHeatingTemperature: 0
   }),
   getters: {
     getRunningDish: (state) => state.runningDish,
@@ -50,10 +51,11 @@ export const UseControllerStore = defineStore("controller", {
       this.isPausing = data.data["isPausing"];
       this.isPausingWithMovingFinished = data.data["isPausingWithMovingFinished"];
       this.isPausingWithMovingBackFinished = data.data["isPausingWithMovingBackFinished"];
-      this.isStirFrying = data.data["isStirFrying"];
+      this.isPausePermitted = data.data["isPausePermitted"];
       this.bottomTemperature = data.data["bottomTemperature"] / 10;
       this.infraredTemperature = data.data["infraredTemperature"] / 10;
       this.cookingTime = floor(data.data["cookingTime"] / 1000);
+      this.currentHeatingTemperature = data.data["currentHeatingTemperature"] / 10;
 
       if (!this.isCooking && this.lastIsCooking) {
         this.isCookFinished = true;

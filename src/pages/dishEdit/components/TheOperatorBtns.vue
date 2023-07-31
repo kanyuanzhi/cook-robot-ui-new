@@ -97,28 +97,12 @@
         <q-btn color="red-6" label="删除" @click="theDeleteDialog.show()" />
       </q-btn-group>
     </q-card-actions>
-    <TheIngredientDialog
-      ref="theIngredientDialog"
-      @submit="onSubmit"
-      @update="onUpdate"
-    />
-    <TheSeasoningDialog
-      ref="theSeasoningDialog"
-      @submit="onSubmit"
-      @update="onUpdate"
-    />
-    <TheFireDialog ref="theFireDialog" @submit="onSubmit" @update="onUpdate" />
-    <TheStirFryDialog
-      ref="theStirFryDialog"
-      @submit="onSubmit"
-      @update="onUpdate"
-    />
-    <TheWaterDialog
-      ref="theWaterDialog"
-      @submit="onSubmit"
-      @update="onUpdate"
-    />
-    <TheOilDialog ref="theOilDialog" @submit="onSubmit" @update="onUpdate" />
+    <TheIngredientDialog ref="theIngredientDialog" @submit="onSubmit" />
+    <TheSeasoningDialog ref="theSeasoningDialog" @submit="onSubmit" />
+    <TheFireDialog ref="theFireDialog" @submit="onSubmit" />
+    <TheStirFryDialog ref="theStirFryDialog" @submit="onSubmit" />
+    <TheWaterDialog ref="theWaterDialog" @submit="onSubmit" />
+    <TheOilDialog ref="theOilDialog" @submit="onSubmit" />
 
     <TheSaveDialog ref="theSaveDialog" />
     <TheDeleteDialog ref="theDeleteDialog" />
@@ -137,6 +121,7 @@ import TheSaveDialog from "pages/dishEdit/components/dialogs/TheSaveDialog.vue";
 import OperatorBtn from "pages/dishEdit/components/dialogs/OperatorBtn.vue";
 import { UseAppStore } from "stores/appStore";
 import TheDeleteDialog from "pages/dishEdit/components/dialogs/TheDeleteDialog.vue";
+import { newStirFryStep } from "pages/dishEdit/components/dialogs/newStep";
 
 const useAppStore = UseAppStore();
 
@@ -149,13 +134,18 @@ const theOilDialog = ref(null);
 
 const theSaveDialog = ref(null);
 const theDeleteDialog = ref(null);
-const onSubmit = (val) => {
-  useAppStore.editingDish.steps.push(val);
-};
-const onUpdate = () => {};
-
-const resetEditingDish = () => {
-  useAppStore.resetEditingDish();
+const onSubmit = (val, index) => {
+  if (index === -1) {
+    useAppStore.editingDish.steps.push(val);
+  } else {
+    useAppStore.editingDish.steps.splice(index + 1, 0, val);
+  }
+  if (val.instructionType !== "stir_fry" && useAppStore.useEasyStepList) {
+    useAppStore.editingDish.steps.push(
+      newStirFryStep(useAppStore.lastStirFryGear, 0)
+    );
+  }
+  useAppStore.shiftEditingDishChangedFlag();
 };
 </script>
 

@@ -8,7 +8,6 @@
     </q-page-container>
 
     <TheControlDialog/>
-
   </q-layout>
 </template>
 

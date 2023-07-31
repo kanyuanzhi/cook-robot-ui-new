@@ -84,7 +84,7 @@ export function newWaterStep(weight) {
   const step =
     newStep("water", stepName);
   step["weight"] = weight;
-  step["pumpNumber"] = 7;
+  step["pumpNumber"] = 6;
   return step;
 }
 

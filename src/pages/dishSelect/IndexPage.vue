@@ -1,47 +1,51 @@
 <template>
-  <div class="q-py-sm dish-select-wrap">
-    <q-splitter v-model="splitterModel" class="my-splitter">
-      <template v-slot:before>
-        <q-tabs
-          v-model="tab"
-          vertical
-          class="text-teal-6"
-          active-bg-color="teal-6"
-          active-color="white"
-        >
-          <q-tab
-            v-for="cuisine in cuisines"
-            :key="cuisine.uuid"
-            :name="cuisine.id"
-            :label="cuisine.name"
-          />
-          <q-separator />
-          <q-route-tab
-            class="bg-teal-5 text-white"
-            label="菜品制作"
-            to="/dishEdit"
-          />
-        </q-tabs>
-      </template>
+  <q-page>
+    <div class="q-pa-sm">
+      <q-splitter v-model="splitterModel">
+        <template v-slot:before>
+          <q-tabs
+            v-model="tab"
+            vertical
+            class="text-teal-6"
+            active-bg-color="teal-6"
+            active-color="white"
+          >
+            <q-tab class="" :name="0" label="全部" />
+            <q-tab
+              v-for="cuisine in cuisines"
+              :key="cuisine.uuid"
+              :name="cuisine.id"
+              :label="cuisine.name"
+            />
+            <q-separator />
+            <q-route-tab
+              class="bg-teal-5 text-white"
+              label="菜品制作"
+              to="/dishEdit"
+            />
+          </q-tabs>
+        </template>
 
-      <template v-slot:after>
-        <q-tab-panels
-          v-model="tab"
-          swipeable
-          vertical
-          transition-prev="jump-up"
-          transition-next="jump-up"
-          class="my-tab-panels-right"
-        >
-          <DishesPanel
-            v-for="cuisine in cuisines"
-            :key="cuisine.uuid"
-            :name="cuisine.id"
-          ></DishesPanel>
-        </q-tab-panels>
-      </template>
-    </q-splitter>
-  </div>
+        <template v-slot:after>
+          <q-tab-panels
+            v-model="tab"
+            swipeable
+            vertical
+            transition-prev="jump-up"
+            transition-next="jump-up"
+          >
+            <DishesPanel :name="0" :cuisine-id="0"></DishesPanel>
+            <DishesPanel
+              v-for="cuisine in cuisines"
+              :key="cuisine.uuid"
+              :name="cuisine.id"
+              :cuisine-id="cuisine.id"
+            ></DishesPanel>
+          </q-tab-panels>
+        </template>
+      </q-splitter>
+    </div>
+  </q-page>
 </template>
 
 <script setup>
@@ -56,7 +60,8 @@ const tab = ref("");
 onMounted(async () => {
   const { data } = await getCuisines();
   cuisines.value = data.data;
-  tab.value = data.data[0].id;
+  // tab.value = data.data[0].id;
+  tab.value = 0;
 });
 </script>
 
@@ -74,12 +79,15 @@ onMounted(async () => {
 }
 
 :deep(.q-tab__label) {
-  font-weight: 500;
-  font-size: 16px;
-  letter-spacing: 1px;
+  font-weight: 600;
+  font-size: 20px;
+  letter-spacing: 10px;
+  padding-top: 0px;
+  padding-bottom: 0;
 }
 
-:deep(.q-tab-panel) {
-  padding-top: 0;
+:deep(.q-tab) {
+  min-height: 35px;
+  height: 43.5px;
 }
 </style>

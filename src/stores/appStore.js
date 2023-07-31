@@ -11,6 +11,7 @@ export const UseAppStore = defineStore("app", {
       cuisine: 1,
       uuid: ""
     },
+    editingDishChangedFlag: true,
     originEditingDish: {
       steps: [],
       name: "",
@@ -18,6 +19,8 @@ export const UseAppStore = defineStore("app", {
       uuid: ""
     },
     runningDish: {},
+    useEasyStepList: true,
+    lastStirFryGear: 0,
   }),
   getters: {
     // getCurrentDish: (state) => state.runningDish,
@@ -32,9 +35,11 @@ export const UseAppStore = defineStore("app", {
     setEditingDish(dish) {
       this.editingDish = cloneDeep(dish);
       this.originEditingDish = cloneDeep(dish);
+      this.shiftEditingDishChangedFlag();
     },
     resetEditingDish() {
       this.editingDish = cloneDeep(this.originEditingDish);
+      this.shiftEditingDishChangedFlag();
     },
     newEditingDish() {
       this.editingDish = {
@@ -49,9 +54,19 @@ export const UseAppStore = defineStore("app", {
         cuisine: 1,
         uuid: ""
       };
+      this.shiftEditingDishChangedFlag();
     },
     setRunningDish(dish) {
       this.runningDish = dish;
     },
+    shiftUseEasyStepList() {
+      this.useEasyStepList = !this.useEasyStepList;
+    },
+    setLastStirFryGear(gear) {
+      this.lastStirFryGear = gear;
+    },
+    shiftEditingDishChangedFlag() {
+      this.editingDishChangedFlag = !this.editingDishChangedFlag;
+    }
   },
 });

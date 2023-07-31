@@ -27,3 +27,43 @@
  *   }
  * }
  */
+
+import { contextBridge } from "electron";
+import { BrowserWindow } from "@electron/remote";
+
+// contextBridge.exposeInMainWorld("electron", {
+//
+// });
+
+contextBridge.exposeInMainWorld("myWindowAPI", {
+  minimize: () => {
+    BrowserWindow.getFocusedWindow()
+      .minimize();
+  },
+
+  isFullscreen: () => {
+    const win = BrowserWindow.getFocusedWindow();
+    return win.isFullScreen();
+  },
+
+  toggle: () => {
+    const win = BrowserWindow.getFocusedWindow();
+    const isFullscreen = win.isFullScreen();
+    win.setFullScreen(!isFullscreen);
+  },
+
+  close: () => {
+    BrowserWindow.getFocusedWindow()
+      .close();
+  },
+
+  // loadPreferences: () => ipcRenderer.invoke("myAPI:load-prefs")
+
+});
+
+contextBridge.exposeInMainWorld("myUpdateAPI", {
+  update: () => {
+    console.log("qweqwe")
+    BrowserWindow.getFocusedWindow().webContents.send("update", 123)
+  },
+});

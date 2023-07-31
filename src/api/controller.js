@@ -12,7 +12,7 @@ export function execute(commandType, commandName, commandData) {
   });
 }
 
-export function fetchStatus(uuid) {
+export function fetchStatus() {
   return api({
     url: "/controller/fetchStatus",
     method: "get"

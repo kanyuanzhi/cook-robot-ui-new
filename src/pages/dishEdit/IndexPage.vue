@@ -5,7 +5,8 @@
       <TheStepList :dish="dish" />
       <!-- <div class="row q-col-gutter-md">
         <div class="col-8">
-          <TheStepList :dish="dish"/>
+          <TheEasyStepList v-if="useAppStore.useEasyStepList"/>
+          <TheStepList v-else/>
         </div>
         <div class="col-4">
           
@@ -20,6 +21,7 @@ import { ref } from "vue";
 import TheStepList from "pages/dishEdit/components/TheStepList.vue";
 import TheOperatorBtns from "pages/dishEdit/components/TheOperatorBtns.vue";
 import { UseAppStore } from "stores/appStore";
+import TheEasyStepList from "pages/dishEdit/components/TheEasyStepList.vue";
 
 const useAppStore = UseAppStore();
 

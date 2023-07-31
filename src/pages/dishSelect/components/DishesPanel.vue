@@ -1,5 +1,5 @@
 <template>
-  <q-tab-panel style="padding-bottom: 0" :name="name" class="right-tab-panel">
+  <q-tab-panel style="padding-bottom: 0; padding-top: 0" :name="cuisineId">
     <div class="cards-wrapper">
       <div class="row q-col-gutter-md">
         <div class="col-12" v-for="dish in dishes" :key="dish.uuid">
@@ -33,28 +33,45 @@
 
 <script setup>
 import { onMounted, ref, watch } from "vue";
-import { getDishes } from "src/api/dish";
+import { getAllDishes, getDishes } from "src/api/dish";
 import { ceil } from "lodash";
 import DishPanelCard from "pages/dishSelect/components/DishPanelCard.vue";
 import DishDetailsCard from "pages/dishSelect/components/DishDetailsCard.vue";
 
 const pageSize = 12;
 
-const props = defineProps(["name"]);
+const props = defineProps(["cuisineId"]);
 const dishes = ref([]);
 const count = ref(0);
 const pageMax = ref(0);
 const pageCurrent = ref(1);
 
 onMounted(async () => {
-  const { data } = await getDishes(1, pageSize, props.name);
-  dishes.value = data.data.dishes;
-  count.value = data.data.count;
+  let responseData;
+  if (props.cuisineId === 0) {
+    responseData = await getAllDishes(1, pageSize, props.cuisineId);
+  } else {
+    responseData = await getDishes(1, pageSize, props.cuisineId);
+  }
+  dishes.value = responseData.data.data.dishes;
+  count.value = responseData.data.data.count;
   pageMax.value = ceil(count.value / pageSize);
 
   watch(pageCurrent, async (value) => {
-    const { data } = await getDishes(value, pageSize, props.name);
-    dishes.value = data.data.dishes;
+    if (props.cuisineId === 0) {
+      responseData = await getAllDishes(
+        pageCurrent.value,
+        pageSize,
+        props.cuisineId
+      );
+    } else {
+      responseData = await getDishes(
+        pageCurrent.value,
+        pageSize,
+        props.cuisineId
+      );
+    }
+    dishes.value = responseData.data.data.dishes;
   });
 });
 
