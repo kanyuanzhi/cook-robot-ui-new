@@ -24,20 +24,6 @@
                 <span> {{ seasoningSummary }}</span>
               </p>
             </div>
-
-            <!--            <q-item>-->
-            <!--              <q-item-section avatar class="text-weight-bold">食材</q-item-section>-->
-            <!--              <q-item-section>-->
-            <!--               -->
-            <!--              </q-item-section>-->
-            <!--            </q-item>-->
-            <!--            <q-item>-->
-            <!--              <q-item-section avatar class="text-weight-bold">调料</q-item-section>-->
-            <!--              <q-item-section>-->
-            <!--                {{ seasoningSummary }}-->
-            <!--              </q-item-section>-->
-            <!--            </q-item>-->
-
           </div>
         </div>
 
@@ -121,8 +107,8 @@ const show = async (uuid) => {
   shown.value = true;
   const dishData = await getDish(uuid);
   dish.value = dishData.data.data;
-  taste.value = dishData.data.data.uuid;
   tasteOptions.value[0].value = dishData.data.data.uuid;
+  taste.value = dishData.data.data.uuid;
   customDishUUIDToSteps[dishData.data.data.uuid] = dishData.data.data.steps;
 
   const customDishesData = await getCustomDishes(uuid);

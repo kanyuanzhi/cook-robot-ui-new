@@ -13,3 +13,10 @@ export function checkUpdatePermission() {
     method: "get"
   });
 }
+
+export function getQrCode() {
+  return api({
+    url: "/system/getQrCode",
+    method: "get"
+  });
+}

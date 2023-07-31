@@ -18,7 +18,7 @@
             <q-item-label class="text-subtitle1 text-teal-6">下载进度</q-item-label>
           </q-item-section>
           <q-item-section>
-            <q-linear-progress rounded size="15px" :value="downloadProgress" color="teal-6"/>
+            <q-linear-progress animation-speed="100" rounded size="15px" :value="downloadProgress" color="teal-6"/>
           </q-item-section>
           <q-item-section side>
             <q-item-label class="text-subtitle1 text-teal-6 text-right" style="width: 50px">{{
@@ -32,7 +32,7 @@
             <q-item-label class="text-subtitle1 text-teal-6">安装进度</q-item-label>
           </q-item-section>
           <q-item-section>
-            <q-linear-progress rounded size="15px" :value="unzipProgress" color="secondary"/>
+            <q-linear-progress animation-speed="100" rounded size="15px" :value="unzipProgress" color="secondary"/>
           </q-item-section>
           <q-item-section side>
             <q-item-label class="text-subtitle1 text-teal-6 text-right" style="width: 50px">{{
@@ -122,8 +122,6 @@ const beginUpdate = () => {
     downloadProgress.value = round(data.downloadProgress, 2);
     unzipProgress.value = round(data.unzipProgress, 2);
     downloadSpeed.value = data.downloadSpeed;
-
-    console.log(data.downloadSpeed)
   };
 
   ws.onerror = function (event) {

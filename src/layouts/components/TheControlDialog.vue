@@ -24,14 +24,17 @@
           </div>
           <template v-if="useControllerStore.isCooking">
             <div class="text-teal-6 text-weight-bold text-subtitle1 text-center q-pt-lg">
-              <span>{{ useControllerStore.currentInstructionInfo.name }}</span><br>
-              <span>{{
-                  "" + useControllerStore.currentInstructionInfo.index + "/" + (useAppStore.runningDish.steps.length + 2)
-                }}</span><br>
+              <span>{{ useControllerStore.currentInstructionInfo.name }}</span>
+            </div>
+            <TheRunningStepsDisplay class="q-my-sm" style="width: 60%"/>
+
+            <!--              <span>{{-->
+            <!--                  "" + useControllerStore.currentInstructionInfo.index + "/" + (useAppStore.runningDish.steps.length + 2)-->
+            <!--                }}</span><br>-->
+            <div class="text-teal-6 text-weight-bold text-subtitle1 text-center">
               <span>{{ cookingTimeDisplay }}</span>
             </div>
           </template>
-
         </template>
         <template v-else>
           <q-btn
@@ -53,12 +56,16 @@
       </q-card-section>
       <q-card-section class="q-py-sm">
         <div class="row justify-around">
-          <q-chip :color="getTemperatureColor(useControllerStore.bottomTemperature)" text-color="white" icon="thermostat">
+          <q-chip :color="getTemperatureColor(useControllerStore.bottomTemperature)" text-color="white"
+                  icon="thermostat">
             锅底温度<span class="text-center" style="width: 40px">{{ useControllerStore.bottomTemperature }}</span>℃
           </q-chip>
-          <q-btn v-if="useControllerStore.isCooking" :color="getTemperatureColor(useControllerStore.currentHeatingTemperature)" rounded unelevated label="加热控制"
+          <q-btn v-if="useControllerStore.isCooking"
+                 :color="getTemperatureColor(useControllerStore.currentHeatingTemperature)" rounded unelevated
+                 label="加热控制"
                  @click="openTemperatureControlDialog()"/>
-          <q-chip :color="getTemperatureColor(useControllerStore.infraredTemperature)" text-color="white" icon="thermostat">
+          <q-chip :color="getTemperatureColor(useControllerStore.infraredTemperature)" text-color="white"
+                  icon="thermostat">
             红外温度<span class="text-center" style="width: 40px">{{ useControllerStore.infraredTemperature }}</span>℃
           </q-chip>
         </div>
@@ -108,6 +115,7 @@ import { computed, ref } from "vue";
 import { secondsToMMSS } from "src/utils/timeFormat";
 import TheHeatingTemperatureControlDialog from "layouts/components/TheHeatingTemperatureControlDialog.vue";
 import { sendCommand } from "layouts/components/command";
+import TheRunningStepsDisplay from "layouts/components/TheRunningStepsDisplay.vue";
 
 const useAppStore = UseAppStore();
 const useControllerStore = UseControllerStore();

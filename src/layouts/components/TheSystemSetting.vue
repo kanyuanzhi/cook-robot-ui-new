@@ -1,7 +1,7 @@
 <template>
   <div>
-    <q-btn-dropdown flat round dense dropdown-icon="more_vert">
-      <q-list class="bg-teal-6 text-white" dense>
+    <q-btn-dropdown flat round dropdown-icon="more_vert">
+      <q-list class="bg-teal-6 text-white">
         <q-item class="dropdown-bottom-border" clickable v-close-popup @click="operateScreen('minimize')">
           <q-item-section side>
             <q-icon name="remove" color="white"/>
@@ -29,6 +29,8 @@
           </q-item-section>
         </q-item>
 
+        <q-separator color="white"/>
+
         <q-item clickable v-close-popup @click="theUpdateConfirmDialog.show">
           <q-item-section side>
             <q-icon name="update" color="white"/>
@@ -37,10 +39,20 @@
             <q-item-label>更新软件</q-item-label>
           </q-item-section>
         </q-item>
+
+        <q-item clickable v-close-popup @click="theQrScanDialog.show">
+          <q-item-section side>
+            <q-icon name="phone_iphone" color="white"/>
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>手机配对</q-item-label>
+          </q-item-section>
+        </q-item>
       </q-list>
     </q-btn-dropdown>
 
     <TheUpdateConfirmDialog ref="theUpdateConfirmDialog"/>
+    <TheQrScanDialog ref="theQrScanDialog"/>
   </div>
 
 </template>
@@ -50,10 +62,12 @@ import { ref } from "vue";
 import { shutdown } from "src/api/system";
 import { UseAppStore } from "stores/appStore";
 import TheUpdateConfirmDialog from "layouts/components/TheUpdateConfirmDialog.vue";
+import TheQrScanDialog from "layouts/components/TheQrScanDialog.vue";
 
 const useAppStore = UseAppStore();
 
 const theUpdateConfirmDialog = ref(null);
+const theQrScanDialog = ref(null)
 
 const isFullscreen = ref(false);
 if (process.env.MODE === "electron") {

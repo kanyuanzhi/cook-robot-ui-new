@@ -11,10 +11,10 @@
     "test": "echo \"No test specified\" && exit 0",
     "dev": "quasar dev",
     "dev:electron": "quasar dev -m electron",
-    "dev:capacitor": "quasar dev -m capacitor -T andriod",
+    "dev:capacitor": "quasar dev -m capacitor -T android",
     "build": "quasar build",
     "build:electron": "quasar build -m electron",
-    "build:capacitor": "quasar build -m capacitor -T andriod"
+    "build:capacitor": "quasar build -m capacitor -T android"
   },
   "dependencies": {
     "@electron/remote": "^2.0.10",
