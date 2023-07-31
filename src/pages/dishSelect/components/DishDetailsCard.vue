@@ -1,58 +1,61 @@
 <template>
-  <q-dialog v-model="shown" transition-show="scale" transition-hide="scale">
-    <q-card style="width: 600px">
-      <q-card-section class="bg-teal-6 text-white q-py-sm">
-        <div class="text-h6 text-weight-bold">{{ dish.name }}</div>
-      </q-card-section>
-      <q-card-section class="text-grey-8">
-        <div class="row">
-          <div class="col-6">
-            <q-img
-              :src="'data:image/png;base64,'+dish.image"
-              fit="fill"
-              :ratio="4/3"
-            />
-          </div>
-          <div class="col-6">
-            <div class="q-pl-md">
-              <p>
-                <span class="text-weight-bold">食材</span><br>
-                <span> {{ ingredientSummary }}</span>
-              </p>
-              <p>
-                <span class="text-weight-bold">调料</span><br>
-                <span> {{ seasoningSummary }}</span>
-              </p>
+  <div>
+    <q-dialog v-model="shown" transition-show="scale" transition-hide="scale">
+      <q-card style="width: 600px">
+        <q-card-section class="bg-teal-6 text-white q-py-sm">
+          <div class="text-h6 text-weight-bold">{{ dish.name }}</div>
+        </q-card-section>
+        <q-card-section class="text-grey-8">
+          <div class="row">
+            <div class="col-6">
+              <q-img
+                :src="'data:image/png;base64,'+dish.image"
+                fit="fill"
+                :ratio="4/3"
+              />
+            </div>
+            <div class="col-6">
+              <div class="q-pl-md">
+                <p>
+                  <span class="text-weight-bold">食材</span><br>
+                  <span> {{ ingredientSummary }}</span>
+                </p>
+                <p>
+                  <span class="text-weight-bold">调料</span><br>
+                  <span> {{ seasoningSummary }}</span>
+                </p>
+              </div>
             </div>
           </div>
-        </div>
 
-        <q-item style="padding:15px 0 0 0">
-          <q-item-section avatar class="text-weight-bold">选择口味</q-item-section>
-          <q-item-section class="q-gutter-sm">
-            <q-option-group
-              :options="tasteOptions"
-              type="radio"
-              inline
-              v-model="taste"
-            />
-          </q-item-section>
-        </q-item>
-      </q-card-section>
-      <q-card-actions class="bg-white text-teal-6 q-pa-none">
-        <q-btn-group spread square unelevated class="full-width">
-          <q-btn color="teal-6" class="text-weight-bold text-subtitle1" label="大厨编辑" style="padding: 8px 8px"
-                 v-close-popup @click="openDishEditPage"/>
-          <q-separator vertical/>
-          <q-btn color="teal-6" class="text-weight-bold text-subtitle1" label="调整口味" style="padding: 8px 8px"
-                 v-close-popup/>
-          <q-separator vertical/>
-          <q-btn color="teal-6" class="text-weight-bold text-subtitle1" label="开始炒制" style="padding: 8px 8px"
-                 v-close-popup @click="openRunningControlPage"/>
-        </q-btn-group>
-      </q-card-actions>
-    </q-card>
-  </q-dialog>
+          <q-item style="padding:15px 0 0 0">
+            <q-item-section avatar class="text-weight-bold">选择口味</q-item-section>
+            <q-item-section class="q-gutter-sm">
+              <q-option-group
+                :options="tasteOptions"
+                type="radio"
+                inline
+                v-model="taste"
+              />
+            </q-item-section>
+          </q-item>
+        </q-card-section>
+        <q-card-actions class="bg-white text-teal-6 q-pa-none">
+          <q-btn-group spread square unelevated class="full-width">
+            <q-btn color="teal-6" class="text-weight-bold text-subtitle1" label="大厨编辑" style="padding: 8px 8px"
+                   v-close-popup @click="openDishEditPage"/>
+            <q-separator vertical/>
+            <q-btn color="teal-6" class="text-weight-bold text-subtitle1" label="口味调整" style="padding: 8px 8px"
+                   @click="openTasteCustomizationPage"/>
+            <q-separator vertical/>
+            <q-btn color="teal-6" class="text-weight-bold text-subtitle1" label="开始炒制" style="padding: 8px 8px"
+                   v-close-popup @click="openRunningControlPage"/>
+          </q-btn-group>
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
+    <TheTasteCustomization ref="theTasteCustomization" :seasoning-map="seasoningMap"/>
+  </div>
 </template>
 
 <script setup>
@@ -64,6 +67,7 @@ import { UseAppStore } from "stores/appStore";
 import { useRouter } from "vue-router";
 import { UseControllerStore } from "stores/controllerStore";
 import { Notify } from "quasar";
+import TheTasteCustomization from "pages/dishSelect/components/TheTasteCustomization.vue";
 
 const useControllerStore = UseControllerStore();
 const useAppStore = UseAppStore();
@@ -102,6 +106,7 @@ const tasteOptions = ref([
   }
 ]);
 const customDishUUIDToSteps = {};
+const customDishUUIDToDish = {};
 
 const show = async (uuid) => {
   shown.value = true;
@@ -116,6 +121,7 @@ const show = async (uuid) => {
   for (let i = 0, len = customDishes.value.length; i < len; i++) {
     tasteOptions.value[i + 1].value = customDishes.value[i].uuid;
     customDishUUIDToSteps[customDishes.value[i].uuid] = customDishes.value[i].steps;
+    customDishUUIDToDish[customDishes.value[i].uuid] = customDishes.value[i]
   }
 
   const seasoningData = await getSeasonings();
@@ -174,6 +180,12 @@ const openRunningControlPage = () => {
     useAppStore.setRunningDish(dish.value);
   }
   useAppStore.showRunningControl();
+};
+
+const theTasteCustomization = ref(null);
+
+const openTasteCustomizationPage = () => {
+  theTasteCustomization.value.show(taste.value, tasteOptions.value, dish.value, customDishes.value,customDishUUIDToDish);
 };
 
 const openDishEditPage = () => {
