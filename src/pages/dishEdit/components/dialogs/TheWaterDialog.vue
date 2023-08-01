@@ -3,7 +3,7 @@
     <q-dialog v-model="shown" @hide="onHide">
       <q-card style="width: 400px" class="q-mt-md">
         <q-card-section class="bg-teal-6 text-white q-py-sm">
-          <div class="text-h6">添加水</div>
+          <div class="text-h6">添加纯净水</div>
         </q-card-section>
         <q-card-section>
           <NumberSelect ref="numberSelect" label="分量" unit="克" :min="5" :max="150" :step="5"

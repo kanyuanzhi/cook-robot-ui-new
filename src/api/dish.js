@@ -67,3 +67,11 @@ export function getCustomDishes(dishUuid) {
     },
   });
 }
+
+export function updateCustomDish(uuidToSteps) {
+  return api({
+    url: "/customDishes",
+    method: "put",
+    data: { uuidToSteps: uuidToSteps },
+  });
+}

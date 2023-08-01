@@ -3,9 +3,10 @@ const defaultSettings = {
 
   version: "v0.5.1",
 
-  useSSL: false,
+  useSSL: true,
 
   middlePlatformIPAddress: "localhost"
+  // middlePlatformIPAddress: "192.168.6.10"
 };
 
 export default defaultSettings;

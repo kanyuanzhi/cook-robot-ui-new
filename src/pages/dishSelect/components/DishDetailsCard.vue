@@ -1,9 +1,9 @@
 <template>
   <div>
-    <q-dialog v-model="shown" transition-show="scale" transition-hide="scale">
+    <q-dialog v-model="shown">
       <q-card style="width: 600px">
-        <q-card-section class="bg-teal-6 text-white q-py-sm">
-          <div class="text-h6 text-weight-bold">{{ dish.name }}</div>
+        <q-card-section class="bg-teal-6 text-white q-py-md">
+          <div class="text-h6 text-weight-bold text-center">{{ dish.name }}</div>
         </q-card-section>
         <q-card-section class="text-grey-8">
           <div class="row">
@@ -13,32 +13,35 @@
                 fit="fill"
                 :ratio="4/3"
               />
+              <p class="q-px-sm q-pt-md">
+                <span> {{ ingredientSummary }}</span>
+              </p>
             </div>
             <div class="col-6">
-              <div class="q-pl-md">
-                <p>
-                  <span class="text-weight-bold">食材</span><br>
-                  <span> {{ ingredientSummary }}</span>
-                </p>
-                <p>
-                  <span class="text-weight-bold">调料</span><br>
-                  <span> {{ seasoningSummary }}</span>
-                </p>
-              </div>
+              <q-list>
+                <q-item tag="label" v-ripple>
+                  <q-item-section avatar>
+                    <q-radio v-model="taste" :val="originalTaste.dish.uuid" :color="originalTaste.color"/>
+                  </q-item-section>
+                  <q-item-section>
+                    <q-item-label>{{ originalTaste.label }}</q-item-label>
+                    <q-item-label caption>{{ originalTaste.summary }}</q-item-label>
+                  </q-item-section>
+                </q-item>
+                <q-scroll-area :thumb-style="thumbStyle" style="height: 240px;">
+                  <q-item v-for="customTaste in customTastes" tag="label" :key="customTaste.dish.uuid" v-ripple>
+                    <q-item-section avatar>
+                      <q-radio v-model="taste" :val="customTaste.dish.uuid" :color="customTaste.color"/>
+                    </q-item-section>
+                    <q-item-section>
+                      <q-item-label>{{ customTaste.label }}</q-item-label>
+                      <q-item-label caption>{{ customTaste.summary }}</q-item-label>
+                    </q-item-section>
+                  </q-item>
+                </q-scroll-area>
+              </q-list>
             </div>
           </div>
-
-          <q-item style="padding:15px 0 0 0">
-            <q-item-section avatar class="text-weight-bold">选择口味</q-item-section>
-            <q-item-section class="q-gutter-sm">
-              <q-option-group
-                :options="tasteOptions"
-                type="radio"
-                inline
-                v-model="taste"
-              />
-            </q-item-section>
-          </q-item>
         </q-card-section>
         <q-card-actions class="bg-white text-teal-6 q-pa-none">
           <q-btn-group spread square unelevated class="full-width">
@@ -54,7 +57,7 @@
         </q-card-actions>
       </q-card>
     </q-dialog>
-    <TheTasteCustomization ref="theTasteCustomization" :seasoning-map="seasoningMap"/>
+    <TheTasteCustomization ref="theTasteCustomization" :dish-name="dish.name" :seasoning-map="seasoningMap"/>
   </div>
 </template>
 
@@ -68,112 +71,87 @@ import { useRouter } from "vue-router";
 import { UseControllerStore } from "stores/controllerStore";
 import { Notify } from "quasar";
 import TheTasteCustomization from "pages/dishSelect/components/TheTasteCustomization.vue";
+import { ingredientFormat, seasoningFormat } from "pages/dishSelect/components/displayFormat";
 
 const useControllerStore = UseControllerStore();
 const useAppStore = UseAppStore();
 const router = useRouter();
 
 const dish = ref({});
-const customDishes = ref(null);
 
 const shown = ref(false);
 const ingredientSummary = ref("");
-const seasoningSummary = ref("");
 
 const seasoningMap = ref(null);
 
 const taste = ref("");
-const tasteOptions = ref([
-  {
-    label: "原味",
-    value: "",
-    color: "teal-6"
-  },
+
+const originalTaste = ref({
+  label: "原味",
+  color: "teal-6",
+  summary: "",
+  dish: {},
+});
+
+const customTastes = ref([
   {
     label: "口味1",
-    value: "",
-    color: "blue"
+    color: "blue",
+    summary: "",
+    dish: {},
   },
   {
     label: "口味2",
-    value: "",
-    color: "red"
+    color: "red",
+    summary: "",
+    dish: {},
   },
   {
     label: "口味3",
-    value: "",
-    color: "orange"
+    color: "orange",
+    summary: "",
+    dish: {},
   }
 ]);
-const customDishUUIDToSteps = {};
-const customDishUUIDToDish = {};
+
+const uuidToTaste = {};
 
 const show = async (uuid) => {
   shown.value = true;
-  const dishData = await getDish(uuid);
-  dish.value = dishData.data.data;
-  tasteOptions.value[0].value = dishData.data.data.uuid;
-  taste.value = dishData.data.data.uuid;
-  customDishUUIDToSteps[dishData.data.data.uuid] = dishData.data.data.steps;
-
-  const customDishesData = await getCustomDishes(uuid);
-  customDishes.value = customDishesData.data.data;
-  for (let i = 0, len = customDishes.value.length; i < len; i++) {
-    tasteOptions.value[i + 1].value = customDishes.value[i].uuid;
-    customDishUUIDToSteps[customDishes.value[i].uuid] = customDishes.value[i].steps;
-    customDishUUIDToDish[customDishes.value[i].uuid] = customDishes.value[i]
-  }
-
   const seasoningData = await getSeasonings();
   seasoningMap.value = seasoningData.data.data;
-  ingredientFormat(dish.value.steps);
-  seasoningFormat(dish.value.steps);
 
-  watch(taste, () => {
-    ingredientFormat(customDishUUIDToSteps[taste.value]);
-    seasoningFormat(customDishUUIDToSteps[taste.value]);
-  });
-};
+  const dishData = await getDish(uuid);
+  dish.value = dishData.data.data;
+  originalTaste.value["dish"] = dishData.data.data;
+  originalTaste.value["summary"] = seasoningFormat(dishData.data.data.steps, seasoningMap.value);
+  taste.value = dishData.data.data.uuid;
+  uuidToTaste[dishData.data.data.uuid] = taste;
 
-const ingredientFormat = (steps) => {
-  const ingredientList = [];
-  for (let step of steps) {
-    if (step.instructionType === "ingredient") {
-      ingredientList.push(step.name + step.weight + "克");
-    }
-  }
-  ingredientSummary.value = ingredientList.join("，");
-};
+  ingredientSummary.value = ingredientFormat(dishData.data.data.steps);
 
-const seasoningFormat = (steps) => {
-  const seasoningInfo = {};
-  for (let pumpNumber in seasoningMap.value) {
-    seasoningInfo[pumpNumber] = {
-      label: seasoningMap.value[pumpNumber],
-      weight: []
-    };
-  }
-  for (let step of steps) {
-    if (step.instructionType === "water" || step.instructionType === "oil") {
-      seasoningInfo[step.pumpNumber].weight.push(step.weight);
-    }
-    if (step.instructionType === "seasoning") {
-      for (let seasoning of step.seasonings) {
-        seasoningInfo[seasoning.pumpNumber].weight.push(seasoning.weight);
+  const customDishesData = await getCustomDishes(uuid);
+  const customDishes = customDishesData.data.data;
+  for (let i = 0, len = customDishes.length; i < len; i++) {
+    for (let j = 0; j < customDishes[i].steps.length; j++) {
+      if (["water", "oil"].includes(customDishes[i].steps[j].instructionType)) {
+        Reflect.set(customDishes[i].steps[j], "editingWeight", customDishes[i].steps[j].weight);
+      } else if (customDishes[i].steps[j].instructionType === "seasoning") {
+        for (let k = 0; k < customDishes[i].steps[j].seasonings.length; k++) {
+          Reflect.set(customDishes[i].steps[j].seasonings[k], "editingWeight", customDishes[i].steps[j].seasonings[k].weight);
+        }
       }
     }
+    customTastes.value[i]["dish"] = customDishes[i];
+    customTastes.value[i]["summary"] = seasoningFormat(customDishes[i].steps, seasoningMap.value);
+    uuidToTaste[customDishes[i].uuid] = customTastes.value[i];
   }
-  const seasoningList = [];
-  for (let pumpNumber in seasoningInfo) {
-    if (seasoningInfo[pumpNumber].weight.length !== 0) {
-      seasoningList.push(seasoningInfo[pumpNumber].label + sum(seasoningInfo[pumpNumber].weight) + "克");
-    }
-  }
-  seasoningSummary.value = seasoningList.join("，");
 };
 
 const openRunningControlPage = () => {
-  dish.value.steps = customDishUUIDToSteps[taste.value];
+  if (taste.value !== originalTaste.value.dish.uuid) {
+    dish.value = uuidToTaste[taste.value].dish;
+  }
   if (useControllerStore.isCooking) {
     Notify.create("当前有菜品正在炒制，请稍后");
   } else {
@@ -185,7 +163,11 @@ const openRunningControlPage = () => {
 const theTasteCustomization = ref(null);
 
 const openTasteCustomizationPage = () => {
-  theTasteCustomization.value.show(taste.value, tasteOptions.value, dish.value, customDishes.value,customDishUUIDToDish);
+  if (taste.value === originalTaste.value.dish.uuid) {
+    theTasteCustomization.value.show(customTastes.value[0].dish.uuid, customTastes.value);
+    return;
+  }
+  theTasteCustomization.value.show(taste.value, customTastes.value);
 };
 
 const openDishEditPage = () => {
@@ -196,6 +178,14 @@ const openDishEditPage = () => {
 defineExpose({
   show
 });
+
+const thumbStyle = {
+  right: "2px",
+  borderRadius: "5px",
+  backgroundColor: "#009688",
+  width: "5px",
+  opacity: "0.75"
+};
 </script>
 
 <style lang="scss" scoped>

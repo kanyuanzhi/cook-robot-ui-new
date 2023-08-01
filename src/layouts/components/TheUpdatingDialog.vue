@@ -122,8 +122,8 @@ const beginUpdate = () => {
     const data = JSON.parse(event.data);
     isDownloadFinished.value = data.isDownloadFinished;
     isUnzipFinished.value = data.isUnzipFinished;
-    downloadProgress.value = data.downloadProgress;
-    unzipProgress.value = data.unzipProgress;
+    downloadProgress.value = round(data.downloadProgress, 2);
+    unzipProgress.value = round(data.unzipProgress, 2);
     downloadSpeed.value = data.downloadSpeed;
   };
 

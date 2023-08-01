@@ -80,7 +80,7 @@ export function newStirFryStep(gear, duration) {
 }
 
 export function newWaterStep(weight) {
-  const stepName = "添加水" + weight + "克";
+  const stepName = "添加纯净水" + weight + "克";
   const step =
     newStep("water", stepName);
   step["weight"] = weight;

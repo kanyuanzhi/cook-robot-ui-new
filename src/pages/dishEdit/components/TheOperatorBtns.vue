@@ -24,7 +24,7 @@
         </div>
         <div class="col">
           <div class="row justify-around" style="padding-top: 10px">
-            <OperatorBtn label="水" size="lg" color="blue" icon="water_drop"
+            <OperatorBtn label="纯净水" size="lg" color="blue" icon="water_drop"
                          @click="theWaterDialog.show()"/>
             <OperatorBtn label="食用油" size="lg" color="orange" icon="fa-solid fa-bottle-droplet"
                          @click="theOilDialog.show()"/>
