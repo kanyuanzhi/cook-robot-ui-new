@@ -1,6 +1,6 @@
 <template>
   <q-item-section class="col">
-    <q-input :input-style="inputStyle" hide-bottom-space v-model="weightValue" dense>
+    <q-input :input-style="inputStyle" hide-bottom-space readonly v-model="weightValue" dense>
       <template v-slot:before>
         <span class="text-subtitle2 text-center text-teal-6 q-py-sm tex" style="width: 100px">{{ seasoningName }}</span>
       </template>
