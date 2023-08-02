@@ -19,7 +19,6 @@ import { onMounted, ref, watch } from "vue";
 import { Notify } from "quasar";
 
 const props = defineProps(["seasoning", "seasoningMap"]);
-const emits = defineEmits(["update"]);
 
 const weightValue = ref(props.seasoning.editingWeight);
 const seasoningName = ref(props.seasoningMap[props.seasoning.pumpNumber]);

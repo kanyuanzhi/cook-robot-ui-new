@@ -48,6 +48,15 @@
             <q-item-label>手机配对</q-item-label>
           </q-item-section>
         </q-item>
+
+        <q-item clickable v-close-popup @click="router.push('/systemSettings')">
+          <q-item-section side>
+            <q-icon name="settings" color="white"/>
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>系统设置</q-item-label>
+          </q-item-section>
+        </q-item>
       </q-list>
     </q-btn-dropdown>
 
@@ -58,35 +67,42 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import { shutdown } from "src/api/system";
 import { UseAppStore } from "stores/appStore";
 import TheUpdateConfirmDialog from "layouts/components/TheUpdateConfirmDialog.vue";
 import TheQrScanDialog from "layouts/components/TheQrScanDialog.vue";
+import { useRouter } from "vue-router";
+import { Platform } from "quasar";
 
 const useAppStore = UseAppStore();
+const router = useRouter();
 
 const theUpdateConfirmDialog = ref(null);
 const theQrScanDialog = ref(null)
 
 const isFullscreen = ref(false);
-if (process.env.MODE === "electron") {
-  isFullscreen.value = window.myWindowAPI.isFullscreen();
-}
+
+onMounted(()=>{
+  if (Platform.is.electron) {
+    isFullscreen.value = window.windowAPI.isFullscreen();
+  }
+})
+
 
 const operateScreen = (flag) => {
   if (process.env.MODE !== "electron") return;
   switch (flag) {
     case "minimize":
-      window.myWindowAPI.minimize();
+      window.windowAPI.minimize();
       return;
     case "close":
       shutdown();
-      window.myWindowAPI.close();
+      window.windowAPI.close();
       return;
     case "toggle-screen":
-      window.myWindowAPI.toggle();
-      isFullscreen.value = window.myWindowAPI.isFullscreen();
+      window.windowAPI.toggle();
+      isFullscreen.value = window.windowAPI.isFullscreen();
       return;
     default:
       return;

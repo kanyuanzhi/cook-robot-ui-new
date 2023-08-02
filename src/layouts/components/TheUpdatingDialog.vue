@@ -140,7 +140,7 @@ const beginUpdate = () => {
 const closeApp = () => {
   if (Platform.is.electron) {
     shutdown();
-    window.myWindowAPI.close();
+    window.windowAPI.close();
   } else {
     Notify.create("非electron平台无法重启软件");
   }
