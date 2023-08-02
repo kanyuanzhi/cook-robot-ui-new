@@ -23,12 +23,13 @@
         <template v-slot:after>
           <q-tab-panels
             v-model="tab"
-            swipeable
             vertical
             transition-prev="jump-up"
             transition-next="jump-up"
           >
-            <NetworkConnectPanel name="networkConnect"/>
+            <TheNetworkConnectPanel name="networkConnect"/>
+            <ThePhonePairPanel name="phonePair"/>
+            <TheSoftwareUpdatePanel name="softwareUpdate"/>
           </q-tab-panels>
         </template>
       </q-splitter>
@@ -38,7 +39,9 @@
 
 <script setup>
 import { ref } from "vue";
-import NetworkConnectPanel from "pages/systemSettings/components/networkConnectPanel.vue";
+import TheNetworkConnectPanel from "pages/systemSettings/components/TheNetworkConnectPanel.vue";
+import ThePhonePairPanel from "pages/systemSettings/components/ThePhonePairPanel.vue";
+import TheSoftwareUpdatePanel from "pages/systemSettings/components/TheSoftwareUpdatePanel.vue";
 
 const splitterModel = ref(20);
 
@@ -48,16 +51,4 @@ const tab = ref("");
 </script>
 
 <style lang="scss" scoped>
-//:deep(.q-tab__label) {
-//  font-weight: 600;
-//  font-size: 20px;
-//  letter-spacing: 10px;
-//  padding-top: 0px;
-//  padding-bottom: 0;
-//}
-//
-//:deep(.q-tab) {
-//  min-height: 35px;
-//  height: 43.5px;
-//}
 </style>

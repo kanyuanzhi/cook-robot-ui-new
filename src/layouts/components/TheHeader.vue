@@ -4,24 +4,18 @@
       <q-avatar>
         <q-btn flat round dense size="12px" icon="fa-solid fa-house" to="/"/>
       </q-avatar>
-      <!--      <q-btn flat round dense icon="mdi-home" to="/"/>-->
-      <!--      <q-btn flat round dense icon="home" to="/"/>-->
+
       <q-toolbar-title>
         <div style="padding-top: 2px">{{ settingStore.title }}</div>
       </q-toolbar-title>
       <q-btn stretch flat label="菜品选择" @click="router.push('/dishSelect')"/>
       <q-separator dark vertical/>
       <q-btn stretch flat label="菜品制作" @click="router.push('/dishEdit')"/>
-      <!--      <q-toggle-->
-      <!--        class="q-pr-md"-->
-      <!--        color="orange"-->
-      <!--        dense-->
-      <!--        :label="useAppStore.useEasyStepList?`简易模式`:`普通模式`"-->
-      <!--        v-model="useAppStore.useEasyStepList"-->
-      <!--      />-->
+
       <q-separator dark vertical/>
-      <!--      <q-btn flat round dense icon="menu" class="q-ml-sm"/>-->
-      <TheSystemSetting class="q-ml-sm"/>
+      <q-btn stretch flat label="系统设置" @click="router.push('/systemSettings')"/>
+      <q-separator v-if="Platform.is.electron" dark vertical/>
+      <TheSystemSetting v-if="Platform.is.electron" class="q-ml-sm"/>
     </q-toolbar>
   </q-header>
 </template>
@@ -31,6 +25,7 @@ import { useRouter } from "vue-router";
 import TheSystemSetting from "layouts/components/TheSystemSetting.vue";
 import { UseAppStore } from "stores/appStore";
 import { UseSettingStore } from "stores/settingStore";
+import { Platform } from "quasar";
 
 const router = useRouter();
 const useAppStore = UseAppStore();

@@ -1,5 +1,5 @@
 <template>
-  <q-tab-panel :name="name">
+  <q-tab-panel class="container" :name="name">
     <div class="column " style="padding: 0 40px">
       <div class="col">
         <q-item>
@@ -9,7 +9,7 @@
           <q-item-section>
             <q-toggle
               v-model="wlanStatus"
-              color="green"
+              color="teal-6"
               :label="wlanStatus?'开':'关'"
               left-label
             />
@@ -19,7 +19,7 @@
       <q-list class="col q-py-md" bordered dense>
         <q-scroll-area style="height: 360px">
           <q-item v-if="currentConnection!==null" clickable v-ripple class="q-px-xl text-teal-6"
-                  @click="networkDisconnectDialog.show">
+                  @click="theNetworkDisconnectDialog.show">
             <q-item-section class="row">
               <span><span class="q-mr-lg">{{ currentConnection.ssid }}</span><span>{{
                   currentConnection.mac
@@ -30,7 +30,7 @@
             </q-item-section>
           </q-item>
           <q-item v-for="network in networks" :key="network.bssid" clickable v-ripple class="q-px-xl"
-                  @click="networkConnectDialog.show(network)">
+                  @click="theNetworkConnectDialog.show(network)">
             <q-item-section class="row">
               <span><span class="q-mr-lg">{{ network.ssid || "隐藏的网络" }}</span><span>{{ network.mac }}</span></span>
             </q-item-section>
@@ -41,16 +41,16 @@
         </q-scroll-area>
       </q-list>
     </div>
-    <NetworkConnectDialog ref="networkConnectDialog"/>
-    <NetworkDisconnectDialog ref="networkDisconnectDialog"/>
+    <TheNetworkConnectPanel ref="theNetworkConnectDialog"/>
+    <TheNetworkDisconnectPanel ref="theNetworkDisconnectDialog"/>
   </q-tab-panel>
 </template>
 
 <script setup>
 import { nextTick, onMounted, ref, watch } from "vue";
 import { Notify, Platform } from "quasar";
-import NetworkConnectDialog from "pages/systemSettings/components/networkConnectDialog.vue";
-import NetworkDisconnectDialog from "pages/systemSettings/components/NetworkDisconnectDialog.vue";
+import TheNetworkConnectPanel from "pages/systemSettings/components/TheNetworkConnectDialog.vue";
+import TheNetworkDisconnectPanel from "pages/systemSettings/components/TheNetworkDisconnectDialog.vue";
 
 const props = defineProps(["name"]);
 
@@ -119,8 +119,8 @@ const scan = async () => {
   }
 };
 
-const networkConnectDialog = ref(null);
-const networkDisconnectDialog = ref(null);
+const theNetworkConnectDialog = ref(null);
+const theNetworkDisconnectDialog = ref(null);
 
 const disConnect = async () => {
 
@@ -142,5 +142,7 @@ const wifiBar = (quality) => {
 </script>
 
 <style lang="scss" scoped>
-
+.container{
+  height: calc(100vh - 50px - 50px - 16px - 1px);
+}
 </style>
