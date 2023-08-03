@@ -16,6 +16,12 @@ export async function sendCommand(commandName, commandData="") {
     case "prepare":
       commandType = "multiple";
       break;
+    case "wash":
+      commandType = "multiple";
+      break;
+    case "pour":
+      commandType = "multiple";
+      break;
     case "dish_out":
       commandType = "multiple";
       break;

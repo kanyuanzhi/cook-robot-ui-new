@@ -81,7 +81,7 @@ onMounted(async () => {
       const res = await window.wlanAPI.open();
       scanInterval = setInterval(scan, 1000);
     } else {
-      const res = await window.res.close();
+      const res = await window.wlanAPI.close();
       clearInterval(scanInterval);
       networks.value = [];
       currentConnection.value = null;

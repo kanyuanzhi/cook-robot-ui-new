@@ -45,6 +45,8 @@ const statusBarDisplay = computed(() => {
       return "炒制" + useAppStore.runningDish.name + "中";
     case "wash":
       return "清洗中";
+    case "pour":
+      return "倒水中";
     case "reset":
       return "复位中";
     case "prepare":

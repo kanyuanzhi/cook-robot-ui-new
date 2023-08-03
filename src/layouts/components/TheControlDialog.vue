@@ -93,7 +93,25 @@
             <q-btn :disable="useControllerStore.isRunning" color="teal-6" label="备菜" icon="restart_alt"
                    @click="sendCommand('prepare')"/>
             <q-separator vertical/>
-            <q-btn :disable="useControllerStore.isRunning" color="teal-6" label="清洗" icon="mdi-washing-machine"/>
+            <q-btn-dropdown :disable="useControllerStore.isRunning" color="teal-6" label="清洗"
+                            icon="mdi-washing-machine">
+              <q-list >
+                <q-item clickable class="bg-teal-6 text-white text-center"  v-close-popup @click="sendCommand('wash')">
+                  <q-item-section>
+                    <q-item-label>洗锅</q-item-label>
+                  </q-item-section>
+                </q-item>
+                <q-separator inset/>
+                <q-item clickable class="bg-teal-6 text-white text-center"  v-close-popup @click="sendCommand('pour')">
+                  <q-item-section>
+                    <q-item-label>倒水</q-item-label>
+                  </q-item-section>
+                </q-item>
+              </q-list>
+            </q-btn-dropdown>
+            <!--            <q-separator vertical/>-->
+            <!--            <q-btn :disable="useControllerStore.isRunning" color="teal-6" label="清洗" icon="mdi-washing-machine"-->
+            <!--                   @click="sendCommand('wash')"/>-->
             <q-separator vertical/>
             <q-btn color="teal-6" label="开门" icon="lock_open" @click="sendCommand('door_unlock')"/>
             <q-separator vertical/>
@@ -147,5 +165,7 @@ const openTemperatureControlDialog = () => {
 </script>
 
 <style lang="scss" scoped>
-
+.q-item{
+  min-height: 43px;
+}
 </style>
