@@ -1,49 +1,47 @@
 <template>
-  <q-tab-panel class="container" :name="name">
-    <div class="column " style="padding: 0 40px">
-      <div class="col">
-        <q-item>
-          <q-item-section>
-            WLAN
-          </q-item-section>
-          <q-item-section>
-            <q-toggle
-              v-model="wlanStatus"
-              color="teal-6"
-              :label="wlanStatus?'开':'关'"
-              left-label
-            />
-          </q-item-section>
-        </q-item>
-      </div>
-      <q-list class="col q-py-md" bordered dense>
-        <q-scroll-area style="height: 360px">
-          <q-item v-if="currentConnection!==null" clickable v-ripple class="q-px-xl text-teal-6"
-                  @click="theNetworkDisconnectDialog.show">
-            <q-item-section class="row">
+  <div class="column">
+    <div class="col">
+      <q-item>
+        <q-item-section>
+          <q-toggle
+            v-model="wlanStatus"
+            color="teal-6"
+            left-label
+          >
+            <template v-slot:default>
+              <span class="text-teal-6">{{ wlanStatus ? "WLAN开" : "WLAN关" }}</span>
+            </template>
+          </q-toggle>
+        </q-item-section>
+      </q-item>
+    </div>
+    <q-list class="col q-py-md" bordered dense>
+      <q-scroll-area style="height: 300px">
+        <q-item v-if="currentConnection!==null" clickable v-ripple class="q-px-xl text-teal-6"
+                @click="theNetworkDisconnectDialog.show">
+          <q-item-section class="row">
               <span><span class="q-mr-lg">{{ currentConnection.ssid }}</span><span>{{
                   currentConnection.mac
                 }}</span></span>
-            </q-item-section>
-            <q-item-section avatar>
-              <q-icon :name="wifiBar(currentConnection.quality)"/>
-            </q-item-section>
-          </q-item>
-          <q-item v-for="network in networks" :key="network.bssid" clickable v-ripple class="q-px-xl"
-                  @click="theNetworkConnectDialog.show(network)">
-            <q-item-section class="row">
-              <span><span class="q-mr-lg">{{ network.ssid || "隐藏的网络" }}</span><span>{{ network.mac }}</span></span>
-            </q-item-section>
-            <q-item-section avatar>
-              <q-icon :name="wifiBar(network.quality)"/>
-            </q-item-section>
-          </q-item>
-        </q-scroll-area>
-      </q-list>
-    </div>
+          </q-item-section>
+          <q-item-section avatar>
+            <q-icon :name="wifiBar(currentConnection.quality)"/>
+          </q-item-section>
+        </q-item>
+        <q-item v-for="network in networks" :key="network.bssid" clickable v-ripple class="q-px-xl"
+                @click="theNetworkConnectDialog.show(network)">
+          <q-item-section class="row">
+            <span><span class="q-mr-lg">{{ network.ssid || "隐藏的网络" }}</span><span>{{ network.mac }}</span></span>
+          </q-item-section>
+          <q-item-section avatar>
+            <q-icon :name="wifiBar(network.quality)"/>
+          </q-item-section>
+        </q-item>
+      </q-scroll-area>
+    </q-list>
     <TheNetworkConnectPanel ref="theNetworkConnectDialog"/>
     <TheNetworkDisconnectPanel ref="theNetworkDisconnectDialog"/>
-  </q-tab-panel>
+  </div>
 </template>
 
 <script setup>
@@ -51,8 +49,6 @@ import { nextTick, onMounted, ref, watch } from "vue";
 import { Notify, Platform } from "quasar";
 import TheNetworkConnectPanel from "pages/systemSettings/components/TheNetworkConnectDialog.vue";
 import TheNetworkDisconnectPanel from "pages/systemSettings/components/TheNetworkDisconnectDialog.vue";
-
-const props = defineProps(["name"]);
 
 const wlanStatus = ref(true);
 
@@ -72,6 +68,9 @@ onMounted(async () => {
   } else {
     Notify.create("当前平台不为electron（linux），不支持控制WLAN的开启/关闭");
   }
+
+  if (!Platform.is.electron) return;
+
   if (wlanStatus.value) {
     scanInterval = setInterval(scan, 1000);
   }
@@ -122,10 +121,6 @@ const scan = async () => {
 const theNetworkConnectDialog = ref(null);
 const theNetworkDisconnectDialog = ref(null);
 
-const disConnect = async () => {
-
-};
-
 const wifiBar = (quality) => {
   if (quality <= 25) {
     return "network_wifi_1_bar";
@@ -142,7 +137,4 @@ const wifiBar = (quality) => {
 </script>
 
 <style lang="scss" scoped>
-.container{
-  height: calc(100vh - 50px - 50px - 16px - 1px);
-}
 </style>

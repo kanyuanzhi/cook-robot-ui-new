@@ -27,9 +27,25 @@
             transition-prev="jump-up"
             transition-next="jump-up"
           >
-            <TheNetworkConnectPanel name="networkConnect"/>
-            <ThePhonePairPanel name="phonePair"/>
-            <TheSoftwareUpdatePanel name="softwareUpdate"/>
+
+            <SettingPanel title="泵料设置"
+                          summary="各泵开启时长（毫秒）与出料分量（克）的比例关系。例：100表示下料1克需要开启100毫秒。"
+                          name="pumpSetting">
+              <ThePumpSettingPanel/>
+            </SettingPanel>
+            <SettingPanel title="网络连接"
+                          name="networkConnect">
+              <TheNetworkConnectPanel/>
+            </SettingPanel>
+            <SettingPanel title="手机配对"
+                          summary="请打开手机App扫描以下二维码完成配对。"
+                          name="phonePair">
+              <ThePhonePairPanel/>
+            </SettingPanel>
+            <SettingPanel title="软件更新"
+                          name="softwareUpdate">
+              <TheSoftwareUpdatePanel/>
+            </SettingPanel>
           </q-tab-panels>
         </template>
       </q-splitter>
@@ -42,10 +58,12 @@ import { ref } from "vue";
 import TheNetworkConnectPanel from "pages/systemSettings/components/TheNetworkConnectPanel.vue";
 import ThePhonePairPanel from "pages/systemSettings/components/ThePhonePairPanel.vue";
 import TheSoftwareUpdatePanel from "pages/systemSettings/components/TheSoftwareUpdatePanel.vue";
+import ThePumpSettingPanel from "pages/systemSettings/components/ThePumpSettingPanel.vue";
+import SettingPanel from "pages/systemSettings/components/SettingPanel.vue";
 
 const splitterModel = ref(20);
 
-const tab = ref("");
+const tab = ref("pumpSetting");
 
 
 </script>
