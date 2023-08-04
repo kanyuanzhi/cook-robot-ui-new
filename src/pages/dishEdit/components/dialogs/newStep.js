@@ -54,7 +54,7 @@ export function newHeatStep(temperature, judgeType, targetTemperature, duration)
       judgeStr = "持续" + duration + "秒";
       break;
     case 4:
-      judgeStr = "无温度或时间控制";
+      judgeStr = "无温度监测";
       break;
     default:
       Notify.create("温度控制方式错误");
