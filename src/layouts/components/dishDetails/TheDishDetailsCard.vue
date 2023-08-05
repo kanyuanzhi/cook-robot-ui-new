@@ -1,14 +1,15 @@
 <template>
   <div>
-    <q-dialog v-model="shown">
+    <q-dialog v-model="useAppStore.dishDetailsCardShown" @show="onShow" @hide="onHide">
       <q-card style="width: 600px">
         <q-card-section class="bg-teal-6 text-white q-py-md">
-          <div class="text-h6 text-weight-bold text-center">{{ dish.name }}</div>
+          <div class="text-h6 text-weight-bold text-center" style="height: 32px">{{ dish.name }}</div>
         </q-card-section>
         <q-card-section class="text-grey-8">
           <div class="row">
             <div class="col-6">
               <q-img
+                v-if="dish.image!==undefined"
                 :src="'data:image/png;base64,'+dish.image"
                 fit="fill"
                 :ratio="4/3"
@@ -70,8 +71,8 @@ import { UseAppStore } from "stores/appStore";
 import { useRouter } from "vue-router";
 import { UseControllerStore } from "stores/controllerStore";
 import { Notify } from "quasar";
-import TheTasteCustomization from "pages/dishSelect/components/TheTasteCustomization.vue";
-import { ingredientFormat, seasoningFormat } from "pages/dishSelect/components/displayFormat";
+import TheTasteCustomization from "layouts/components/dishDetails/TheTasteCustomization.vue";
+import { ingredientFormat, seasoningFormat } from "layouts/components/dishDetails/displayFormat";
 
 const useControllerStore = UseControllerStore();
 const useAppStore = UseAppStore();
@@ -79,7 +80,6 @@ const router = useRouter();
 
 const dish = ref({});
 
-const shown = ref(false);
 const ingredientSummary = ref("");
 
 const seasoningMap = ref(null);
@@ -116,8 +116,8 @@ const customTastes = ref([
 
 const uuidToTaste = {};
 
-const show = async (uuid) => {
-  shown.value = true;
+const onShow = async () => {
+  const uuid = useAppStore.dishDetailsCardUUID;
   const seasoningData = await getSeasonings();
   seasoningMap.value = seasoningData.data.data;
 
@@ -175,9 +175,36 @@ const openDishEditPage = () => {
   router.push("/dishEdit");
 };
 
-defineExpose({
-  show
-});
+const onHide = () => {
+  dish.value = {};
+  ingredientSummary.value = "";
+  originalTaste.value = {
+    label: "原味",
+    color: "teal-6",
+    summary: "",
+    dish: {},
+  };
+  customTastes.value = [
+    {
+      label: "口味1",
+      color: "blue",
+      summary: "",
+      dish: {},
+    },
+    {
+      label: "口味2",
+      color: "red",
+      summary: "",
+      dish: {},
+    },
+    {
+      label: "口味3",
+      color: "orange",
+      summary: "",
+      dish: {},
+    }
+  ];
+};
 
 const thumbStyle = {
   right: "2px",

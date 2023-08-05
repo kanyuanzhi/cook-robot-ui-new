@@ -30,7 +30,7 @@
 
 <script setup>
 import { onMounted, ref } from "vue";
-import TheTasteWeightInput from "pages/dishSelect/components/TheTasteWeightInput.vue";
+import TheTasteWeightInput from "layouts/components/dishDetails/TheTasteWeightInput.vue";
 
 const props = defineProps(["customTaste", "name", "seasoningMap"]);
 

@@ -19,7 +19,7 @@
 
 <script setup>
 import { ref } from "vue";
-import TheUpdatingDialog from "pages/systemSettings/components/TheUpdatingDialog.vue";
+import TheUpdatingDialog from "pages/systemSettings/softwareUpdate/TheUpdatingDialog.vue";
 import { checkUpdatePermission } from "src/api/system";
 
 const shown = ref(false);

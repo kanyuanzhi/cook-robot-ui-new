@@ -40,9 +40,8 @@
 
 <script setup>
 import { ref, watch } from "vue";
-import { cloneDeep } from "lodash/lang";
-import TheTasteModificationPanel from "pages/dishSelect/components/TheTasteModificationPanel.vue";
-import { seasoningFormat } from "pages/dishSelect/components/displayFormat";
+import TheTasteModificationPanel from "layouts/components/dishDetails/TheTasteModificationPanel.vue";
+import { seasoningFormat } from "layouts/components/dishDetails/displayFormat";
 import { updateCustomDish } from "src/api/dish";
 
 const props = defineProps(["dishName", "seasoningMap"]);

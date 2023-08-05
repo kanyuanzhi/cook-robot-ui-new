@@ -21,6 +21,9 @@ export const UseAppStore = defineStore("app", {
     runningDish: {},
     useEasyStepList: true,
     lastStirFryGear: 0,
+    dishQrScanningShown: false,
+    dishDetailsCardShown: false,
+    dishDetailsCardUUID: ""
   }),
   getters: {
     // getCurrentDish: (state) => state.runningDish,
@@ -67,6 +70,16 @@ export const UseAppStore = defineStore("app", {
     },
     shiftEditingDishChangedFlag() {
       this.editingDishChangedFlag = !this.editingDishChangedFlag;
-    }
+    },
+    showDishQrScanning() {
+      this.dishQrScanningShown = true;
+    },
+    hideDishQrScanning() {
+      this.dishQrScanningShown = false;
+    },
+    showDishDetailsCard(uuid) {
+      this.dishDetailsCardUUID = uuid;
+      this.dishDetailsCardShown = true;
+    },
   },
 });

@@ -27,8 +27,7 @@
             transition-prev="jump-up"
             transition-next="jump-up"
           >
-
-            <SettingPanel title="泵料设置"
+            <SettingPanel title="料泵设置"
                           summary="各泵开启时长（毫秒）与出料分量（克）的比例关系。例：100表示下料1克需要开启100毫秒。"
                           name="pumpSetting">
               <ThePumpSettingPanel/>
@@ -55,17 +54,15 @@
 
 <script setup>
 import { ref } from "vue";
-import TheNetworkConnectPanel from "pages/systemSettings/components/TheNetworkConnectPanel.vue";
-import ThePhonePairPanel from "pages/systemSettings/components/ThePhonePairPanel.vue";
-import TheSoftwareUpdatePanel from "pages/systemSettings/components/TheSoftwareUpdatePanel.vue";
-import ThePumpSettingPanel from "pages/systemSettings/components/ThePumpSettingPanel.vue";
+import TheNetworkConnectPanel from "pages/systemSettings/networkConnect/TheNetworkConnectPanel.vue";
+import ThePhonePairPanel from "pages/systemSettings/phonePair/ThePhonePairPanel.vue";
+import TheSoftwareUpdatePanel from "pages/systemSettings/softwareUpdate/TheSoftwareUpdatePanel.vue";
+import ThePumpSettingPanel from "pages/systemSettings/pumpSetting/ThePumpSettingPanel.vue";
 import SettingPanel from "pages/systemSettings/components/SettingPanel.vue";
 
 const splitterModel = ref(20);
 
 const tab = ref("pumpSetting");
-
-
 </script>
 
 <style lang="scss" scoped>

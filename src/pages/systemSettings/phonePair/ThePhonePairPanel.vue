@@ -1,18 +1,17 @@
 <template>
-  <div class="flex flex-center full-height">
-    <q-btn push color="teal-6" size="md" label="检查更新" @click="theUpdateConfirmDialog.show()"/>
-    <TheUpdateConfirmDialog ref="theUpdateConfirmDialog"/>
-  </div>
+  <q-tab-panel class="flex flex-center full-height">
+    <div class="column items-center">
+      <q-img :src="'data:image/png;base64,'+QrImage" :ratio="1" style="width: 200px; height: 200px"/>
+    </div>
+  </q-tab-panel>
 </template>
 
 <script setup>
 import { onMounted, ref } from "vue";
 import { getQrCode } from "src/api/system";
 import { Notify } from "quasar";
-import TheUpdateConfirmDialog from "pages/systemSettings/components/TheUpdateConfirmDialog.vue";
 
 const QrImage = ref("");
-const theUpdateConfirmDialog = ref(null)
 
 onMounted(async () => {
   const { data } = await getQrCode();
@@ -23,8 +22,8 @@ onMounted(async () => {
   }
 });
 
-
 </script>
 
 <style lang="scss" scoped>
+
 </style>

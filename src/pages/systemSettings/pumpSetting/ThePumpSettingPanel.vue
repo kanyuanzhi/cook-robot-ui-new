@@ -18,7 +18,7 @@
 import { onMounted, ref } from "vue";
 import { Notify } from "quasar";
 import { getSeasoningConfigs, updateSeasoningConfigs } from "src/api/seasoning";
-import ThePumpRatioInput from "pages/systemSettings/components/ThePumpRatioInput.vue";
+import ThePumpRatioInput from "pages/systemSettings/pumpSetting/ThePumpRatioInput.vue";
 
 const seasoningConfigs = ref([]);
 

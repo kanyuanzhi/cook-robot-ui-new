@@ -95,14 +95,14 @@
             <q-separator vertical/>
             <q-btn-dropdown :disable="useControllerStore.isRunning" color="teal-6" label="清洗"
                             icon="mdi-washing-machine">
-              <q-list >
-                <q-item clickable class="bg-teal-6 text-white text-center"  v-close-popup @click="sendCommand('wash')">
+              <q-list>
+                <q-item clickable class="bg-teal-6 text-white text-center" v-close-popup @click="sendCommand('wash')">
                   <q-item-section>
                     <q-item-label>洗锅</q-item-label>
                   </q-item-section>
                 </q-item>
                 <q-separator inset/>
-                <q-item clickable class="bg-teal-6 text-white text-center"  v-close-popup @click="sendCommand('pour')">
+                <q-item clickable class="bg-teal-6 text-white text-center" v-close-popup @click="sendCommand('pour')">
                   <q-item-section>
                     <q-item-label>倒水</q-item-label>
                   </q-item-section>
@@ -165,7 +165,7 @@ const openTemperatureControlDialog = () => {
 </script>
 
 <style lang="scss" scoped>
-.q-item{
+.q-item {
   min-height: 43px;
 }
 </style>

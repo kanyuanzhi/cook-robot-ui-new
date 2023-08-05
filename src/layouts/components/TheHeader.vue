@@ -8,12 +8,14 @@
       <q-toolbar-title>
         <div style="padding-top: 2px">{{ settingStore.title }}</div>
       </q-toolbar-title>
+      <q-btn stretch v-if="!Platform.is.mobile" flat label="扫码炒菜" @click="useAppStore.showDishQrScanning"/>
+      <q-separator v-if="!Platform.is.mobile" dark vertical/>
       <q-btn stretch flat label="菜品选择" @click="router.push('/dishSelect')"/>
       <q-separator dark vertical/>
       <q-btn stretch flat label="菜品制作" @click="router.push('/dishEdit')"/>
 
-      <q-separator dark vertical/>
-      <q-btn stretch flat label="系统设置" @click="router.push('/systemSettings')"/>
+      <q-separator v-if="!Platform.is.mobile" dark vertical/>
+      <q-btn v-if="!Platform.is.mobile" stretch flat label="系统设置" @click="router.push('/systemSettings')"/>
       <q-separator v-if="Platform.is.electron" dark vertical/>
       <TheSystemSetting v-if="Platform.is.electron" class="q-ml-sm"/>
     </q-toolbar>

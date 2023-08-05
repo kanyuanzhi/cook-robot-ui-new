@@ -47,8 +47,8 @@
 <script setup>
 import { nextTick, onMounted, ref, watch } from "vue";
 import { Notify, Platform } from "quasar";
-import TheNetworkConnectPanel from "pages/systemSettings/components/TheNetworkConnectDialog.vue";
-import TheNetworkDisconnectPanel from "pages/systemSettings/components/TheNetworkDisconnectDialog.vue";
+import TheNetworkConnectPanel from "pages/systemSettings/networkConnect/TheNetworkConnectDialog.vue";
+import TheNetworkDisconnectPanel from "pages/systemSettings/networkConnect/TheNetworkDisconnectDialog.vue";
 
 const wlanStatus = ref(true);
 
