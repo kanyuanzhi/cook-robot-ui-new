@@ -1,7 +1,8 @@
 <template>
   <q-layout view="lHh Lpr lFf">
     <TheHeader/>
-    <TheFooter/>
+    <TheFooter class="desktop-only"/>
+    <TheMobileFooter class="mobile-only"/>
 
     <q-page-container>
       <router-view/>
@@ -22,6 +23,7 @@ import TheControlDialog from "layouts/components/TheControlDialog.vue";
 import TheDishQrScanningDialog from "layouts/components/TheDishQrScanningDialog.vue";
 import { UseAppStore } from "stores/appStore";
 import TheDishDetailsCard from "layouts/components/dishDetails/TheDishDetailsCard.vue";
+import TheMobileFooter from "layouts/components/TheMobileFooter.vue";
 
 const useControllerStore = UseControllerStore();
 const useAppStore = UseAppStore();

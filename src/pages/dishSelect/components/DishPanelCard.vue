@@ -14,11 +14,11 @@
           </div>
         </q-card-section>
         <q-separator inset />
-        <q-card-section
-          style="height: 20px; padding-top: 10px; text-align: right"
-        >
-          <span class="text-grey-7" style="font-size: 12px">200人做过</span>
-        </q-card-section>
+<!--        <q-card-section-->
+<!--          style="height: 20px; padding-top: 10px; text-align: right"-->
+<!--        >-->
+<!--          <span class="text-grey-7" style="font-size: 12px">200人做过</span>-->
+<!--        </q-card-section>-->
       </q-card-section>
     </q-card-section>
   </q-card>

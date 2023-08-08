@@ -1,32 +1,28 @@
 <template>
   <q-page class="flex flex-center">
-    <div class="row q-pa-md full-width">
-      <div class="col-5 q-pr-md">
-        <div class="column justify-start click-area select-area q-pa-xl" @click="router.push('/dishSelect')">
-          <div class="col-2">
-            <span class="text-blue-8 text-weight-bold text-h4">菜品选择</span>
-          </div>
-          <div class="col-2">
-            <span class="text-grey-9 text-weight-bold text-h6">多种菜品任你选择</span>
-          </div>
+    <div class="column q-pa-md q-gutter-y-md full-width">
+      <div class="col column click-area select-area q-pa-xl" @click="router.push('/dishSelect')">
+        <div class="col">
+          <span class="text-blue-8 text-weight-bold text-h5">菜品选择</span>
+        </div>
+        <div class="col">
+          <span class="text-grey-9 text-weight-bold text-subtitle1">多种菜品任你选择</span>
         </div>
       </div>
-      <div class="col-7 column q-gutter-y-md">
-        <div class="col column q-pa-xl click-area interact-area">
-          <div class="col-6">
-            <span class="text-amber-8 text-weight-bold text-h4">人机互动</span>
-          </div>
-          <div class="col-6">
-            <span class="text-grey-9 text-weight-bold text-h6">多种互动任你选择</span>
-          </div>
+      <div class="col column q-pa-xl click-area interact-area">
+        <div class="col-6">
+          <span class="text-amber-8 text-weight-bold text-h5">人机互动</span>
         </div>
-        <div class="col column q-pa-xl click-area shop-area">
-          <div class="col-6">
-            <span class="text-orange-10 text-weight-bold text-h4">商城选购</span>
-          </div>
-          <div class="col-6">
-            <span class="text-grey-9 text-weight-bold text-h6">多种商品任你选择</span>
-          </div>
+        <div class="col-6">
+          <span class="text-grey-9 text-weight-bold text-subtitle1">多种互动任你选择</span>
+        </div>
+      </div>
+      <div class="col column q-pa-xl click-area shop-area">
+        <div class="col-6">
+          <span class="text-orange-10 text-weight-bold text-h5">商城选购</span>
+        </div>
+        <div class="col-6">
+          <span class="text-grey-9 text-weight-bold text-subtitle1">多种商品任你选择</span>
         </div>
       </div>
     </div>
@@ -47,7 +43,7 @@ const router = useRouter();
 
 <style lang="scss" scoped>
 .select-area {
-  height: calc(100vh - 50px - 50px - 40px);
+  //height: calc(100vh - 50px - 50px - 40px);
 }
 
 .click-area {

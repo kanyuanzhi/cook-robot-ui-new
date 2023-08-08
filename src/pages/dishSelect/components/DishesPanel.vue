@@ -2,7 +2,7 @@
   <q-tab-panel style="padding-bottom: 0;padding-top: 0" :name="cuisineId">
     <div class="cards-wrapper">
       <div class="row q-col-gutter-md">
-        <div class="col-4" v-for="dish in dishes" :key="dish.uuid">
+        <div class="col-6" v-for="dish in dishes" :key="dish.uuid">
           <DishPanelCard :dish-image="dish.image" :dish-name="dish.name" @click="useAppStore.showDishDetailsCard(dish.uuid)"/>
         </div>
       </div>
@@ -12,7 +12,7 @@
       <q-pagination
         v-model="pageCurrent"
         :max="pageMax"
-        max-pages="10"
+        max-pages="3"
         direction-links
         gutter="10px"
         outline
@@ -21,6 +21,7 @@
         active-color="teal-6"
         :ellipses="true"
         boundary-numbers
+        size="sm"
       />
     </div>
   </q-tab-panel>
@@ -35,7 +36,7 @@ import { UseAppStore } from "stores/appStore";
 
 const useAppStore = UseAppStore()
 
-const pageSize = 12;
+const pageSize = 8;
 
 const props = defineProps(["cuisineId"]);
 const dishes = ref([]);
@@ -68,8 +69,8 @@ onMounted(async () => {
 
 <style lang="scss" scoped>
 .cards-wrapper {
-  //height: calc(100vh - 50px - 32px - 20px - 20px - 10px)
-  height: 450px
+  height: calc(100vh - 50px - 32px - 20px - 20px - 10px - 10px)
+  //height: 600px
 }
 
 .pagination-wrapper {
