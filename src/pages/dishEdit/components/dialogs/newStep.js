@@ -54,7 +54,7 @@ export function newHeatStep(temperature, judgeType, targetTemperature, duration)
       judgeStr = "持续" + duration + "秒";
       break;
     case 4:
-      judgeStr = "无温度或时间控制";
+      judgeStr = "无温度监测";
       break;
     default:
       Notify.create("温度控制方式错误");
@@ -80,7 +80,7 @@ export function newStirFryStep(gear, duration) {
 }
 
 export function newWaterStep(weight) {
-  const stepName = "添加水" + weight + "克";
+  const stepName = "添加纯净水" + weight + "克";
   const step =
     newStep("water", stepName);
   step["weight"] = weight;

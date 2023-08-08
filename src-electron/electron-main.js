@@ -1,7 +1,12 @@
-import { app, BrowserWindow, nativeTheme } from "electron";
+import { app, BrowserWindow, nativeTheme, ipcMain } from "electron";
 import path from "path";
 import os from "os";
 import { initialize, enable } from "@electron/remote/main";
+import {
+  connect, disconnect,
+  getCurrentConnections,
+  scan, open, close, getStatus
+} from "app/src-electron/handles/wlan";
 
 initialize();
 
@@ -58,8 +63,19 @@ function createWindow() {
   });
 }
 
+app.commandLine.appendSwitch("ignore-certificate-errors");
+
 app.whenReady()
-  .then(createWindow);
+  .then(() => {
+    ipcMain.handle("wlan:open", open);
+    ipcMain.handle("wlan:close", close);
+    ipcMain.handle("wlan:getStatus", getStatus);
+    ipcMain.handle("wlan:scan", scan);
+    ipcMain.handle("wlan:getCurrentConnections", getCurrentConnections);
+    ipcMain.handle("wlan:connect", connect);
+    ipcMain.handle("wlan:disconnect", disconnect);
+    createWindow();
+  });
 
 app.on("window-all-closed", () => {
   if (platform !== "darwin") {

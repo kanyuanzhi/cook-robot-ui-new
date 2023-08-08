@@ -1,17 +1,9 @@
 <template>
-  <q-tab-panel
-    style="padding-bottom: 0; padding-top: 0"
-    :name="cuisineId"
-    class="right-tab-panel"
-  >
+  <q-tab-panel style="padding-bottom: 0;padding-top: 0" :name="cuisineId">
     <div class="cards-wrapper">
       <div class="row q-col-gutter-md">
-        <div class="col-12" v-for="dish in dishes" :key="dish.uuid">
-          <DishPanelCard
-            :dish-image="dish.image"
-            :dish-name="dish.name"
-            @click="dishDetailsCard.show(dish.uuid)"
-          />
+        <div class="col-4" v-for="dish in dishes" :key="dish.uuid">
+          <DishPanelCard :dish-image="dish.image" :dish-name="dish.name" @click="useAppStore.showDishDetailsCard(dish.uuid)"/>
         </div>
       </div>
     </div>
@@ -31,7 +23,6 @@
         boundary-numbers
       />
     </div>
-    <DishDetailsCard ref="dishDetailsCard" />
   </q-tab-panel>
 </template>
 
@@ -40,7 +31,9 @@ import { onMounted, ref, watch } from "vue";
 import { getAllDishes, getDishes } from "src/api/dish";
 import { ceil } from "lodash";
 import DishPanelCard from "pages/dishSelect/components/DishPanelCard.vue";
-import DishDetailsCard from "pages/dishSelect/components/DishDetailsCard.vue";
+import { UseAppStore } from "stores/appStore";
+
+const useAppStore = UseAppStore()
 
 const pageSize = 12;
 
@@ -51,41 +44,32 @@ const pageMax = ref(0);
 const pageCurrent = ref(1);
 
 onMounted(async () => {
-  let responseData;
-  if (props.cuisineId === 0) {
+  let responseData
+  if (props.cuisineId === 0){
     responseData = await getAllDishes(1, pageSize, props.cuisineId);
-  } else {
+  }else {
     responseData = await getDishes(1, pageSize, props.cuisineId);
   }
   dishes.value = responseData.data.data.dishes;
   count.value = responseData.data.data.count;
   pageMax.value = ceil(count.value / pageSize);
 
-  watch(pageCurrent, async (value) => {
-    if (props.cuisineId === 0) {
-      responseData = await getAllDishes(
-        pageCurrent.value,
-        pageSize,
-        props.cuisineId
-      );
-    } else {
-      responseData = await getDishes(
-        pageCurrent.value,
-        pageSize,
-        props.cuisineId
-      );
-    }
-    dishes.value = responseData.data.data.dishes;
-  });
+  watch(pageCurrent,
+    async (value) => {
+      if (props.cuisineId === 0){
+        responseData = await getAllDishes(pageCurrent.value, pageSize, props.cuisineId);
+      }else {
+        responseData = await getDishes(pageCurrent.value, pageSize, props.cuisineId);
+      }
+      dishes.value = responseData.data.data.dishes;
+    });
 });
-
-const dishDetailsCard = ref(null);
 </script>
 
 <style lang="scss" scoped>
 .cards-wrapper {
   //height: calc(100vh - 50px - 32px - 20px - 20px - 10px)
-  height: calc(100% - 45px);
+  height: 450px
 }
 
 .pagination-wrapper {
@@ -98,7 +82,4 @@ const dishDetailsCard = ref(null);
   align-items: center;
 }
 
-.right-tab-panel {
-  height: 100%;
-}
 </style>

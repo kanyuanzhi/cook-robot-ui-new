@@ -57,6 +57,8 @@ const show = async (index = -1) => {
   const { data } = await getSeasonings();
   const seasoningMap = data.data;
   for (let i in seasoningMap) {
+    console.log(i)
+    if (i === "7" || i === "8") continue; // 7、8号阀为自来水阀，不做调料阀
     seasoningOptionsTpl.push(
       {
         label: seasoningMap[i],

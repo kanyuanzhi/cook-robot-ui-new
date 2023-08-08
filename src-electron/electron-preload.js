@@ -28,14 +28,14 @@
  * }
  */
 
-import { contextBridge } from "electron";
+import { contextBridge, ipcRenderer } from "electron";
 import { BrowserWindow } from "@electron/remote";
 
 // contextBridge.exposeInMainWorld("electron", {
 //
 // });
 
-contextBridge.exposeInMainWorld("myWindowAPI", {
+contextBridge.exposeInMainWorld("windowAPI", {
   minimize: () => {
     BrowserWindow.getFocusedWindow()
       .minimize();
@@ -61,9 +61,62 @@ contextBridge.exposeInMainWorld("myWindowAPI", {
 
 });
 
-contextBridge.exposeInMainWorld("myUpdateAPI", {
-  update: () => {
-    console.log("qweqwe")
-    BrowserWindow.getFocusedWindow().webContents.send("update", 123)
+contextBridge.exposeInMainWorld("wlanAPI", {
+  open: () => {
+    return ipcRenderer.invoke("wlan:open")
+      .then(result => {
+        return result;
+      });
+  },
+  close: () => {
+    return ipcRenderer.invoke("wlan:close")
+      .then(result => {
+        return result;
+      });
+  },
+  getStatus: () => {
+    return ipcRenderer.invoke("wlan:getStatus")
+      .then(result => {
+        return result;
+      });
+  },
+  scan: () => {
+    return ipcRenderer.invoke("wlan:scan")
+      .then(result => {
+        return result;
+      })
+      .catch(Error => {
+        return null;
+      });
+  },
+  getCurrentConnections: () => {
+    return ipcRenderer.invoke("wlan:getCurrentConnections")
+      .then(result => {
+        return result;
+      })
+      .catch(Error => {
+        return null;
+      });
+  },
+  connect: (ssid, password) => {
+    return ipcRenderer.invoke("wlan:connect", {
+      ssid: ssid,
+      password: password
+    })
+      .then(result => {
+        return result;
+      })
+      .catch(Error => {
+        return null;
+      });
+  },
+  disconnect: () => {
+    return ipcRenderer.invoke("wlan:disconnect")
+      .then(result => {
+        return result;
+      })
+      .catch(Error => {
+        return null;
+      });
   },
 });

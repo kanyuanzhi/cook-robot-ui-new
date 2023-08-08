@@ -24,14 +24,17 @@
           </div>
           <template v-if="useControllerStore.isCooking">
             <div class="text-teal-6 text-weight-bold text-subtitle1 text-center q-pt-lg">
-              <span>{{ useControllerStore.currentInstructionInfo.name }}</span><br>
-              <span>{{
-                  "" + useControllerStore.currentInstructionInfo.index + "/" + (useAppStore.runningDish.steps.length + 2)
-                }}</span><br>
+              <span>{{ useControllerStore.currentInstructionInfo.name }}</span>
+            </div>
+            <TheRunningStepsDisplay class="q-my-sm" style="width: 60%"/>
+
+            <!--              <span>{{-->
+            <!--                  "" + useControllerStore.currentInstructionInfo.index + "/" + (useAppStore.runningDish.steps.length + 2)-->
+            <!--                }}</span><br>-->
+            <div class="text-teal-6 text-weight-bold text-subtitle1 text-center">
               <span>{{ cookingTimeDisplay }}</span>
             </div>
           </template>
-
         </template>
         <template v-else>
           <q-btn
@@ -53,12 +56,16 @@
       </q-card-section>
       <q-card-section class="q-py-sm">
         <div class="row justify-around">
-          <q-chip :color="getTemperatureColor(useControllerStore.bottomTemperature)" text-color="white" icon="thermostat">
+          <q-chip :color="getTemperatureColor(useControllerStore.bottomTemperature)" text-color="white"
+                  icon="thermostat">
             锅底温度<span class="text-center" style="width: 40px">{{ useControllerStore.bottomTemperature }}</span>℃
           </q-chip>
-          <q-btn v-if="useControllerStore.isCooking" :color="getTemperatureColor(useControllerStore.currentHeatingTemperature)" rounded unelevated label="加热控制"
+          <q-btn v-if="useControllerStore.isCooking"
+                 :color="getTemperatureColor(useControllerStore.currentHeatingTemperature)" rounded unelevated
+                 label="加热控制"
                  @click="openTemperatureControlDialog()"/>
-          <q-chip :color="getTemperatureColor(useControllerStore.infraredTemperature)" text-color="white" icon="thermostat">
+          <q-chip :color="getTemperatureColor(useControllerStore.infraredTemperature)" text-color="white"
+                  icon="thermostat">
             红外温度<span class="text-center" style="width: 40px">{{ useControllerStore.infraredTemperature }}</span>℃
           </q-chip>
         </div>
@@ -86,7 +93,25 @@
             <q-btn :disable="useControllerStore.isRunning" color="teal-6" label="备菜" icon="restart_alt"
                    @click="sendCommand('prepare')"/>
             <q-separator vertical/>
-            <q-btn :disable="useControllerStore.isRunning" color="teal-6" label="清洗" icon="mdi-washing-machine"/>
+            <q-btn-dropdown :disable="useControllerStore.isRunning" color="teal-6" label="清洗"
+                            icon="mdi-washing-machine">
+              <q-list>
+                <q-item clickable class="bg-teal-6 text-white text-center" v-close-popup @click="sendCommand('wash')">
+                  <q-item-section>
+                    <q-item-label>洗锅</q-item-label>
+                  </q-item-section>
+                </q-item>
+                <q-separator inset/>
+                <q-item clickable class="bg-teal-6 text-white text-center" v-close-popup @click="sendCommand('pour')">
+                  <q-item-section>
+                    <q-item-label>倒水</q-item-label>
+                  </q-item-section>
+                </q-item>
+              </q-list>
+            </q-btn-dropdown>
+            <!--            <q-separator vertical/>-->
+            <!--            <q-btn :disable="useControllerStore.isRunning" color="teal-6" label="清洗" icon="mdi-washing-machine"-->
+            <!--                   @click="sendCommand('wash')"/>-->
             <q-separator vertical/>
             <q-btn color="teal-6" label="开门" icon="lock_open" @click="sendCommand('door_unlock')"/>
             <q-separator vertical/>
@@ -108,6 +133,7 @@ import { computed, ref } from "vue";
 import { secondsToMMSS } from "src/utils/timeFormat";
 import TheHeatingTemperatureControlDialog from "layouts/components/TheHeatingTemperatureControlDialog.vue";
 import { sendCommand } from "layouts/components/command";
+import TheRunningStepsDisplay from "layouts/components/TheRunningStepsDisplay.vue";
 
 const useAppStore = UseAppStore();
 const useControllerStore = UseControllerStore();
@@ -139,5 +165,7 @@ const openTemperatureControlDialog = () => {
 </script>
 
 <style lang="scss" scoped>
-
+.q-item {
+  min-height: 43px;
+}
 </style>

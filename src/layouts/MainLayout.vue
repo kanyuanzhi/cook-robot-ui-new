@@ -8,6 +8,8 @@
     </q-page-container>
 
     <TheControlDialog/>
+    <TheDishQrScanningDialog/>
+    <TheDishDetailsCard/>
   </q-layout>
 </template>
 
@@ -17,8 +19,12 @@ import { UseControllerStore } from "stores/controllerStore";
 import TheHeader from "layouts/components/TheHeader.vue";
 import TheFooter from "layouts/components/TheFooter.vue";
 import TheControlDialog from "layouts/components/TheControlDialog.vue";
+import TheDishQrScanningDialog from "layouts/components/TheDishQrScanningDialog.vue";
+import { UseAppStore } from "stores/appStore";
+import TheDishDetailsCard from "layouts/components/dishDetails/TheDishDetailsCard.vue";
 
 const useControllerStore = UseControllerStore();
+const useAppStore = UseAppStore();
 
 setInterval(useControllerStore.fetchStatus, 200);
 </script>
