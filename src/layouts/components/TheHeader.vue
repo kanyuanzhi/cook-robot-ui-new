@@ -3,7 +3,7 @@
     <q-toolbar class="col-4">
       <q-img fit="fill" src="~/assets/logo.png" style="width: 113px; height: 35px;" @click="router.push('/')"/>
     </q-toolbar>
-    <q-toolbar class="col-8">
+    <q-toolbar class="col-8 mobile-hide">
       <q-space/>
       <TheMoreOperations/>
       <!--      <q-btn stretch v-if="!Platform.is.mobile" flat label="扫码炒菜" @click="useAppStore.showDishQrScanning"/>-->
