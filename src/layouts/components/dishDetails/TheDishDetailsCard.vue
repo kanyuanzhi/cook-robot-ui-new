@@ -13,6 +13,7 @@
                 :src="'data:image/png;base64,'+dish.image"
                 fit="fill"
                 :ratio="4/3"
+                @click="theDishImageUploader.show(dish.uuid)"
               />
               <p class="q-px-sm q-pt-md">
                 <span> {{ ingredientSummary }}</span>
@@ -59,6 +60,7 @@
       </q-card>
     </q-dialog>
     <TheTasteCustomization ref="theTasteCustomization" :dish-name="dish.name" :seasoning-map="seasoningMap"/>
+    <TheDishImageUploader ref="theDishImageUploader"/>
   </div>
 </template>
 
@@ -73,6 +75,7 @@ import { UseControllerStore } from "stores/controllerStore";
 import { Notify } from "quasar";
 import TheTasteCustomization from "layouts/components/dishDetails/TheTasteCustomization.vue";
 import { ingredientFormat, seasoningFormat } from "layouts/components/dishDetails/displayFormat";
+import TheDishImageUploader from "layouts/components/dishDetails/TheDishImageUploader.vue";
 
 const useControllerStore = UseControllerStore();
 const useAppStore = UseAppStore();
@@ -169,6 +172,8 @@ const openTasteCustomizationPage = () => {
   }
   theTasteCustomization.value.show(taste.value, customTastes.value);
 };
+
+const theDishImageUploader = ref(null)
 
 const openDishEditPage = () => {
   useAppStore.setEditingDish(dish.value);
