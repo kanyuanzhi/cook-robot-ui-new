@@ -1,11 +1,11 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-    <TheMobileHeader/>
+    <TheMobileHeader v-if="!useMobileStore.isScanning"/>
 
     <q-page-container>
       <router-view/>
     </q-page-container>
-    <TheMobileFooter  v-if="!useMobileStore.isScanning"/>
+    <TheMobileFooter v-if="!useMobileStore.isScanning"/>
 
     <TheControlDialog/>
     <TheDishQrScanningDialog/>

@@ -9,7 +9,7 @@
       />
       <q-card-section  class="my-section">
         <q-card-section style="height: 35px;" class="my-section-inner">
-          <div class="text-subtitle2 text-grey-8" style="">
+          <div class="text-subtitle2 text-white" style="">
             {{ nameDisplay }}
           </div>
         </q-card-section>

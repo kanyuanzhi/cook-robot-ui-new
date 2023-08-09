@@ -12,7 +12,7 @@
       <q-btn round color="teal-6" icon="clear" size="lg" @click="stopScan"/>
     </div>
     <q-dialog v-model="confirmShown" persistent>
-      <q-card>
+      <q-card style="width: 300px">
         <q-card-section class="row items-center">
           <!--          <q-avatar icon="signal_wifi_off" color="primary" text-color="white" />-->
           <span class="q-ml-sm">配对成功，是否连接？</span>
@@ -35,6 +35,8 @@ import { BarcodeScanner } from "@capacitor-community/barcode-scanner";
 import { UseMobileStore } from "stores/mobileStore";
 import { useRouter } from "vue-router";
 import { UseSettingStore } from "stores/settingStore";
+import { api } from "src/boot/axios";
+import { startsWith } from "lodash";
 
 const useSettingStore = UseSettingStore();
 const useMobileStore = UseMobileStore();
@@ -58,10 +60,12 @@ onMounted(async () => {
     // if the result has content
     if (result.hasContent) {
       BarcodeScanner.stopScan();
-      confirmShown.value = true;
       scanResult = result.content;
-      console.log(result.content); // log the raw scanned content
-      // await router.push("/");
+      if (startsWith(scanResult, "phonePairing")) {
+        confirmShown.value = true;
+      } else {
+        Notify.create("二维码错误，请扫描小智云炒设备上显示的二维码");
+      }
     }
   } catch (e) {
     Notify.create(e.toString());
@@ -76,12 +80,18 @@ const stopScan = () => {
 };
 
 const confirmPair = () => {
-  Notify.create(scanResult);
-  const platformIpAddress = scanResult.trim()
-    .split("::")[1];
-  Notify.create(platformIpAddress);
-  useSettingStore.setMiddlePlatformIPAddress(platformIpAddress);
   useMobileStore.setScanningStatus(false);
+  try {
+    const platformIpAddress = scanResult.trim()
+      .split("::")[1];
+    // useSettingStore.test();
+    // Notify.create(platformIpAddress);
+    useSettingStore.setMiddlePlatformIPAddress(platformIpAddress);
+  } catch (e) {
+    console.log(e.toString());
+  }
+
+  router.push("/");
 };
 </script>
 

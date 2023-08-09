@@ -160,7 +160,7 @@ const openRunningControlPage = () => {
   } else {
     useAppStore.setRunningDish(dish.value);
   }
-  router.push("/mobileratio")
+  router.push("/mobile/control")
   // useAppStore.showRunningControl();
 };
 

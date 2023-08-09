@@ -1,12 +1,11 @@
 {
   "appId": "org.capacitor.quasar.app",
-  "appName": "cookRobot",
+  "appName": "小智云炒",
   "bundledWebRuntime": false,
   "npmClient": "yarn",
   "webDir": "www",
   "server": {
     "androidScheme": "http",
-    "cleartext": true,
-    "url": "http://192.168.130.235:8081"
+    "cleartext": true
   }
 }

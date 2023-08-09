@@ -3,7 +3,7 @@
     <div class="col-1 flex flex-center">
       <span class="text-subtitle1 text-teal-6">{{ runningDishDisplay }}</span>
     </div>
-    <div class="col-8 column items-center">
+    <div class="col-7 column items-center">
       <template v-if="useControllerStore.isRunning">
         <div class="col-4 flex flex-center">
           <q-spinner-hourglass
@@ -64,7 +64,9 @@
         红外温度<span class="text-center" style="width: 40px">{{ useControllerStore.infraredTemperature }}</span>℃
       </q-chip>
     </div>
-    <div class="col-2">
+    <div class="col-3 bg-teal-1">
+      <div class="text-center q-pa-sm text-teal-9">操作</div>
+      <q-separator class="q-mb-md"/>
       <div v-if="useControllerStore.isCooking" class="row justify-center q-gutter-x-md">
         <q-btn v-if="!useControllerStore.isPausing"
                color="teal-6" label="中途加料" icon="mdi-shaker"

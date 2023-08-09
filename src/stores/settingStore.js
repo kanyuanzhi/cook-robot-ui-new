@@ -1,5 +1,7 @@
 import { defineStore } from "pinia";
 import defaultSettings from "../settings";
+import { Notify } from "quasar";
+import { api } from "boot/axios";
 
 const {
   title,
@@ -19,8 +21,14 @@ export const UseSettingStore = defineStore("settings", {
     // getCurrentDish: (state) => state.runningDish,
   },
   actions: {
-    setMiddlePlatformIPAddress: (address) => {
+    setMiddlePlatformIPAddress(address) {
       this.middlePlatformIPAddress = address;
+      api.defaults.baseURL = (this.useSSL ? "https" : "http") + "://" + address + ":8889/api/v1";
+    },
+    test(){
+      Notify.create(21321312);
+
     }
+
   },
 });

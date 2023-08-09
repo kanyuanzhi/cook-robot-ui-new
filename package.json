@@ -2,7 +2,7 @@
   "name": "cook-robot-ui-new",
   "version": "0.0.1",
   "description": "A Quasar Project",
-  "productName": "cookRobot",
+  "productName": "小智云炒",
   "author": "kanyuanzhi <kan@mail.ustc.edu.cn>",
   "private": true,
   "scripts": {
