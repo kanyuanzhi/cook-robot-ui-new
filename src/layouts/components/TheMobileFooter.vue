@@ -13,7 +13,7 @@
           <span class="q-mt-xs" style="font-size: 9px">菜品</span>
         </template>
       </q-route-tab>
-      <q-route-tab name="control" to="/control" >
+      <q-route-tab name="control" to="/mobile/control" >
         <template v-slot:default>
           <span><q-icon name="local_fire_department" size="23px"/></span>
           <div class="q-mt-xs" style="font-size: 9px">控制</div>

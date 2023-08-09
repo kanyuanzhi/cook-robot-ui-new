@@ -156,7 +156,7 @@ const openTemperatureControlDialog = () => {
 
 <style lang="scss" scoped>
 .control-container {
-  height: calc(100vh - 50px - 50px - 1px);
+  height: calc(100vh - 50px - 50px - 5px);
 }
 
 .q-item {

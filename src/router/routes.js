@@ -40,12 +40,16 @@ const routes = [
     ],
   },
   {
-    path: "/control",
+    path: "/mobile",
     component: () => import("layouts/MainLayout.vue"),
     children: [
       {
-        path: "",
-        component: () => import("pages/control/IndexPage.vue")
+        path: "control",
+        component: () => import("pages/mobilePages/control/IndexPage.vue")
+      },
+      {
+        path: "scan",
+        component: () => import("pages/mobilePages/scan/IndexPage.vue")
       },
     ],
   },
