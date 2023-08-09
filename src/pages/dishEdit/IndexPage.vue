@@ -1,6 +1,6 @@
 <template>
-  <q-page>
-    <div class="q-pa-xs">
+  <q-page class="dish-edit-page">
+    <div class="q-pa-xs dish-edit-wrap">
       <TheOperatorBtns />
       <TheStepList :dish="dish" />
       <!-- <div class="row q-col-gutter-md">
@@ -28,4 +28,13 @@ const useAppStore = UseAppStore();
 const dish = ref(useAppStore.editingDish);
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.dish-edit-page {
+  top: 52px;
+  position: fixed;
+}
+
+.dish-edit-wrap {
+  height: 100%;
+}
+</style>

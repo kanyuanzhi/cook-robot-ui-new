@@ -1,5 +1,5 @@
 <template>
-  <q-page>
+  <q-page class="my-page">
     <div class="q-pa-sm dish-select-wrap">
       <q-splitter v-model="splitterModel" class="my-splitter">
         <template v-slot:before>
@@ -29,7 +29,6 @@
         <template v-slot:after>
           <q-tab-panels
             v-model="tab"
-            swipeable
             vertical
             transition-prev="jump-up"
             transition-next="jump-up"
@@ -67,6 +66,10 @@ onMounted(async () => {
 </script>
 
 <style lang="scss" scoped>
+.my-page {
+  position: absolute;
+  top: 52px;
+}
 .dish-select-wrap {
   height: calc(100vh - 100px);
 }
@@ -77,6 +80,7 @@ onMounted(async () => {
 
 .my-tab-panels-right {
   height: 100%;
+  overflow: hidden;
 }
 
 :deep(.q-tab__label) {

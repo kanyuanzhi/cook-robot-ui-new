@@ -1,8 +1,8 @@
 <template>
   <q-tab-panel style="padding-bottom: 0;padding-top: 0" :name="cuisineId">
     <div class="cards-wrapper">
-      <div class="row q-col-gutter-md">
-        <div class="col-6" v-for="dish in dishes" :key="dish.uuid">
+      <div class="row q-col-gutter-md my-right-list">
+        <div class="col-12" v-for="dish in dishes" :key="dish.uuid">
           <DishPanelCard :dish-image="dish.image" :dish-name="dish.name" @click="useAppStore.showDishDetailsCard(dish.uuid)"/>
         </div>
       </div>
@@ -74,13 +74,19 @@ onMounted(async () => {
 }
 
 .pagination-wrapper {
+  background-color: white;
+  position: absolute;
   //height: 20px;
-  margin-top: 15px;
-  margin-bottom: 0;
+  padding-top: 5px;
+  padding-bottom: 15px;
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.my-right-list {
+  margin-bottom: 15px;
 }
 
 </style>
