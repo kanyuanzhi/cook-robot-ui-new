@@ -17,12 +17,12 @@
               :name="cuisine.id"
               :label="cuisine.name"
             />
-            <q-separator />
+            <!-- <q-separator />
             <q-route-tab
               class="bg-teal-5 text-white"
               label="菜品制作"
               to="/dishEdit"
-            />
+            /> -->
           </q-tabs>
         </template>
 

@@ -8,7 +8,7 @@
     </q-card-section>
     <q-separator inset />
     <q-card-section class="control-btns-wrap">
-      <div class="row justify-between" style="height: 140px">
+      <div class="row justify-between no-wrap" style="height: 140px">
         <!-- <div class="col">
           <div class="row justify-around" style="padding-top: 10px">
             <OperatorBtn label="食材" size="lg" color="green" icon="fa-solid fa-wheat-awn"

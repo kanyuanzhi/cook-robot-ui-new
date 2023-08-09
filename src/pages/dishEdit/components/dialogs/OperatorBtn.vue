@@ -3,7 +3,7 @@
     unelevated
     :color="color"
     :size="size"
-    style="width: 60px; height: 80px"
+    style="width: 14vw; height: 80px"
   >
     <div class="column items-center no-wrap">
       <q-icon :name="icon" />

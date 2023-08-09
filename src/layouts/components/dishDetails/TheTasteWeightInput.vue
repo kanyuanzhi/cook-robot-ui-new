@@ -2,7 +2,7 @@
   <q-item-section class="col">
     <q-input :input-style="inputStyle" hide-bottom-space readonly v-model="weightValue" dense>
       <template v-slot:before>
-        <span class="text-subtitle2 text-center text-teal-6 q-py-sm tex" style="width: 100px">{{ seasoningName }}</span>
+        <span class="text-subtitle2 text-center text-teal-6 q-py-sm tex" style="width: 90px">{{ seasoningName }}</span>
       </template>
       <template v-slot:prepend>
         <q-btn round dense flat icon="remove" color="teal-6" size="12px" @click="onWeightMinus"/>

@@ -6,7 +6,7 @@
           <div class="text-h6 text-weight-bold text-center" style="height: 32px">{{ dish.name }}</div>
         </q-card-section>
         <q-card-section class="text-grey-8">
-          <div class="row">
+          <div class="col">
             <div class="col-6">
               <q-img
                 v-if="dish.image!==undefined"
@@ -14,13 +14,13 @@
                 fit="fill"
                 :ratio="4/3"
               />
-              <p class="q-px-sm q-pt-md">
+              <p class="q-px-sm q-pt-sm">
                 <span> {{ ingredientSummary }}</span>
               </p>
             </div>
             <div class="col-6">
               <q-list>
-                <q-item tag="label" v-ripple>
+                <q-item tag="label" v-ripple class="list-label">
                   <q-item-section avatar>
                     <q-radio v-model="taste" :val="originalTaste.dish.uuid" :color="originalTaste.color"/>
                   </q-item-section>
@@ -30,7 +30,7 @@
                   </q-item-section>
                 </q-item>
                 <q-scroll-area :thumb-style="thumbStyle" style="height: 240px;">
-                  <q-item v-for="customTaste in customTastes" tag="label" :key="customTaste.dish.uuid" v-ripple>
+                  <q-item v-for="customTaste in customTastes" tag="label" :key="customTaste.dish.uuid" v-ripple class="list-label">
                     <q-item-section avatar>
                       <q-radio v-model="taste" :val="customTaste.dish.uuid" :color="customTaste.color"/>
                     </q-item-section>
@@ -46,13 +46,13 @@
         </q-card-section>
         <q-card-actions class="bg-white text-teal-6 q-pa-none">
           <q-btn-group spread square unelevated class="full-width">
-            <q-btn color="teal-6" class="text-weight-bold text-subtitle1" label="大厨编辑" style="padding: 8px 8px"
+            <!-- <q-btn color="teal-6" class="text-weight-bold text-subtitle1" label="大厨编辑" style="padding: 8px 8px"
                    v-close-popup @click="openDishEditPage"/>
-            <q-separator vertical/>
-            <q-btn color="teal-6" class="text-weight-bold text-subtitle1" label="口味调整" style="padding: 8px 8px"
+            <q-separator vertical/> -->
+            <q-btn color="teal-6" class="text-subtitle1" label="口味调整" style="padding: 8px 8px" size="md"
                    @click="openTasteCustomizationPage"/>
             <q-separator vertical/>
-            <q-btn color="teal-6" class="text-weight-bold text-subtitle1" label="开始炒制" style="padding: 8px 8px"
+            <q-btn color="teal-6" class="text-subtitle1" label="开始炒制" style="padding: 8px 8px" size="md"
                    v-close-popup @click="openRunningControlPage"/>
           </q-btn-group>
         </q-card-actions>
@@ -216,5 +216,8 @@ const thumbStyle = {
 </script>
 
 <style lang="scss" scoped>
-
+.list-label {
+  padding-left: 0;
+  padding-right: 0;
+}
 </style>

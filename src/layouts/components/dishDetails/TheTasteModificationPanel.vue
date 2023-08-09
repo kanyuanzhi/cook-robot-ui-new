@@ -7,17 +7,17 @@
         <q-item class="row no-padding q-mb-sm rounded-borders custom-item"
                 v-for="(seasoningStep,index) in seasoningSteps"
                 :key="seasoningStep.uuid">
-          <div class="col-3 flex flex-center text-subtitle2 text-white bg-teal-6 text-weight-bold">
+          <div class="col-4 flex flex-center text-subtitle2 text-white bg-teal-6 text-weight-bold">
             第{{ index + 1}}次加料
           </div>
           <q-separator vertical/>
           <template v-if="seasoningStep.instructionType!=='seasoning'">
-            <div class="col-9 q-py-sm q-pr-md">
+            <div class="col-8 q-py-sm q-pr-md">
               <TheTasteWeightInput :seasoning-map="seasoningMap" :seasoning="seasoningStep" @update="onUpdate"/>
             </div>
           </template>
           <template v-else>
-            <div class="col-9 column q-gutter-y-sm q-py-sm q-pr-md">
+            <div class="col-8 column q-gutter-y-sm q-py-sm q-pr-md">
               <TheTasteWeightInput v-for="seasoning in seasoningStep.seasonings" :key="seasoning.key"
                                    :seasoning-map="seasoningMap" :seasoning="seasoning" @update="onUpdate"/>
             </div>
@@ -65,5 +65,6 @@ const thumbStyle = {
 
 .custom-item {
   border: 1px rgba(0, 0, 0, 0.1) solid;
+  white-space: nowrap;
 }
 </style>

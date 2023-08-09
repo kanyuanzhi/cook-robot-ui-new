@@ -30,11 +30,15 @@ const dish = ref(useAppStore.editingDish);
 
 <style lang="scss" scoped>
 .dish-edit-page {
-  top: 52px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: fixed;
+  width: 100%;
 }
 
 .dish-edit-wrap {
   height: 100%;
+  width: 95vw;
 }
 </style>
