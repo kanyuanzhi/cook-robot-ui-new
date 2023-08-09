@@ -1,14 +1,16 @@
 <template>
   <q-dialog v-model="shown" position="standard" class="inherit-dialog ">
     <q-card style="width: 520px;height: 200px" class="">
-      <q-card-section class="text-center bg-teal-6">
-        <div class="text-h6 text-white">加热温度</div>
+      <q-card-section class="text-center bg-teal-6 q-pa-sm">
+        <div class="text-subtitle1 text-white">加热温度</div>
       </q-card-section>
       <q-card-section>
+        <div class=" text-center">
+          <q-chip class="text-subtitle2 text-weight-bold" :color="colorDisplay" text-color="white">
+            <span style="width: 30px">{{ temperature }}</span>℃
+          </q-chip>
+        </div>
         <q-item class="q-mt-lg">
-          <q-item-section avatar>
-            <q-icon name="local_fire_department" :color="colorDisplay"/>
-          </q-item-section>
           <q-item-section>
             <q-slider
               v-model="temperature"
@@ -17,11 +19,6 @@
               :step="1"
               :color="colorDisplay"
               @change="onTemperatureChange"/>
-          </q-item-section>
-          <q-item-section avatar class="text-center">
-            <q-chip class="text-subtitle2 text-weight-bold" :color="colorDisplay" text-color="white">
-              <span style="width: 30px">{{ temperature }}</span>℃
-            </q-chip>
           </q-item-section>
         </q-item>
       </q-card-section>
@@ -42,7 +39,7 @@ const temperature = ref(0);
 
 const show = () => {
   shown.value = true;
-  temperature.value = useControllerStore.currentHeatingTemperature
+  temperature.value = useControllerStore.currentHeatingTemperature;
 };
 
 const colorDisplay = computed(() => {

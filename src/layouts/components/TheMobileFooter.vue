@@ -13,24 +13,24 @@
           <span class="q-mt-xs" style="font-size: 9px">菜品</span>
         </template>
       </q-route-tab>
-      <q-route-tab name="control" to="/dishEdit" >
+      <q-route-tab name="control" to="/control" >
         <template v-slot:default>
           <span><q-icon name="local_fire_department" size="23px"/></span>
           <div class="q-mt-xs" style="font-size: 9px">控制</div>
         </template>
       </q-route-tab>
-      <q-route-tab name="edit" to="/dishEdit">
-        <template v-slot:default>
-          <span><q-icon name="edit" size="23px"/></span>
-          <div class="q-mt-xs" style="font-size: 9px">制作</div>
-        </template>
-      </q-route-tab>
-      <q-route-tab name="settings" to="/dishEdit">
-        <template v-slot:default>
-          <span><q-icon name="settings" size="23px"/></span>
-          <div class="q-mt-xs" style="font-size: 9px">设置</div>
-        </template>
-      </q-route-tab>
+<!--      <q-route-tab name="edit" to="/dishEdit">-->
+<!--        <template v-slot:default>-->
+<!--          <span><q-icon name="edit" size="23px"/></span>-->
+<!--          <div class="q-mt-xs" style="font-size: 9px">制作</div>-->
+<!--        </template>-->
+<!--      </q-route-tab>-->
+<!--      <q-route-tab name="settings" to="/dishEdit">-->
+<!--        <template v-slot:default>-->
+<!--          <span><q-icon name="settings" size="23px"/></span>-->
+<!--          <div class="q-mt-xs" style="font-size: 9px">设置</div>-->
+<!--        </template>-->
+<!--      </q-route-tab>-->
     </q-tabs>
 <!--    <div class="row" @click="useAppStore.showRunningControl()">-->
 <!--      <q-toolbar class="col-12">-->

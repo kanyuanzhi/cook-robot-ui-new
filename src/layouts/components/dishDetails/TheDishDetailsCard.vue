@@ -2,8 +2,8 @@
   <div>
     <q-dialog v-model="useAppStore.dishDetailsCardShown" @show="onShow" @hide="onHide">
       <q-card style="width: 600px">
-        <q-card-section class="bg-teal-6 text-white q-py-md">
-          <div class="text-h6 text-weight-bold text-center" style="height: 32px">{{ dish.name }}</div>
+        <q-card-section class="bg-teal-6 text-white q-pa-sm">
+          <div class="text-subtitle1 text-weight-bold text-center">{{ dish.name }}</div>
         </q-card-section>
         <q-card-section class="text-grey-8">
           <div class="col">
@@ -157,7 +157,8 @@ const openRunningControlPage = () => {
   } else {
     useAppStore.setRunningDish(dish.value);
   }
-  useAppStore.showRunningControl();
+  router.push("/control")
+  // useAppStore.showRunningControl();
 };
 
 const theTasteCustomization = ref(null);
