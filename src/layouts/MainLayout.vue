@@ -26,5 +26,5 @@ import TheDishDetailsCard from "layouts/components/dishDetails/TheDishDetailsCar
 const useControllerStore = UseControllerStore();
 const useAppStore = UseAppStore();
 
-// setInterval(useControllerStore.fetchStatus, 200);
+setInterval(useControllerStore.fetchStatus, 200);
 </script>

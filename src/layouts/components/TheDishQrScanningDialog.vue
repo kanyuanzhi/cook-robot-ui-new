@@ -1,5 +1,5 @@
 <template>
-  <q-dialog v-model="useAppStore.dishQrScanningShown" position="standard" @show="onShow" @hide="onHide">
+  <q-dialog v-model="useAppStore.dishQrScanningShown" position="standard" @hide="onHide">
     <q-card style="width: 360px;" @mousedown.prevent>
       <q-card-section class="text-center bg-teal-6" @mousedown.prevent>
         <div class="text-h6 text-white">扫码炒菜</div>

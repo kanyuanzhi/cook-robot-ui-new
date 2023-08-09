@@ -13,7 +13,7 @@
                 :src="'data:image/png;base64,'+dish.image"
                 fit="fill"
                 :ratio="4/3"
-                @click="theDishImageUploader.show(dish.uuid)"
+                @click="onImageClick(dish.uuid)"
               />
               <p class="q-px-sm q-pt-md">
                 <span> {{ ingredientSummary }}</span>
@@ -60,7 +60,9 @@
       </q-card>
     </q-dialog>
     <TheTasteCustomization ref="theTasteCustomization" :dish-name="dish.name" :seasoning-map="seasoningMap"/>
-    <TheDishImageUploader ref="theDishImageUploader"/>
+
+    <!--只在windows的electron上显示-->
+    <TheDishImageUploader class="" ref="theDishImageUploader" @uploaded="(image)=>dish.image = image"/>
   </div>
 </template>
 
@@ -72,7 +74,7 @@ import { sum } from "lodash";
 import { UseAppStore } from "stores/appStore";
 import { useRouter } from "vue-router";
 import { UseControllerStore } from "stores/controllerStore";
-import { Notify } from "quasar";
+import { Notify, Platform } from "quasar";
 import TheTasteCustomization from "layouts/components/dishDetails/TheTasteCustomization.vue";
 import { ingredientFormat, seasoningFormat } from "layouts/components/dishDetails/displayFormat";
 import TheDishImageUploader from "layouts/components/dishDetails/TheDishImageUploader.vue";
@@ -173,11 +175,18 @@ const openTasteCustomizationPage = () => {
   theTasteCustomization.value.show(taste.value, customTastes.value);
 };
 
-const theDishImageUploader = ref(null)
-
 const openDishEditPage = () => {
   useAppStore.setEditingDish(dish.value);
   router.push("/dishEdit");
+};
+
+const theDishImageUploader = ref(null);
+const onImageClick = (uuid) => {
+  if (Platform.is.win) {
+    theDishImageUploader.value.show(uuid);
+  } else {
+    return
+  }
 };
 
 const onHide = () => {
