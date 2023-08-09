@@ -13,9 +13,12 @@
                 :src="'data:image/png;base64,'+dish.image"
                 fit="fill"
                 :ratio="4/3"
-              />
+              >
+                <div class="absolute-bottom text-subtitle2">
+                  <span> {{ ingredientSummary }}</span>
+                </div>
+              </q-img>
               <p class="q-px-sm q-pt-sm">
-                <span> {{ ingredientSummary }}</span>
               </p>
             </div>
             <div class="col-6">
@@ -29,7 +32,7 @@
                     <q-item-label caption>{{ originalTaste.summary }}</q-item-label>
                   </q-item-section>
                 </q-item>
-                <q-scroll-area :thumb-style="thumbStyle" style="height: 240px;">
+                <q-scroll-area :thumb-style="thumbStyle" style="height: 220px;">
                   <q-item v-for="customTaste in customTastes" tag="label" :key="customTaste.dish.uuid" v-ripple class="list-label">
                     <q-item-section avatar>
                       <q-radio v-model="taste" :val="customTaste.dish.uuid" :color="customTaste.color"/>
@@ -49,10 +52,10 @@
             <!-- <q-btn color="teal-6" class="text-weight-bold text-subtitle1" label="大厨编辑" style="padding: 8px 8px"
                    v-close-popup @click="openDishEditPage"/>
             <q-separator vertical/> -->
-            <q-btn color="teal-6" class="text-subtitle1" label="口味调整" style="padding: 8px 8px" size="md"
+            <q-btn color="teal-6" class="text-subtitle1" label="口味调整" style="padding: 6px 8px" size="md"
                    @click="openTasteCustomizationPage"/>
             <q-separator vertical/>
-            <q-btn color="teal-6" class="text-subtitle1" label="开始炒制" style="padding: 8px 8px" size="md"
+            <q-btn color="teal-6" class="text-subtitle1" label="开始炒制" style="padding: 6px 8px" size="md"
                    v-close-popup @click="openRunningControlPage"/>
           </q-btn-group>
         </q-card-actions>
