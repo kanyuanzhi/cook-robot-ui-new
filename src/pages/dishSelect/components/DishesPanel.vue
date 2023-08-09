@@ -1,14 +1,14 @@
 <template>
-  <q-tab-panel style="padding-bottom: 0;padding-top: 0" :name="cuisineId">
+  <q-tab-panel style="padding-bottom: 0;padding-top: 0" :name="cuisineId" class="right-tab-panel">
     <div class="cards-wrapper">
-      <div class="row q-col-gutter-md my-right-list">
-        <div class="col-12" v-for="dish in dishes" :key="dish.uuid">
+      <div class="row q-col-gutter-sm my-right-list">
+        <div class="col-6" v-for="dish in dishes" :key="dish.uuid">
           <DishPanelCard :dish-image="dish.image" :dish-name="dish.name" @click="useAppStore.showDishDetailsCard(dish.uuid)"/>
         </div>
       </div>
     </div>
 
-    <div class="flex pagination-wrapper">
+    <!-- <div class="flex pagination-wrapper">
       <q-pagination
         v-model="pageCurrent"
         :max="pageMax"
@@ -23,7 +23,7 @@
         boundary-numbers
         size="sm"
       />
-    </div>
+    </div> -->
   </q-tab-panel>
 </template>
 
@@ -36,7 +36,7 @@ import { UseAppStore } from "stores/appStore";
 
 const useAppStore = UseAppStore()
 
-const pageSize = 8;
+const pageSize = 100;
 
 const props = defineProps(["cuisineId"]);
 const dishes = ref([]);
@@ -71,7 +71,7 @@ onMounted(async () => {
 .cards-wrapper {
   height: calc(100vh - 50px - 32px - 20px - 20px - 10px - 10px);
   //height: 600px
-  width: 70vw;
+  width: 100%;
 }
 
 .pagination-wrapper {
@@ -87,7 +87,13 @@ onMounted(async () => {
 }
 
 .my-right-list {
-  margin-bottom: 15px;
+  // margin-bottom: 15px;
+  width: 100%;
+}
+
+.right-tab-panel {
+  padding: 3px;
+  width: 80vw;
 }
 
 </style>

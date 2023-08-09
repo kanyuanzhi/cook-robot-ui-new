@@ -1,19 +1,19 @@
 <template>
   <q-card class="my-card" flat bordered>
-    <q-card-section horizontal style="width: 100%; margin: 3px">
+    <q-card-section horizontal style="width: 100%;">
       <q-img
-        class="col-6"
+        class="col-12"
         :src="'data:image/png;base64,' + dishImage"
-        height="115px"
+        height="105px"
         fit="fill"
       />
-      <q-card-section style="padding: 0; width: 50%">
-        <q-card-section style="height: 80px; width: 140px; padding-top: 10px">
+      <q-card-section  class="my-section">
+        <q-card-section style="height: 35px;" class="my-section-inner">
           <div class="text-subtitle2 text-grey-8" style="">
             {{ nameDisplay }}
           </div>
         </q-card-section>
-        <q-separator inset />
+        <!-- <q-separator inset /> -->
 <!--        <q-card-section-->
 <!--          style="height: 20px; padding-top: 10px; text-align: right"-->
 <!--        >-->
@@ -36,4 +36,18 @@ const nameDisplay = computed(() => {
 });
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.my-section {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding:0;
+}
+
+.my-section-inner {
+  background-color: rgba(#666, 0.5);
+  width: 100%;
+  padding: 5px;
+}
+
+</style>

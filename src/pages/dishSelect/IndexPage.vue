@@ -80,6 +80,7 @@ onMounted(async () => {
 
 .my-tab-panels-right {
   height: 100%;
+  
   overflow: hidden;
 }
 

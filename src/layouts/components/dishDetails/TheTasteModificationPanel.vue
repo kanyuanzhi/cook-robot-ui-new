@@ -1,5 +1,5 @@
 <template>
-  <q-tab-panel class="q-px-sm" :name="name">
+  <q-tab-panel  :name="name" style="padding-left: 4px;padding-right: 4px;">
     <q-list dense separator>
       <q-scroll-area
         :thumb-style="thumbStyle"
@@ -7,17 +7,17 @@
         <q-item class="row no-padding q-mb-sm rounded-borders custom-item"
                 v-for="(seasoningStep,index) in seasoningSteps"
                 :key="seasoningStep.uuid">
-          <div class="col-4 flex flex-center text-subtitle2 text-white bg-teal-6 text-weight-bold">
+          <div class="col-3 flex flex-center text-white bg-teal-6 text-weight-regular" style="font-size: 14px;">
             第{{ index + 1}}次加料
           </div>
           <q-separator vertical/>
           <template v-if="seasoningStep.instructionType!=='seasoning'">
-            <div class="col-8 q-py-sm q-pr-md">
+            <div class="col-9 q-py-sm">
               <TheTasteWeightInput :seasoning-map="seasoningMap" :seasoning="seasoningStep" @update="onUpdate"/>
             </div>
           </template>
           <template v-else>
-            <div class="col-8 column q-gutter-y-sm q-py-sm q-pr-md">
+            <div class="col-9 column q-gutter-y-sm q-py-sm ">
               <TheTasteWeightInput v-for="seasoning in seasoningStep.seasonings" :key="seasoning.key"
                                    :seasoning-map="seasoningMap" :seasoning="seasoning" @update="onUpdate"/>
             </div>
