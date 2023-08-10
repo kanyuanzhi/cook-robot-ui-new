@@ -6,7 +6,7 @@
           <q-tabs
             v-model="tab"
             vertical
-            class="text-teal-6"
+            class="text-teal-6 left-tab"
             active-bg-color="teal-6"
             active-color="white"
           >
@@ -76,6 +76,11 @@ onMounted(async () => {
 
 .my-splitter {
   height: 100%;
+  width: 100vw;
+}
+
+.left-tab {
+  width: 20vw;
 }
 
 .my-tab-panels-right {
