@@ -93,7 +93,7 @@ onMounted(async () => {
 
 .right-tab-panel {
   padding: 3px;
-  width: 80vw;
+  width: 79vw;
 }
 
 </style>
