@@ -59,6 +59,10 @@ import ThePhonePairPanel from "pages/systemSettings/phonePair/ThePhonePairPanel.
 import TheSoftwareUpdatePanel from "pages/systemSettings/softwareUpdate/TheSoftwareUpdatePanel.vue";
 import ThePumpSettingPanel from "pages/systemSettings/pumpSetting/ThePumpSettingPanel.vue";
 import SettingPanel from "pages/systemSettings/components/SettingPanel.vue";
+import { UseAppStore } from "stores/appStore";
+
+const useAppStore = UseAppStore();
+useAppStore.setPageTitle("系统设置");
 
 const splitterModel = ref(20);
 

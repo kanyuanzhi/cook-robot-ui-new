@@ -26,5 +26,7 @@ const progressLabel = computed(() => {
 </script>
 
 <style lang="scss" scoped>
-
+.rounded-borders{
+  border-radius: 15px;
+}
 </style>

@@ -11,11 +11,13 @@
             class="text-teal-6"
             active-bg-color="teal-6"
             active-color="white"
+            switch-indicator
           >
-            <q-tab class="" :name="0" label="全部"/>
-            <q-tab v-for="cuisine in cuisines" :key="cuisine.uuid" :name="cuisine.id" :label="cuisine.name"/>
+            <q-tab :name="0" label="全部" style="border-top-right-radius: 20px;border-bottom-right-radius: 20px"/>
+            <q-tab v-for="cuisine in cuisines" :key="cuisine.uuid" :name="cuisine.id" :label="cuisine.name"
+                   style="border-top-right-radius: 20px;border-bottom-right-radius: 20px"/>
             <q-separator/>
-            <q-route-tab class="bg-teal-5 text-white" label="菜品制作" to="/dishEdit"/>
+            <q-route-tab label="菜品制作" to="/dishEdit"/>
           </q-tabs>
         </template>
 
@@ -41,6 +43,10 @@
 import { onMounted, ref } from "vue";
 import { getCuisines } from "src/api/cuisine";
 import DishesPanel from "pages/dishSelect/components/DishesPanel.vue";
+import { UseAppStore } from "stores/appStore";
+
+const useAppStore = UseAppStore()
+useAppStore.setPageTitle("菜品选择");
 
 const splitterModel = ref(20);
 const cuisines = ref([]);

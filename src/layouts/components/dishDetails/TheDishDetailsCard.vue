@@ -2,10 +2,12 @@
   <div>
     <q-dialog v-model="useAppStore.dishDetailsCardShown" @show="onShow" @hide="onHide">
       <q-card style="width: 600px">
-        <q-card-section class="bg-teal-6 text-white q-py-md">
-          <div class="text-h6 text-weight-bold text-center" style="height: 32px">{{ dish.name }}</div>
+        <q-card-section class="q-py-md">
+          <div class="bg-teal-6 q-py-sm text-center" style="border-radius: 10px;min-height: 44px">
+            <span class="text-subtitle1 text-weight-bold text-white">{{ dish.name }}</span>
+          </div>
         </q-card-section>
-        <q-card-section class="text-grey-8">
+        <q-card-section class="text-grey-8 q-py-none">
           <div class="row">
             <div class="col-6">
               <q-img
@@ -15,9 +17,11 @@
                 :ratio="4/3"
                 @click="onImageClick(dish.uuid)"
               />
-              <p class="q-px-sm q-pt-md">
-                <span> {{ ingredientSummary }}</span>
-              </p>
+              <div v-html="ingredientSummary"></div>
+
+<!--              <p class="q-px-sm q-pt-md">-->
+<!--                <span> {{ ingredientSummary }}</span>-->
+<!--              </p>-->
             </div>
             <div class="col-6">
               <q-list>
@@ -30,7 +34,7 @@
                     <q-item-label caption>{{ originalTaste.summary }}</q-item-label>
                   </q-item-section>
                 </q-item>
-                <q-scroll-area :thumb-style="thumbStyle" style="height: 240px;">
+                <q-scroll-area :thumb-style="thumbStyle" style="height: 220px;">
                   <q-item v-for="customTaste in customTastes" tag="label" :key="customTaste.dish.uuid" v-ripple>
                     <q-item-section avatar>
                       <q-radio v-model="taste" :val="customTaste.dish.uuid" :color="customTaste.color"/>
@@ -45,24 +49,36 @@
             </div>
           </div>
         </q-card-section>
-        <q-card-actions class="bg-white text-teal-6 q-pa-none">
-          <q-btn-group spread square unelevated class="full-width">
-            <q-btn color="teal-6" class="text-weight-bold text-subtitle1" label="大厨编辑" style="padding: 8px 8px"
+        <q-card-section class="q-pa-md">
+          <div class="row justify-around q-pb-md">
+            <q-btn color="teal-6" class="col-4 text-subtitle1" push rounded label="大厨编辑"
                    v-close-popup @click="openDishEditPage"/>
-            <q-separator vertical/>
-            <q-btn color="teal-6" class="text-weight-bold text-subtitle1" label="口味调整" style="padding: 8px 8px"
+            <q-btn color="teal-6" class="col-4 text-subtitle1" push rounded label="口味调整"
                    @click="openTasteCustomizationPage"/>
-            <q-separator vertical/>
-            <q-btn color="teal-6" class="text-weight-bold text-subtitle1" label="开始炒制" style="padding: 8px 8px"
+          </div>
+          <div>
+            <q-btn color="teal-6" class="text-subtitle1 full-width" push rounded label="开始炒制"
                    v-close-popup @click="openRunningControlPage"/>
-          </q-btn-group>
-        </q-card-actions>
+          </div>
+        </q-card-section>
+<!--        <q-card-actions class="bg-white text-teal-6 q-pa-none">-->
+<!--          <q-btn-group spread square unelevated class="full-width">-->
+<!--            <q-btn color="teal-6" class="text-weight-bold text-subtitle1" label="大厨编辑" style="padding: 8px 8px"-->
+<!--                   v-close-popup @click="openDishEditPage"/>-->
+<!--            <q-separator vertical/>-->
+<!--            <q-btn color="teal-6" class="text-weight-bold text-subtitle1" label="口味调整" style="padding: 8px 8px"-->
+<!--                   @click="openTasteCustomizationPage"/>-->
+<!--            <q-separator vertical/>-->
+<!--            <q-btn color="teal-6" class="text-weight-bold text-subtitle1" label="开始炒制" style="padding: 8px 8px"-->
+<!--                   v-close-popup @click="openRunningControlPage"/>-->
+<!--          </q-btn-group>-->
+<!--        </q-card-actions>-->
       </q-card>
     </q-dialog>
     <TheTasteCustomization ref="theTasteCustomization" :dish-name="dish.name" :seasoning-map="seasoningMap"/>
 
     <!--只在windows的electron上显示-->
-    <TheDishImageUploader class="" ref="theDishImageUploader" @uploaded="(image)=>dish.image = image"/>
+    <TheDishImageUploader ref="theDishImageUploader" @uploaded="(image)=>dish.image = image"/>
   </div>
 </template>
 
@@ -185,7 +201,7 @@ const onImageClick = (uuid) => {
   if (Platform.is.win) {
     theDishImageUploader.value.show(uuid);
   } else {
-    return
+    return;
   }
 };
 

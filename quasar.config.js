@@ -8,10 +8,10 @@
 // Configuration for your app
 // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js
 
-const {configure} = require("quasar/wrappers");
+const { configure } = require("quasar/wrappers");
 const path = require("path");
 
-module.exports = configure(function(/* ctx */) {
+module.exports = configure(function (/* ctx */) {
   return {
     eslint: {
       // fix: true,
@@ -117,7 +117,7 @@ module.exports = configure(function(/* ctx */) {
         },
       },
 
-      // iconSet: 'material-icons', // Quasar icon set
+      iconSet: "material-icons", // Quasar icon set
       // lang: 'en-US', // Quasar language pack
 
       // For special cases outside of where the auto-import strategy can have an impact
@@ -213,8 +213,8 @@ module.exports = configure(function(/* ctx */) {
 
         // Windows only
         // win32metadata: { ... }
-        // platform: "linux",
-        // arch: "arm64" // ia32, x64, armv7l, arm64, mips64el, universal
+        platform: "linux",
+        arch: "arm64" // ia32, x64, armv7l, arm64, mips64el, universal
       },
 
       builder: {

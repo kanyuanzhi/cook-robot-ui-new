@@ -1,8 +1,10 @@
 <template>
   <q-dialog v-model="shown" position="standard" class="inherit-dialog ">
     <q-card style="width: 520px;height: 200px" class="">
-      <q-card-section class="text-center bg-teal-6">
-        <div class="text-h6 text-white">加热温度</div>
+      <q-card-section>
+        <div class="bg-teal-6 q-py-sm text-center" style="border-radius: 10px;">
+          <span class="text-subtitle1 text-weight-bold text-white">加热温度</span>
+        </div>
       </q-card-section>
       <q-card-section>
         <q-item class="q-mt-lg">

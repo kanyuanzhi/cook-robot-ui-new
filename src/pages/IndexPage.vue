@@ -40,9 +40,12 @@
 
 <script setup>
 import { useRouter } from "vue-router";
+import { UseAppStore } from "stores/appStore";
 
 const router = useRouter();
 
+const useAppStore = UseAppStore()
+useAppStore.setPageTitle("主页")
 </script>
 
 <style lang="scss" scoped>

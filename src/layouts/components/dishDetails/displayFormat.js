@@ -4,13 +4,13 @@ export function ingredientFormat(steps) {
   const ingredientList = [];
   for (let step of steps) {
     if (step.instructionType === "ingredient") {
-      ingredientList.push(step.name + step.weight + "克");
+      ingredientList.push("菜仓" + step.slotNumber + "：" + step.name + step.weight + "克");
     }
   }
-  return ingredientList.join("，");
+  return ingredientList.join("<br>");
 }
 
-export function seasoningFormat(steps, seasoningMap){
+export function seasoningFormat(steps, seasoningMap) {
   const seasoningInfo = {};
   for (let pumpNumber in seasoningMap) {
     seasoningInfo[pumpNumber] = {

@@ -2,11 +2,13 @@
   <q-dialog v-model="useAppStore.runningControlShown" position="standard">
     <q-card style="width: 600px;">
       <!--        <q-linear-progress :value="0.6" color="pink" />-->
-      <q-card-section class="text-center bg-teal-6">
-        <div class="text-h6 text-white">运行控制</div>
+      <q-card-section class="text-center q-py-md">
+        <div class="text-h6 text-black">运行控制</div>
       </q-card-section>
-      <q-card-section class="text-center q-py-sm">
-        <span class="text-subtitle1 text-teal-6">{{ runningDishDisplay }}</span>
+      <q-card-section class="q-py-none">
+        <div class="bg-teal-6 q-py-sm text-center" style="border-radius: 10px">
+          <span class="text-subtitle1 text-weight-bold text-white">{{ runningDishDisplay }}</span>
+        </div>
       </q-card-section>
       <q-card-section class="flex flex-center column" style="height: 250px;">
         <template v-if="useControllerStore.isRunning">
@@ -62,7 +64,7 @@
           </q-chip>
           <q-btn v-if="useControllerStore.isCooking"
                  :color="getTemperatureColor(useControllerStore.currentHeatingTemperature)" rounded unelevated
-                 label="加热控制"
+                 label="加热控制" push
                  @click="openTemperatureControlDialog()"/>
           <q-chip :color="getTemperatureColor(useControllerStore.infraredTemperature)" text-color="white"
                   icon="thermostat">
@@ -70,14 +72,12 @@
           </q-chip>
         </div>
       </q-card-section>
-      <q-card-actions align="around">
-        <q-btn-group spread unelevated class="full-width">
+      <q-card-actions align="around" class="q-pa-md">
+        <q-btn-group spread unelevated class="full-width" style="border-radius: 20px">
           <template v-if="useControllerStore.isCooking">
-            <q-btn v-if="!useControllerStore.isPausing"
-                   color="teal-6" label="中途加料" icon="mdi-shaker"
+            <q-btn v-if="!useControllerStore.isPausing" class="text-subtitle1" color="teal-6" label="中途加料" icon="mdi-shaker" push
                    @click="sendCommand('pause_to_add')"/>
-            <q-btn v-else
-                   color="teal-6" label="继续炒制" icon="fa-solid fa-play"
+            <q-btn v-else class="text-subtitle1" color="teal-6" label="继续炒制" icon="fa-solid fa-play" push
                    @click="sendCommand('resume')"/>
             <!--            <q-btn v-if="!useControllerStore.isPausing" :disable="!useControllerStore.isPausingWithMovingBackFinished"-->
             <!--                   color="teal-6" label="中途加料" icon="mdi-shaker"-->
@@ -86,25 +86,25 @@
             <!--                   color="teal-6" label="继续炒制" icon="fa-solid fa-play"-->
             <!--                   @click="sendCommand('resume')"/>-->
             <q-separator vertical/>
-            <q-btn color="teal-6" label="开门" icon="lock_open"
-                   @click="sendCommand('door_unlock')"/>
+            <q-btn class="text-subtitle1" color="teal-6" label="开门" icon="lock_open" push @click="sendCommand('door_unlock')"/>
           </template>
           <template v-else>
-            <q-btn :disable="useControllerStore.isRunning" color="teal-6" label="备菜" icon="restart_alt"
+            <q-btn class="text-subtitle1" :disable="useControllerStore.isRunning" color="teal-6" label="备菜" icon="restart_alt" push
                    @click="sendCommand('prepare')"/>
             <q-separator vertical/>
-            <q-btn-dropdown :disable="useControllerStore.isRunning" color="teal-6" label="清洗"
+            <q-btn-dropdown class="text-subtitle1" :disable="useControllerStore.isRunning" color="teal-6" label="清洗" push
                             icon="mdi-washing-machine">
               <q-list>
-                <q-item clickable class="bg-teal-6 text-white text-center" v-close-popup @click="sendCommand('wash')">
+                <q-item clickable class="bg-teal-6 text-white text-center no-padding" v-close-popup
+                        @click="sendCommand('wash')">
                   <q-item-section>
-                    <q-item-label>洗锅</q-item-label>
+                    <span><q-icon name="svguse:public/custom-icons.svg#wash" size="19px" class="q-pr-md"/>洗锅</span>
                   </q-item-section>
                 </q-item>
                 <q-separator inset/>
                 <q-item clickable class="bg-teal-6 text-white text-center" v-close-popup @click="sendCommand('pour')">
                   <q-item-section>
-                    <q-item-label>倒水</q-item-label>
+                    <span><q-icon name="svguse:public/custom-icons.svg#pour" size="19px" class="q-pr-md"/>倒水</span>
                   </q-item-section>
                 </q-item>
               </q-list>
@@ -113,10 +113,10 @@
             <!--            <q-btn :disable="useControllerStore.isRunning" color="teal-6" label="清洗" icon="mdi-washing-machine"-->
             <!--                   @click="sendCommand('wash')"/>-->
             <q-separator vertical/>
-            <q-btn color="teal-6" label="开门" icon="lock_open" @click="sendCommand('door_unlock')"/>
+            <q-btn class="text-subtitle1" color="teal-6" label="开门" icon="lock_open" push @click="sendCommand('door_unlock')"/>
             <q-separator vertical/>
-            <q-btn :disable="useControllerStore.isRunning" color="teal-6" label="出菜" icon="fa-solid fa-plate-wheat"
-                   @click="sendCommand('dish_out')"/>
+            <q-btn class="text-subtitle1" :disable="useControllerStore.isRunning" color="teal-6" label="出菜" icon="fa-solid fa-plate-wheat"
+                   push @click="sendCommand('dish_out')"/>
           </template>
         </q-btn-group>
       </q-card-actions>

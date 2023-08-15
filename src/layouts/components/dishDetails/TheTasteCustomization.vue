@@ -1,8 +1,10 @@
 <template>
   <q-dialog v-model="shown" transition-show="scale" transition-hide="scale" persistent>
     <q-card style="width: 400px">
-      <q-card-section class="bg-teal-6 text-white q-py-md">
-        <div class="text-subtitle1 text-weight-bold text-center">{{ dishName }}口味调整（单位：克）</div>
+      <q-card-section>
+        <div class="bg-teal-6 q-py-sm text-center" style="border-radius: 10px;">
+          <span class="text-subtitle1 text-weight-bold text-white">{{ dishName }}口味调整（单位：克）</span>
+        </div>
       </q-card-section>
       <q-card-section class="q-pa-none">
         <q-tab-panels v-model="taste">
@@ -25,13 +27,11 @@
                  :label="customTaste.label"/>
         </q-tabs>
       </q-card-section>
-      <q-card-actions class="bg-white text-teal-6 q-pa-none">
-        <q-btn-group spread square unelevated class="full-width">
-          <q-btn color="teal-6" class="text-weight-bold text-subtitle1" label="取消" style="padding: 8px 8px"
-                 v-close-popup @click="onCancel"/>
+      <q-card-actions class="bg-white text-teal-6 q-pt-none">
+        <q-btn-group spread  class="full-width" push style="border-radius: 20px">
+          <q-btn color="teal-6" class="text-subtitle1" label="取消" push v-close-popup @click="onCancel"/>
           <q-separator vertical/>
-          <q-btn color="teal-6" class="text-weight-bold text-subtitle1" label="保存" style="padding: 8px 8px"
-                 v-close-popup @click="onConfirm"/>
+          <q-btn color="teal-6" class="text-subtitle1" label="保存" push v-close-popup @click="onConfirm"/>
         </q-btn-group>
       </q-card-actions>
     </q-card>

@@ -23,7 +23,9 @@ export const UseAppStore = defineStore("app", {
     lastStirFryGear: 0,
     dishQrScanningShown: false,
     dishDetailsCardShown: false,
-    dishDetailsCardUUID: ""
+    dishDetailsCardUUID: "",
+
+    pageTitle: ""
   }),
   getters: {
     // getCurrentDish: (state) => state.runningDish,
@@ -81,5 +83,8 @@ export const UseAppStore = defineStore("app", {
       this.dishDetailsCardUUID = uuid;
       this.dishDetailsCardShown = true;
     },
+    setPageTitle(title) {
+      this.pageTitle = title;
+    }
   },
 });

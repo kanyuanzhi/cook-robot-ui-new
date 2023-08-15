@@ -29,7 +29,7 @@ import { Notify } from "quasar";
 import { getDish } from "src/api/dish";
 
 const useAppStore = UseAppStore();
-const test = "dishUUID:837561df-d4f0-4059-be70-dc1208348efb";
+const test = "dishUUID::837561df-d4f0-4059-be70-dc1208348efb";
 
 const scanResult = ref("");
 

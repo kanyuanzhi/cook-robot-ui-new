@@ -4,6 +4,7 @@
       <q-img fit="fill" src="~/assets/logo.png" style="width: 113px; height: 35px;" @click="router.push('/')"/>
     </q-toolbar>
     <q-toolbar class="col-8 mobile-hide">
+      <q-toolbar-title class="text-teal-9 text-center">{{ useAppStore.pageTitle}}</q-toolbar-title>
       <q-space/>
       <TheMoreOperations/>
       <!--      <q-btn stretch v-if="!Platform.is.mobile" flat label="扫码炒菜" @click="useAppStore.showDishQrScanning"/>-->

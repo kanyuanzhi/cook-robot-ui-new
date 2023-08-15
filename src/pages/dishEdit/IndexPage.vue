@@ -22,6 +22,7 @@ import { UseAppStore } from "stores/appStore";
 import TheEasyStepList from "pages/dishEdit/components/TheEasyStepList.vue";
 
 const useAppStore = UseAppStore();
+useAppStore.setPageTitle("菜品制作");
 
 const dish = ref(useAppStore.editingDish);
 
