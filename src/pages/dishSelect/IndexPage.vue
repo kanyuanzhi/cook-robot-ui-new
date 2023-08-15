@@ -1,7 +1,7 @@
 <template>
   <q-page class="my-page">
     <div class="q-pa-sm dish-select-wrap">
-      <q-splitter v-model="splitterModel" class="my-splitter">
+      <q-splitter v-model="splitterModel" class="my-splitter" :limits="[20, 20]">
         <template v-slot:before>
           <q-tabs
             v-model="tab"
@@ -72,6 +72,7 @@ onMounted(async () => {
 }
 .dish-select-wrap {
   height: calc(100vh - 100px);
+  padding: 0;
 }
 
 .my-splitter {
