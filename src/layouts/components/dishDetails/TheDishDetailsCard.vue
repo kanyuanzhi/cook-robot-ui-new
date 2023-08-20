@@ -17,7 +17,7 @@
                 :ratio="4/3"
                 @click="onImageClick(dish.uuid)"
               />
-              <div v-html="ingredientSummary"></div>
+              <div v-html="ingredientSummary" style="line-height: 25px"></div>
 
 <!--              <p class="q-px-sm q-pt-md">-->
 <!--                <span> {{ ingredientSummary }}</span>-->

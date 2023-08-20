@@ -28,7 +28,7 @@
             transition-next="jump-up"
           >
             <SettingPanel title="料泵设置"
-                          summary="各泵开启时长（毫秒）与出料分量（克）的比例关系。例：100表示下料1克需要开启100毫秒。"
+                          summary="各泵开启时长（毫秒）与出料分量（克）的比例关系。例：100表示下料1克需要开启100毫秒。“绿色”标签表示调料充足，“红色”标签表示调料不足。"
                           name="pumpSetting">
               <ThePumpSettingPanel/>
             </SettingPanel>

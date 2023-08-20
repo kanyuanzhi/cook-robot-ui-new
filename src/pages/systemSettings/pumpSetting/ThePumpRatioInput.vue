@@ -1,6 +1,6 @@
 <template>
   <q-item class="row">
-    <q-item-section class="col-2 bg-teal-6">
+    <q-item-section class="col-2 " :class="[isWarning?'bg-red-6':'bg-teal-6']">
       <q-item-label class="text-white text-subtitle2 text-center">
         <span>{{ "" + seasoning.pumpNumber + "号泵" }}</span>
       </q-item-label>
@@ -11,7 +11,8 @@
       </q-item-label>
     </q-item-section>
     <q-item-section class="col-6">
-      <q-input :model-value="seasoning.editingRatio" :input-style="inputStyle" color="teal-6" readonly dense :disable="disable">
+      <q-input :model-value="seasoning.editingRatio" :input-style="inputStyle" color="teal-6" readonly dense
+               :disable="disable">
         <template v-slot:prepend>
           <q-btn round dense flat icon="remove" color="teal-6" size="12px" @click="onMinus"/>
         </template>
@@ -27,7 +28,7 @@
 import { defineProps, ref, watch, defineModel } from "vue";
 import { Notify } from "quasar";
 
-const props = defineProps(["seasoning", "disable"]);
+const props = defineProps(["seasoning", "disable", "isWarning"]);
 
 const onMinus = () => {
   if (props.seasoning.ratio <= 0) {

@@ -47,7 +47,7 @@
             round
             unelevated
             icon="play_arrow"
-            @click="sendCommand('cook',useAppStore.runningDish.uuid)"/>
+            @click="startCook"/>
           <q-btn
             v-else
             color="teal-6"
@@ -75,7 +75,8 @@
       <q-card-actions align="around" class="q-pa-md">
         <q-btn-group spread unelevated class="full-width" style="border-radius: 20px">
           <template v-if="useControllerStore.isCooking">
-            <q-btn v-if="!useControllerStore.isPausing" class="text-subtitle1" color="teal-6" label="中途加料" icon="mdi-shaker" push
+            <q-btn v-if="!useControllerStore.isPausing" class="text-subtitle1" color="teal-6" label="中途加料"
+                   icon="mdi-shaker" push
                    @click="sendCommand('pause_to_add')"/>
             <q-btn v-else class="text-subtitle1" color="teal-6" label="继续炒制" icon="fa-solid fa-play" push
                    @click="sendCommand('resume')"/>
@@ -86,13 +87,16 @@
             <!--                   color="teal-6" label="继续炒制" icon="fa-solid fa-play"-->
             <!--                   @click="sendCommand('resume')"/>-->
             <q-separator vertical/>
-            <q-btn class="text-subtitle1" color="teal-6" label="开门" icon="lock_open" push @click="sendCommand('door_unlock')"/>
+            <q-btn class="text-subtitle1" color="teal-6" label="开门" icon="lock_open" push
+                   @click="sendCommand('door_unlock')"/>
           </template>
           <template v-else>
-            <q-btn class="text-subtitle1" :disable="useControllerStore.isRunning" color="teal-6" label="备菜" icon="restart_alt" push
+            <q-btn class="text-subtitle1" :disable="useControllerStore.isRunning" color="teal-6" label="备菜"
+                   icon="restart_alt" push
                    @click="sendCommand('prepare')"/>
             <q-separator vertical/>
-            <q-btn-dropdown class="text-subtitle1" :disable="useControllerStore.isRunning" color="teal-6" label="清洗" push
+            <q-btn-dropdown class="text-subtitle1" :disable="useControllerStore.isRunning" color="teal-6" label="清洗"
+                            push
                             icon="mdi-washing-machine">
               <q-list>
                 <q-item clickable class="bg-teal-6 text-white text-center no-padding" v-close-popup
@@ -113,9 +117,11 @@
             <!--            <q-btn :disable="useControllerStore.isRunning" color="teal-6" label="清洗" icon="mdi-washing-machine"-->
             <!--                   @click="sendCommand('wash')"/>-->
             <q-separator vertical/>
-            <q-btn class="text-subtitle1" color="teal-6" label="开门" icon="lock_open" push @click="sendCommand('door_unlock')"/>
+            <q-btn class="text-subtitle1" color="teal-6" label="开门" icon="lock_open" push
+                   @click="sendCommand('door_unlock')"/>
             <q-separator vertical/>
-            <q-btn class="text-subtitle1" :disable="useControllerStore.isRunning" color="teal-6" label="出菜" icon="fa-solid fa-plate-wheat"
+            <q-btn class="text-subtitle1" :disable="useControllerStore.isRunning" color="teal-6" label="出菜"
+                   icon="fa-solid fa-plate-wheat"
                    push @click="sendCommand('dish_out')"/>
           </template>
         </q-btn-group>
@@ -134,12 +140,15 @@ import { secondsToMMSS } from "src/utils/timeFormat";
 import TheHeatingTemperatureControlDialog from "layouts/components/TheHeatingTemperatureControlDialog.vue";
 import { sendCommand } from "layouts/components/command";
 import TheRunningStepsDisplay from "layouts/components/TheRunningStepsDisplay.vue";
+import { getSeasonings } from "src/api/seasoning";
+import { Notify } from "quasar";
 
 const useAppStore = UseAppStore();
 const useControllerStore = UseControllerStore();
 const router = useRouter();
 
 const runningDishDisplay = computed(() => {
+  if (useControllerStore.currentCommandName === "wash") return "清洗中";
   return useAppStore.runningDish.name === undefined ? "未选择菜品" : useAppStore.runningDish.name;
 });
 
@@ -155,6 +164,48 @@ const getTemperatureColor = (temperature) => {
   } else {
     return "red-6";
   }
+};
+
+const startCook = async () => {
+  if (await checkLiquidSeasoningLevel()) {
+    await sendCommand("cook", useAppStore.runningDish.uuid);
+  }
+};
+
+const checkLiquidSeasoningLevel = async () => {
+  const { data } = await getSeasonings();
+  const seasonings = data.data;
+  const usedSeasoningPumpNumbers = [];
+  const warningSeasoningPumpNumber = [];
+  for (let step of useAppStore.runningDish.steps) {
+    if (step.instructionType === "seasoning") {
+      for (let seasoning of step.seasonings) {
+        if (usedSeasoningPumpNumbers.indexOf(seasoning.pumpNumber) === -1) {
+          usedSeasoningPumpNumbers.push(seasoning.pumpNumber);
+          if (useControllerStore.liquidSeasoningWarning[seasoning.pumpNumber - 1] === true) {
+            warningSeasoningPumpNumber.push(seasoning.pumpNumber);
+          }
+        }
+      }
+    }
+    if (step.instructionType === "water" || step.instructionType === "oil") {
+      if (usedSeasoningPumpNumbers.indexOf(step.pumpNumber) === -1) {
+        usedSeasoningPumpNumbers.push(step.pumpNumber);
+        if (useControllerStore.liquidSeasoningWarning[step.pumpNumber - 1] === true) {
+          warningSeasoningPumpNumber.push(step.pumpNumber);
+        }
+      }
+    }
+  }
+  const warningSeasoningName = [];
+  for (let pumpNumber of warningSeasoningPumpNumber) {
+    warningSeasoningName.push(seasonings[pumpNumber]);
+  }
+  if (warningSeasoningName.length !== 0) {
+    Notify.create(warningSeasoningName.join("、") + "不足，请添加！");
+    return false;
+  }
+  return true;
 };
 
 const theHeatingTemperatureControlDialog = ref(null);

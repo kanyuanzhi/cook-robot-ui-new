@@ -4,8 +4,9 @@
     @reset="onReset"
   >
     <div class="row q-col-gutter-x-lg">
-      <ThePumpRatioInput v-for="seasoning in seasoningConfigs" :key="seasoning.uuid"
-                         class="col-6" :seasoning="seasoning"/>
+      <ThePumpRatioInput v-for="(seasoning,index) in seasoningConfigs" :key="seasoning.uuid"
+                         class="col-6" :seasoning="seasoning"
+                         :is-warning="useControllerStore.liquidSeasoningWarning[index]"/>
     </div>
     <div class="text-right q-mt-lg">
       <q-btn label="取消" type="reset" text-color="teal-6" push class="q-mr-sm white"/>
@@ -15,17 +16,30 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, reactive } from "vue";
 import { Notify } from "quasar";
 import { getSeasoningConfigs, updateSeasoningConfigs } from "src/api/seasoning";
 import ThePumpRatioInput from "pages/systemSettings/pumpSetting/ThePumpRatioInput.vue";
+import { UseControllerStore } from "stores/controllerStore";
+
+const useControllerStore = UseControllerStore();
 
 const seasoningConfigs = ref([]);
+const liquidSeasoningLevel = ref([
+  useControllerStore.pump1LiquidWarning,
+  useControllerStore.pump2LiquidWarning,
+  useControllerStore.pump3LiquidWarning,
+  useControllerStore.pump4LiquidWarning,
+  useControllerStore.pump5LiquidWarning,
+  useControllerStore.pump6LiquidWarning,
+]);
 
 onMounted(async () => {
   const { data } = await getSeasoningConfigs();
   seasoningConfigs.value = data.data;
-  for (let seasoning of seasoningConfigs.value) {
+  console.log(data);
+  for (let i = 0; i < seasoningConfigs.value.length; i++) {
+    const seasoning = seasoningConfigs.value[i];
     Reflect.set(seasoning, "editingRatio", seasoning.ratio);
   }
 });

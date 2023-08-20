@@ -24,6 +24,7 @@ export const UseControllerStore = defineStore("controller", {
     isPausePermitted: false,
     bottomTemperature: 0,
     infraredTemperature: 0,
+    liquidSeasoningWarning: [],
     cookingTime: 0,
     currentHeatingTemperature: 0
   }),
@@ -54,6 +55,14 @@ export const UseControllerStore = defineStore("controller", {
       this.isPausePermitted = data.data["isPausePermitted"];
       this.bottomTemperature = data.data["bottomTemperature"] / 10;
       this.infraredTemperature = data.data["infraredTemperature"] / 10;
+      this.liquidSeasoningWarning = [
+        data.data["pump1LiquidWarning"] === 100,
+        data.data["pump2LiquidWarning"] === 100,
+        data.data["pump3LiquidWarning"] === 100,
+        data.data["pump4LiquidWarning"] === 100,
+        data.data["pump5LiquidWarning"] === 100,
+        data.data["pump6LiquidWarning"] === 100
+      ];
       this.cookingTime = floor(data.data["cookingTime"] / 1000);
       this.currentHeatingTemperature = data.data["currentHeatingTemperature"] / 10;
 
