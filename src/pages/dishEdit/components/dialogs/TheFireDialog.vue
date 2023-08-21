@@ -34,11 +34,7 @@
                 toggle-color="teal-6"
                 color="white"
                 text-color="grey-7"
-                :options="[
-                {label: '锅底温度', value: 1},
-                {label: '红外温度', value: 2},
-                // {label: '时间', value: 3},
-                {label: '无', value: 4}]"
+                :options="useSettingStore.isNewMachine?newMachineOptions:oldMachineOptions"
               />
             </q-item-section>
           </q-item>
@@ -47,7 +43,7 @@
             <q-item-section>
             <span class="text-grey-7" style="font-size: 12px">
               <span class="text-red">*</span>
-              控制加热达到以下设定温度或时间后，继续下一步骤，选择无则加热后直接开始下一步骤
+              控制加热达到以下设定温度后，继续下一步骤，选择无则加热后直接开始下一步骤
             </span>
             </q-item-section>
           </q-item>
@@ -56,9 +52,9 @@
                         :number="targetTemperature" :disable="judgeType===3||judgeType === 4"
                         @update="(v)=>targetTemperature=v"/>
 
-<!--          <DurationSelect ref="durationSelect" :duration="duration"-->
-<!--                          :disable="judgeType===1||judgeType===2||judgeType === 4"-->
-<!--                          @update="(v)=>{duration=v}"/>-->
+          <!--          <DurationSelect ref="durationSelect" :duration="duration"-->
+          <!--                          :disable="judgeType===1||judgeType===2||judgeType === 4"-->
+          <!--                          @update="(v)=>{duration=v}"/>-->
         </q-card-section>
         <q-card-actions align="right">
           <q-btn v-close-popup flat color="teal-6">取消</q-btn>
@@ -74,6 +70,9 @@ import { ref } from "vue";
 import DurationSelect from "pages/dishEdit/components/select/DurationSelect.vue";
 import NumberSelect from "pages/dishEdit/components/select/NumberSelect.vue";
 import { newHeatStep } from "pages/dishEdit/components/dialogs/newStep";
+import { UseSettingStore } from "stores/settingStore";
+
+const useSettingStore = UseSettingStore();
 
 const emits = defineEmits(["update", "submit"]);
 
@@ -120,6 +119,34 @@ const onHide = () => {
   duration.value = 0;
   judgeType.value = 4;
 };
+
+const newMachineOptions = [
+  {
+    label: "温度",
+    value: 2
+  },
+  // {label: '时间', value: 3},
+  {
+    label: "无",
+    value: 4
+  }
+];
+
+const oldMachineOptions = [
+  {
+    label: "锅底温度",
+    value: 1
+  },
+  {
+    label: "红外温度",
+    value: 2
+  },
+  // {label: '时间', value: 3},
+  {
+    label: "无",
+    value: 4
+  }
+];
 
 defineExpose({
   show,

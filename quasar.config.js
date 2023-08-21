@@ -69,7 +69,11 @@ module.exports = configure(function (/* ctx */) {
 
       // publicPath: '/',
       // analyze: true,
-      // env: {},
+      env: {
+        // APPIMAGE: "/home/szzn/Desktop/software/cookRobot-linux-arm64/cookRobot"
+        // APPIMAGE: "/home/xupc/Desktop/software/cookRobot-linux-arm64/cookRobot"
+        APPIMAGE: "/home/pi/Desktop/software/cookRobot-linux-arm64/cookRobot"
+      },
       // rawDefine: {}
       // ignorePublicFolder: true,
       // minify: false,

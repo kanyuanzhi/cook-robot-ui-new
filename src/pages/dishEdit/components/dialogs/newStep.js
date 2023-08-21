@@ -1,5 +1,8 @@
 import { cloneDeep } from "lodash/lang";
 import { Notify } from "quasar";
+import { UseSettingStore } from "stores/settingStore";
+
+const useSettingStore = UseSettingStore();
 
 function newStep(type, name) {
   const step = {
@@ -48,7 +51,8 @@ export function newHeatStep(temperature, judgeType, targetTemperature, duration)
       judgeStr = "持续监测锅底温度至" + targetTemperature + "℃";
       break;
     case 2:
-      judgeStr = "持续监测红外温度至" + targetTemperature + "℃";
+      // judgeStr = "持续监测红外温度至" + targetTemperature + "℃";
+      judgeStr = (useSettingStore.isNewMachine ? "持续监测温度至" : "持续监测红外温度至") + targetTemperature + "℃";
       break;
     case 3:
       judgeStr = "持续" + duration + "秒";

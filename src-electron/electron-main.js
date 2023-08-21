@@ -7,6 +7,7 @@ import {
   getCurrentConnections,
   scan, open, close, getStatus
 } from "app/src-electron/handles/wlan";
+import { updateAutoLaunch } from "app/src-electron/auto-launch";
 
 initialize();
 
@@ -66,7 +67,8 @@ function createWindow() {
 app.commandLine.appendSwitch("ignore-certificate-errors");
 
 app.whenReady()
-  .then(() => {
+  .then(async () => {
+    // await updateAutoLaunch();
     ipcMain.handle("wlan:open", open);
     ipcMain.handle("wlan:close", close);
     ipcMain.handle("wlan:getStatus", getStatus);

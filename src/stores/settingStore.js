@@ -5,7 +5,8 @@ const {
   title,
   version,
   useSSL,
-  middlePlatformIPAddress
+  middlePlatformIPAddress,
+  isNewMachine
 } = defaultSettings;
 
 export const UseSettingStore = defineStore("settings", {
@@ -13,7 +14,8 @@ export const UseSettingStore = defineStore("settings", {
     title: title,
     version: version,
     useSSL: useSSL,
-    middlePlatformIPAddress: middlePlatformIPAddress
+    middlePlatformIPAddress: middlePlatformIPAddress,
+    isNewMachine: isNewMachine
   }),
   getters: {
     // getCurrentDish: (state) => state.runningDish,

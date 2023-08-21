@@ -8,9 +8,14 @@
                          class="col-6" :seasoning="seasoning"
                          :is-warning="useControllerStore.liquidSeasoningWarning[index]"/>
     </div>
-    <div class="text-right q-mt-lg">
-      <q-btn label="取消" type="reset" text-color="teal-6" push class="q-mr-sm white"/>
-      <q-btn label="保存" type="submit" push color="teal-6"/>
+    <div class="row  q-mt-lg">
+      <div class="col-8">
+        <span class="text-teal-8">“绿色”标签表示调料充足，<span class="text-red-6">“红色”</span>标签表示调料不足。</span>
+      </div>
+      <div class="col-4 text-right">
+        <q-btn label="取消" type="reset" text-color="teal-6" push class="q-mr-sm white"/>
+        <q-btn label="保存" type="submit" push color="teal-6"/>
+      </div>
     </div>
   </q-form>
 </template>

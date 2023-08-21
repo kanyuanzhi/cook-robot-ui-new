@@ -102,13 +102,25 @@
                 <q-item clickable class="bg-teal-6 text-white text-center no-padding" v-close-popup
                         @click="sendCommand('wash')">
                   <q-item-section>
-                    <span><q-icon name="svguse:public/custom-icons.svg#wash" size="19px" class="q-pr-md"/>洗锅</span>
+                    <div class="flex flex-center">
+                      <svg fill="#ffffff" width="22" height="22">
+                        <use xlink:href="~/assets/custom-icons.svg#wash"></use>
+                      </svg>
+                      <span class="q-pl-md">洗锅</span>
+                    </div>
                   </q-item-section>
                 </q-item>
                 <q-separator inset/>
                 <q-item clickable class="bg-teal-6 text-white text-center" v-close-popup @click="sendCommand('pour')">
                   <q-item-section>
-                    <span><q-icon name="svguse:public/custom-icons.svg#pour" size="19px" class="q-pr-md"/>倒水</span>
+                    <!--                    <span><q-icon name="svguse:src/assets/custom-icons.svg#pour" size="19px" class="q-pr-md"/>倒水</span>-->
+
+                    <div class="flex flex-center">
+                      <svg fill="#ffffff" width="22" height="22">
+                        <use xlink:href="~/assets/custom-icons.svg#pour"></use>
+                      </svg>
+                      <span class="q-pl-md">倒水</span>
+                    </div>
                   </q-item-section>
                 </q-item>
               </q-list>
