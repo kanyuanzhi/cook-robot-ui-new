@@ -57,7 +57,7 @@
         </template>
       </q-card-section>
       <q-card-section class="q-py-sm">
-        <div class="row justify-around">
+        <div v-if="!useSettingStore.isNewMachine" class="row justify-around">
           <q-chip :color="getTemperatureColor(useControllerStore.bottomTemperature)" text-color="white"
                   icon="thermostat">
             锅底温度<span class="text-center" style="width: 40px">{{ useControllerStore.bottomTemperature }}</span>℃
@@ -70,6 +70,17 @@
                   icon="thermostat">
             红外温度<span class="text-center" style="width: 40px">{{ useControllerStore.infraredTemperature }}</span>℃
           </q-chip>
+        </div>
+        <div v-else class="row justify-center">
+          <q-btn :color="getTemperatureColor(useControllerStore.infraredTemperature)" text-color="white"
+                 icon="thermostat" class="text-center" rounded unelevated :push="useControllerStore.isCooking"
+                 @click="()=>{return useControllerStore.isCooking? openTemperatureControlDialog():Notify.create('未在炒制菜品不允许调整温度')}">
+            锅内温度<span class="text-center" style="width: 40px">{{ useControllerStore.infraredTemperature }}</span>℃
+          </q-btn>
+          <!--          <q-btn v-if="useControllerStore.isCooking"-->
+          <!--                 :color="getTemperatureColor(useControllerStore.currentHeatingTemperature)" rounded unelevated-->
+          <!--                 label="加热控制" push-->
+          <!--                 @click="openTemperatureControlDialog()"/>-->
         </div>
       </q-card-section>
       <q-card-actions align="around" class="q-pa-md">
@@ -154,9 +165,11 @@ import { sendCommand } from "layouts/components/command";
 import TheRunningStepsDisplay from "layouts/components/TheRunningStepsDisplay.vue";
 import { getSeasonings } from "src/api/seasoning";
 import { Notify } from "quasar";
+import { UseSettingStore } from "stores/settingStore";
 
 const useAppStore = UseAppStore();
 const useControllerStore = UseControllerStore();
+const useSettingStore = UseSettingStore();
 const router = useRouter();
 
 const runningDishDisplay = computed(() => {
