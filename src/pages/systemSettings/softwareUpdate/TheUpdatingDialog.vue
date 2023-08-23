@@ -1,10 +1,7 @@
 <template>
-  <q-dialog v-model="shown" :persistent="isPersistent">
+  <q-dialog v-model="shown" :persistent="true">
     <q-card style="width: 500px" class="q-mt-md">
-      <q-card-section v-if="isRunning" class="text-center text-teal-6 text-subtitle1">
-        机器正在运行，请稍后更新......
-      </q-card-section>
-      <q-card-section v-else>
+      <q-card-section>
         <q-item>
           <q-item-section side>
             <q-item-label class="text-subtitle1 text-teal-6">下载速度</q-item-label>
@@ -70,17 +67,9 @@ const useAppStore = UseAppStore();
 const useSettingStore = UseSettingStore();
 
 const shown = ref(false);
-const isPersistent = ref(false);
 
-const isRunning = ref(false);
-const isUpdating = ref(false);
-
-const show = (runningStatus, updatingStatus) => {
+const show = () => {
   shown.value = true;
-  isRunning.value = runningStatus;
-  isUpdating.value = updatingStatus;
-  if (runningStatus) return;
-  isPersistent.value = true;
   beginUpdate();
 };
 
@@ -110,7 +99,6 @@ const isInstallFinished = computed(() => {
 });
 
 const beginUpdate = () => {
-  isUpdating.value = true;
   const wsUrl = (useSettingStore.useSSL ? "wss" : "ws") + "://" + useSettingStore.middlePlatformIPAddress + ":8889/api/v1/system/update";
   ws = new WebSocket(wsUrl);
 

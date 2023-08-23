@@ -3,7 +3,7 @@
     <q-list dense separator>
       <q-scroll-area
         :thumb-style="thumbStyle"
-        style="height: 350px;" :visible="false">
+        style="height: 340px;" :visible="false">
         <q-item class="row no-padding q-mb-sm rounded-borders custom-item"
                 v-for="(seasoningStep,index) in seasoningSteps"
                 :key="seasoningStep.uuid">

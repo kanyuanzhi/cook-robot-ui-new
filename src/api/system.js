@@ -16,7 +16,21 @@ export function checkUpdatePermission() {
 
 export function getQrCode() {
   return api({
-    url: "/system/getQrCode",
+    url: "/system/qrCode",
+    method: "get"
+  });
+}
+
+export function getSoftwareInfo() {
+  return api({
+    url: "/system/softwareInfo",
+    method: "get"
+  });
+}
+
+export function checkUpdateInfo() {
+  return api({
+    url: "/system/checkUpdateInfo",
     method: "get"
   });
 }
