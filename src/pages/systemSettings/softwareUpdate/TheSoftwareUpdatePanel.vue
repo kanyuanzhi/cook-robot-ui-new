@@ -15,8 +15,15 @@
           <q-item-section>更新日期：{{ formattedTime }}</q-item-section>
         </q-item>
         <q-item>
-          <!--          <q-btn push color="teal-6" size="md" label="检查更新" @click="theUpdateConfirmDialog.show()"/>-->
-          <q-btn v-if="!isCheckPassed" push color="teal-6" size="md" label="检查更新" @click="check"/>
+          <q-btn v-if="!isCheckPassed" push color="teal-6" size="md" @click="check" :disable="isChecking">
+            <q-spinner-ios
+              v-if="isChecking"
+              color="white"
+              size="0.7em"
+              class="q-mr-md"
+            />
+            检查更新
+          </q-btn>
           <q-btn v-else push color="teal-6" size="md" label="开始更新" @click="beginUpdate"/>
         </q-item>
       </q-list>
@@ -43,13 +50,12 @@ const QrImage = ref("");
 const theUpdatingDialog = ref(null);
 
 const isCheckPassed = ref(false);
+const isChecking = ref(false);
 
 onMounted(async () => {
   try {
     const versionData = await getSoftwareInfo();
     softwareInfo.value = versionData.data.data;
-    console.log(softwareInfo.value);
-
     const qrCodeData = await getQrCode();
     if (qrCodeData.data.message === "success") {
       QrImage.value = qrCodeData.data.data;
@@ -66,8 +72,11 @@ const formattedTime = computed(() => {
 });
 
 const check = async () => {
+  isChecking.value = true;
   const { data } = await checkUpdateInfo();
+  isChecking.value = false;
   if (data.message === "error") {
+    console.log(data)
     Notify.create("检查更新失败");
   } else {
     if (data.data.isLatest) {

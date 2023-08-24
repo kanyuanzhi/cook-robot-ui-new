@@ -47,7 +47,7 @@
             size="0.7em"
             class="q-mr-md"
           />
-          {{ isInstallFinished ? "退出重启" : "正在升级" }}
+          {{ isInstallFinished ? "退出重启" : "正在更新" }}
         </q-btn>
       </q-card-actions>
     </q-card>
