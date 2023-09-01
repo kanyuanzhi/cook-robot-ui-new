@@ -6,8 +6,8 @@ import { UseControllerStore } from "stores/controllerStore";
 const useAppStore = UseAppStore();
 const useControllerStore = UseControllerStore();
 
-export async function sendCommand(commandName, commandData="") {
-  let commandType
+export async function sendCommand(commandName, commandData = "") {
+  let commandType;
   // cook型命令会在commandData中携带菜品uuid，其他commandData为空
   switch (commandName) {
     case "cook":
@@ -23,6 +23,9 @@ export async function sendCommand(commandName, commandData="") {
       commandType = "multiple";
       break;
     case "dish_out":
+      commandType = "multiple";
+      break;
+    case "withdraw":
       commandType = "multiple";
       break;
     case "pause_to_add":

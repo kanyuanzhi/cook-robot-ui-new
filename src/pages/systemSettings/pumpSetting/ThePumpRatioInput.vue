@@ -11,7 +11,8 @@
       </q-item-label>
     </q-item-section>
     <q-item-section class="col-6">
-      <q-input :model-value="seasoning.editingRatio" :input-style="inputStyle" color="teal-6" readonly dense
+      <q-input :model-value="seasoning.editingRatio" :input-style="inputStyle" color="teal-6"
+               :readonly="!Platform.is.win" dense
                :disable="disable">
         <template v-slot:prepend>
           <q-btn round dense flat icon="remove" color="teal-6" size="12px" @click="onMinus"/>
@@ -26,12 +27,12 @@
 
 <script setup>
 import { defineProps, ref, watch, defineModel } from "vue";
-import { Notify } from "quasar";
+import { Notify, Platform } from "quasar";
 
 const props = defineProps(["seasoning", "disable", "isWarning"]);
 
 const onMinus = () => {
-  if (props.seasoning.ratio <= 0) {
+  if (props.seasoning.editingRatio <= 0) {
     // eslint-disable-next-line vue/no-mutating-props
     props.seasoning.editingRatio = 0;
     Notify.create("比例不能小于0");

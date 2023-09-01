@@ -145,7 +145,7 @@
             <q-separator vertical/>
             <q-btn class="text-subtitle1" :disable="useControllerStore.isRunning" color="teal-6" label="出菜"
                    icon="fa-solid fa-plate-wheat"
-                   push @click="sendCommand('dish_out')"/>
+                   push @click="startDishOut"/>
           </template>
         </q-btn-group>
       </q-card-actions>
@@ -164,7 +164,7 @@ import TheHeatingTemperatureControlDialog from "layouts/components/TheHeatingTem
 import { sendCommand } from "layouts/components/command";
 import TheRunningStepsDisplay from "layouts/components/TheRunningStepsDisplay.vue";
 import { getSeasonings } from "src/api/seasoning";
-import { Notify } from "quasar";
+import { Dialog, Notify } from "quasar";
 import { UseSettingStore } from "stores/settingStore";
 
 const useAppStore = UseAppStore();
@@ -195,6 +195,22 @@ const startCook = async () => {
   if (await checkLiquidSeasoningLevel()) {
     await sendCommand("cook", useAppStore.runningDish.uuid);
   }
+};
+
+const startDishOut = () => {
+  Dialog.create({
+    title: "操作确认",
+    message: "出菜过程中，锅体会倾斜向下倒出菜品，是否确认执行？",
+    ok: {
+      push: true,
+      color: "teal-6",
+      label: "确认"
+    },
+    class: "text-grey-9"
+  })
+    .onOk(async () => {
+      await sendCommand("dish_out");
+    });
 };
 
 const checkLiquidSeasoningLevel = async () => {

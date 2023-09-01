@@ -7,11 +7,11 @@
         </q-card-section>
 
         <q-card-section class="q-pt-none">
-          <q-input color="teal-6" dense v-model="password" autofocus/>
+          <q-input color="teal-6" label="安全密钥" v-model="password" autofocus/>
         </q-card-section>
 
         <q-card-actions align="right" class="text-teal-6">
-          <q-btn flat label="确认" v-close-popup @click="onConfirm"/>
+          <q-btn push label="确认" color="teal-6" v-close-popup @click="emits('connect', ssid, password)"/>
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -26,7 +26,7 @@
       <CustomKeyboard
         ref="customKeyboard"
         @change="onChange"
-        @connect="onConfirm"
+        @connect="emits('connect', ssid, password)"
       />
     </q-dialog>
   </div>
@@ -35,36 +35,28 @@
 <script setup>
 import { ref } from "vue";
 import CustomKeyboard from "pages/systemSettings/components/CustomKeyboard.vue";
-import { Notify } from "quasar";
+
+const emits = defineEmits(["connect"]);
 
 const shown = ref(false);
 
 const password = ref("");
-const network = ref(null);
-
+const ssid = ref("");
 const customKeyboard = ref(null);
 
-const show = (networkValue) => {
+const show = (ssidValue) => {
   shown.value = true;
-  network.value = networkValue;
+  ssid.value = ssidValue;
 };
 
 const onChange = (input, name) => {
   password.value = input;
 };
 
-const onConfirm = async () => {
-  const result = await window.wlanAPI.connect(network.value.ssid, password.value);
-  if (result === null) {
-    Notify.create("网络安全密钥错误，请重新输入");
-    return;
-  }
-  shown.value = false;
-};
-
 const onHide = () => {
-  password.value = ""
-  network.value = null
+  password.value = "";
+  ssid.value = "";
+  customKeyboard.value = null;
 };
 
 defineExpose({

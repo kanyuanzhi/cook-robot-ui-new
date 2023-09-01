@@ -119,4 +119,45 @@ contextBridge.exposeInMainWorld("wlanAPI", {
         return null;
       });
   },
+  deleteConnection: (ssid) => {
+    return ipcRenderer.invoke("wlan:deleteConnection", {
+      ssid: ssid,
+    })
+      .then(result => {
+        return result;
+      })
+      .catch(Error => {
+        return null;
+      });
+  },
+});
+
+contextBridge.exposeInMainWorld("storeAPI", {
+  get: (key, temp) => {
+    return ipcRenderer.invoke("store:get", key)
+      .then(result => {
+        return result;
+      })
+      .catch(Error => {
+        return null;
+      });
+  },
+  set: (key, value) => {
+    return ipcRenderer.invoke("store:set", key, value)
+      .then(result => {
+        return result;
+      })
+      .catch(Error => {
+        return null;
+      });
+  },
+  remove: (key) => {
+    return ipcRenderer.invoke("store:remove", key)
+      .then(result => {
+        return result;
+      })
+      .catch(Error => {
+        return null;
+      });
+  },
 });

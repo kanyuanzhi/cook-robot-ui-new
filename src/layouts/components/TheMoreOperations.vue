@@ -1,6 +1,6 @@
 <template>
-  <q-btn-dropdown color="grey-9" flat dropdown-icon="add_circle_outline">
-    <q-list class="bg-grey-9 text-white">
+  <q-btn-dropdown color="teal-6" flat dropdown-icon="add_circle_outline">
+    <q-list class="bg-teal-6 text-white">
       <q-item class="dropdown-bottom-border" clickable v-close-popup @click="useAppStore.showDishQrScanning">
         <q-item-section side>
           <q-icon name="mdi-scan-helper" color="white" size="18px"/>

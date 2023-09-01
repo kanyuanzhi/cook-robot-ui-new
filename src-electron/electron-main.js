@@ -5,9 +5,10 @@ import { initialize, enable } from "@electron/remote/main";
 import {
   connect, disconnect,
   getCurrentConnections,
-  scan, open, close, getStatus
+  scan, open, close, getStatus, deleteConnection
 } from "app/src-electron/handles/wlan";
-import { updateAutoLaunch } from "app/src-electron/auto-launch";
+// import { updateAutoLaunch } from "app/src-electron/auto-launch";
+import { get, set, remove } from "app/src-electron/handles/store";
 
 initialize();
 
@@ -76,6 +77,10 @@ app.whenReady()
     ipcMain.handle("wlan:getCurrentConnections", getCurrentConnections);
     ipcMain.handle("wlan:connect", connect);
     ipcMain.handle("wlan:disconnect", disconnect);
+    ipcMain.handle("wlan:deleteConnection", deleteConnection);
+    ipcMain.handle("store:get", get);
+    ipcMain.handle("store:set", set);
+    ipcMain.handle("store:remove", remove);
     createWindow();
   });
 

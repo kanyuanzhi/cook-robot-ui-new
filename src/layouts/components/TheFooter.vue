@@ -47,6 +47,8 @@ const statusBarDisplay = computed(() => {
       return "备菜中";
     case "dish_out":
       return "出菜中";
+    case "withdraw":
+      return "收纳中";
     default:
       return "状态错误";
   }

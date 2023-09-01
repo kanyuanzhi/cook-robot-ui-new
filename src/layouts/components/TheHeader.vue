@@ -3,35 +3,54 @@
     <q-toolbar class="col-4">
       <q-img fit="fill" src="~/assets/logo.png" style="width: 113px; height: 35px;" @click="router.push('/')"/>
     </q-toolbar>
-    <q-toolbar class="col-8 mobile-hide">
-      <q-toolbar-title class="text-teal-9 text-center">{{ useAppStore.pageTitle}}</q-toolbar-title>
+    <q-toolbar class="col-4">
+      <q-toolbar-title class="text-teal-9 text-center">{{ useAppStore.pageTitle }}</q-toolbar-title>
+    </q-toolbar>
+    <q-toolbar class="col-4">
       <q-space/>
+      <q-btn v-if="Platform.is.win" label="远控设置" outline rounded color="teal-6" @click="setRemoteControlAddress"/>
+      <q-space/>
+      <q-btn label="一键收纳" outline rounded color="teal-6" @click="sendCommand('withdraw')"/>
       <TheMoreOperations/>
-      <!--      <q-btn stretch v-if="!Platform.is.mobile" flat label="扫码炒菜" @click="useAppStore.showDishQrScanning"/>-->
-      <!--      <q-separator v-if="!Platform.is.mobile" dark vertical/>-->
-      <!--      <q-btn stretch flat label="菜品选择" @click="router.push('/dishSelect')"/>-->
-      <!--      <q-separator dark vertical/>-->
-      <!--      <q-btn stretch flat label="菜品制作" @click="router.push('/dishEdit')"/>-->
-
-      <!--      <q-separator v-if="!Platform.is.mobile" dark vertical/>-->
-      <!--      <q-btn v-if="!Platform.is.mobile" stretch flat label="系统设置" @click="router.push('/systemSettings')"/>-->
-      <!--      <q-separator v-if="Platform.is.electron" dark vertical/>-->
-      <!--      <TheSystemSetting v-if="Platform.is.electron" class="q-ml-sm"/>-->
     </q-toolbar>
   </q-header>
 </template>
 
 <script setup>
 import { useRouter } from "vue-router";
-import TheSystemSetting from "layouts/components/TheSystemSetting.vue";
 import { UseAppStore } from "stores/appStore";
-import { UseSettingStore } from "stores/settingStore";
-import { Platform } from "quasar";
+import { Dialog, Notify, Platform } from "quasar";
 import TheMoreOperations from "layouts/components/TheMoreOperations.vue";
+import { UseSettingStore } from "stores/settingStore";
+import { sendCommand } from "layouts/components/command";
 
 const router = useRouter();
 const useAppStore = UseAppStore();
-const settingStore = UseSettingStore();
+const useSettingStore = UseSettingStore();
+
+const setRemoteControlAddress = () => {
+  Dialog.create({
+    title: "远程控制",
+    message: "请输入远端设备的IP地址（当前地址：" + useSettingStore.middlePlatformIPAddress +
+      "）。若无法得到远端IP地址：（1）将电脑有线网络的IP设置为192.168.6.100，子网掩码设置为255.255.255.0，网关设置为192.168.6.1；" +
+      "（2）将电脑与树莓派用网线相连，在此处输入192.168.6.11。",
+    prompt: {
+      model: "",
+      type: "text",
+      color: "teal-6"
+    },
+    ok: {
+      push: true,
+      color: "teal-6",
+      label: "确认"
+    },
+    class: "text-grey-9"
+  })
+    .onOk((data) => {
+      useSettingStore.setMiddlePlatformIPAddress(data);
+      Notify.create("请打开菜品选择观察页面是否为空？若为空请重新输入远端设备的IP地址。");
+    });
+};
 </script>
 
 <style lang="scss" scoped>

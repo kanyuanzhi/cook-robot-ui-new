@@ -91,6 +91,7 @@ export async function getCurrentConnections() {
 }
 
 export async function connect(event, data) {
+  // data: { ssid: 'ssid', password: 'password' }
   try {
     return Wifi.connect(data);
   } catch (e) {
@@ -102,6 +103,15 @@ export async function connect(event, data) {
 export async function disconnect() {
   try {
     return Wifi.disconnect();
+  } catch (e) {
+    console.log(e)
+    return null;
+  }
+}
+export async function deleteConnection(event, data) {
+  // data : { ssid: 'ssid' }
+  try {
+    return Wifi.deleteConnection(data);
   } catch (e) {
     console.log(e)
     return null;

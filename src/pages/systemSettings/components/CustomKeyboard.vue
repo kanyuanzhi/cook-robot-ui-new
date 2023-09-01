@@ -6,14 +6,10 @@
 import Keyboard from "simple-keyboard";
 import "simple-keyboard/build/css/index.css";
 
-import { onMounted } from "vue";
+import { onMounted, onUnmounted } from "vue";
 
 const props = defineProps([""]);
 const emit = defineEmits(["keyPress", "change", "clear", "connect"]);
-defineExpose({
-  setInputName,
-  setInput,
-});
 
 let keyboard = null;
 onMounted(() => {
@@ -47,21 +43,26 @@ onMounted(() => {
   });
 });
 
-function setInputName(name) {
+const setInputName = (name) => {
   keyboard.setOptions({
     inputName: name,
   });
-}
+};
 
-function setInput(value, name) {
+const setInput = (value, name) => {
   keyboard.setInput(value, name);
-}
+};
 
-function onChange(input) {
+
+const getInputName = () => {
+  return keyboard.options.inputName;
+};
+
+const onChange = (input) => {
   emit("change", input, keyboard.options.inputName);
-}
+};
 
-function onKeyPress(button) {
+const onKeyPress = (button) => {
   emit("keyPress", button);
   if (button === "{enter}") {
     emit("connect");
@@ -77,7 +78,17 @@ function onKeyPress(button) {
       layoutName: shiftToggle,
     });
   }
-}
+};
+
+onUnmounted(() => {
+  keyboard.destroy();
+});
+
+defineExpose({
+  setInputName,
+  setInput,
+  getInputName,
+});
 </script>
 
 <style lang="scss" scoped></style>
