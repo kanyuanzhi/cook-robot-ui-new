@@ -193,6 +193,7 @@ const openTasteCustomizationPage = () => {
 
 const openDishEditPage = () => {
   useAppStore.setEditingDish(dish.value);
+  useAppStore.setBackBtnShown(true);
   router.push("/dishEdit");
 };
 

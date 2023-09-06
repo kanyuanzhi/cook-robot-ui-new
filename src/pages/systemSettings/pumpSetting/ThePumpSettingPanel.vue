@@ -42,7 +42,6 @@ const liquidSeasoningLevel = ref([
 onMounted(async () => {
   const { data } = await getSeasoningConfigs();
   seasoningConfigs.value = data.data;
-  console.log(data);
   for (let i = 0; i < seasoningConfigs.value.length; i++) {
     const seasoning = seasoningConfigs.value[i];
     Reflect.set(seasoning, "editingRatio", seasoning.ratio);

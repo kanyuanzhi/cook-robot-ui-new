@@ -15,7 +15,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { onMounted, onUnmounted, ref } from "vue";
 import TheStepList from "pages/dishEdit/components/TheStepList.vue";
 import TheOperatorBtns from "pages/dishEdit/components/TheOperatorBtns.vue";
 import { UseAppStore } from "stores/appStore";
@@ -25,6 +25,10 @@ const useAppStore = UseAppStore();
 useAppStore.setPageTitle("菜品制作");
 
 const dish = ref(useAppStore.editingDish);
+
+onUnmounted(() => {
+  useAppStore.setBackBtnShown(false);
+})
 
 </script>
 

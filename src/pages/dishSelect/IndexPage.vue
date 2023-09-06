@@ -40,23 +40,27 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { getCuisines } from "src/api/cuisine";
 import DishesPanel from "pages/dishSelect/components/DishesPanel.vue";
 import { UseAppStore } from "stores/appStore";
 
-const useAppStore = UseAppStore()
+const useAppStore = UseAppStore();
 useAppStore.setPageTitle("菜品选择");
 
 const splitterModel = ref(20);
 const cuisines = ref([]);
-const tab = ref("");
+const tab = ref(null);
 
 onMounted(async () => {
   const { data } = await getCuisines();
   cuisines.value = data.data;
   // tab.value = data.data[0].id;
-  tab.value = 0;
+  tab.value = useAppStore.cuisineTab;
+});
+
+watch(tab, () => {
+  useAppStore.setCuisineTab(tab.value);
 });
 
 

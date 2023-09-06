@@ -25,7 +25,12 @@ export const UseAppStore = defineStore("app", {
     dishDetailsCardShown: false,
     dishDetailsCardUUID: "",
 
-    pageTitle: ""
+    cuisineTab: 0,
+    cuisinePage: 1,
+    isBackFromDishEdit: false,
+
+    pageTitle: "",
+    backBtnShown: false,
   }),
   getters: {
     // getCurrentDish: (state) => state.runningDish,
@@ -83,8 +88,20 @@ export const UseAppStore = defineStore("app", {
       this.dishDetailsCardUUID = uuid;
       this.dishDetailsCardShown = true;
     },
+    setCuisineTab(tab) {
+      this.cuisineTab = tab;
+    },
+    setCuisinePage(page) {
+      this.cuisinePage = page;
+    },
+    setIsBackFromDishEdit(isBackFromDishEdit) {
+      this.isBackFromDishEdit = isBackFromDishEdit;
+    },
     setPageTitle(title) {
       this.pageTitle = title;
+    },
+    setBackBtnShown(shown) {
+      this.backBtnShown = shown;
     }
   },
 });

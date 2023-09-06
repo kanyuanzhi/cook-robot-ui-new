@@ -6,10 +6,10 @@
     <q-toolbar class="col-4">
       <q-toolbar-title class="text-teal-9 text-center">{{ useAppStore.pageTitle }}</q-toolbar-title>
     </q-toolbar>
-    <q-toolbar class="col-4">
+    <q-toolbar class="col-4 q-gutter-md">
       <q-space/>
       <q-btn v-if="Platform.is.win" label="远控设置" outline rounded color="teal-6" @click="setRemoteControlAddress"/>
-      <q-space/>
+      <q-btn v-if="useAppStore.backBtnShown" label="返回" outline rounded color="teal-6" @click="onBackBtnClick"/>
       <q-btn label="一键收纳" outline rounded color="teal-6" @click="sendCommand('withdraw')"/>
       <TheMoreOperations/>
     </q-toolbar>
@@ -27,6 +27,11 @@ import { sendCommand } from "layouts/components/command";
 const router = useRouter();
 const useAppStore = UseAppStore();
 const useSettingStore = UseSettingStore();
+
+const onBackBtnClick = () => {
+  useAppStore.setIsBackFromDishEdit(true);
+  router.push("/dishSelect");
+};
 
 const setRemoteControlAddress = () => {
   Dialog.create({
