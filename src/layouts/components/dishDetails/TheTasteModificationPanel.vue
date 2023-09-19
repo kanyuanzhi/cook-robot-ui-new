@@ -1,14 +1,14 @@
 <template>
-  <q-tab-panel class="q-px-sm" :name="name">
+  <q-tab-panel class="q-px-sm q-py-none" :name="name">
     <q-list dense separator>
       <q-scroll-area
-        :thumb-style="thumbStyle"
-        style="height: 340px;" :visible="false">
+          :thumb-style="thumbStyle"
+          style="height: 350px;" :visible="false">
         <q-item class="row no-padding q-mb-sm rounded-borders custom-item"
                 v-for="(seasoningStep,index) in seasoningSteps"
                 :key="seasoningStep.uuid">
           <div class="col-3 flex flex-center text-subtitle2 text-white bg-teal-6 text-weight-bold">
-            第{{ index + 1}}次加料
+            第{{ index + 1 }}次加料
           </div>
           <q-separator vertical/>
           <template v-if="seasoningStep.instructionType!=='seasoning'">
@@ -32,14 +32,14 @@
 import { onMounted, ref } from "vue";
 import TheTasteWeightInput from "layouts/components/dishDetails/TheTasteWeightInput.vue";
 
-const props = defineProps(["customTaste", "name", "seasoningMap"]);
+const props = defineProps(["steps", "name", "seasoningMap"]);
 
 const seasoningSteps = ref([]);
 
 onMounted(() => {
-  for (let i = 0; i < props.customTaste.dish.steps.length; i++) {
-    if (["water", "oil", "seasoning"].includes(props.customTaste.dish.steps[i].instructionType)) {
-      seasoningSteps.value.push(props.customTaste.dish.steps[i]);
+  for (let i = 0; i < props.steps.length; i++) {
+    if (["water", "oil", "seasoning"].includes(props.steps[i].instructionType)) {
+      seasoningSteps.value.push(props.steps[i]);
     }
   }
 });
@@ -53,7 +53,7 @@ const thumbStyle = {
   borderRadius: "5px",
   backgroundColor: "#009688",
   width: "5px",
-  opacity: "0.75"
+  opacity: "0.75",
 };
 
 </script>

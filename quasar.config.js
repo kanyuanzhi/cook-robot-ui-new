@@ -116,8 +116,7 @@ module.exports = configure(function (/* ctx */) {
         notify: {
           timeout: 3000,
           position: "top",
-          color: "orange-7",
-          textColor: "white",
+          type: "positive"
         },
       },
 

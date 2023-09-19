@@ -7,101 +7,80 @@
         </div>
       </q-card-section>
       <q-card-section class="q-pa-none">
-        <q-tab-panels v-model="taste">
-          <TheTasteModificationPanel v-for="customTaste in customTastes" :key="customTaste.dish.uuid"
-                                     :custom-taste="customTaste" :name="customTaste.dish.uuid"
+        <q-tab-panels v-model="customUUID">
+          <TheTasteModificationPanel v-for="(steps, index) in customStepsArray" :key="customUUIDs[index]"
+                                     :steps="steps" :name="customUUIDs[index]"
                                      :seasoning-map="seasoningMap"/>
         </q-tab-panels>
       </q-card-section>
 
       <q-card-section class="q-pa-none">
-        <q-tabs
-          v-model="taste"
-          active-bg-color="white"
-          active-color="teal-6"
-          class="text-grey-7"
-          indicator-color="teal-6"
-          switch-indicator
-        >
-          <q-tab v-for="customTaste in customTastes" :key="customTaste.dish.uuid" :name="customTaste.dish.uuid"
-                 :label="customTaste.label"/>
-        </q-tabs>
+        <q-scroll-area
+            :thumb-style="thumbStyle"
+            :content-style="contentStyle"
+            :content-active-style="contentActiveStyle"
+            class="full-width" style="height: 40px;">
+          <q-tabs
+              v-model="customUUID"
+              @update:model-value="val=>emit('update:selectedCustomUUID', val)"
+              class="text-teal-6"
+              active-bg-color="teal-6"
+              active-color="white"
+              indicator-color="transparent"
+              dense
+          >
+            <q-tab v-for="(steps, index) in customStepsArray" :key="customUUIDs[index]" :name="customUUIDs[index]"
+                   :label="'口味'+(index+1)" :ripple="false"/>
+          </q-tabs>
+        </q-scroll-area>
       </q-card-section>
-      <q-card-actions class="bg-white text-teal-6 q-pt-none">
-        <q-btn-group spread  class="full-width" push style="border-radius: 20px">
-          <q-btn color="teal-6" class="text-subtitle1" label="取消" push v-close-popup @click="onCancel"/>
-          <q-separator vertical/>
-          <q-btn color="teal-6" class="text-subtitle1" label="保存" push v-close-popup @click="onConfirm"/>
-        </q-btn-group>
-      </q-card-actions>
+      <q-card-section class="bg-white text-teal-6">
+        <div class="row q-gutter-sm">
+          <q-btn color="teal-6" class="col text-subtitle2" label="删除" :disable="customUUID===undefined" rounded push
+                 @click="deleteCustomSteps"/>
+          <q-btn color="teal-6" class="col text-subtitle2" label="新建" rounded push @click="addCustomSteps"/>
+          <q-btn color="teal-6" class="col text-subtitle2" label="取消" rounded push v-close-popup @click="cancel"/>
+          <q-btn color="teal-6" class="col text-subtitle2" label="保存" rounded push v-close-popup @click="save"/>
+        </div>
+      </q-card-section>
     </q-card>
   </q-dialog>
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
+import { ref } from "vue";
 import TheTasteModificationPanel from "layouts/components/dishDetails/TheTasteModificationPanel.vue";
-import { seasoningFormat } from "layouts/components/dishDetails/displayFormat";
-import { updateCustomDish } from "src/api/dish";
+import { thumbStyle, contentStyle, contentActiveStyle } from "layouts/components/dishDetails/displayFormat";
 
-const props = defineProps(["dishName", "seasoningMap"]);
+const props = defineProps(["dishName", "seasoningMap", "customUUIDs", "customStepsArray"]);
+const emit = defineEmits(["add", "delete", "cancel", "save", "update:selectedCustomUUID"]);
 
 const shown = ref(false);
+const customUUID = ref("");
 
-const taste = ref("");
-const customTastes = ref([]);
-
-const dish = ref({});
-
-const show = async (tasteValue, customTastesValue) => {
+const show = (selectedCustomUUID) => {
   shown.value = true;
-  taste.value = tasteValue;
-  customTastes.value = customTastesValue;
-};
-watch(taste, () => {
-
-});
-
-const onCancel = () => {
-  for (let i = 0; i < customTastes.value.length; i++) {
-    for (let j = 0, stepLen = customTastes.value[i].dish.steps.length; j < stepLen; j++) {
-      if (["water", "oil"].includes(customTastes.value[i].dish.steps[j].instructionType)) {
-        customTastes.value[i].dish.steps[j].editingWeight = customTastes.value[i].dish.steps[j].weight;
-      } else if (customTastes.value[i].dish.steps[j].instructionType === "seasoning") {
-        for (let k = 0, kLen = customTastes.value[i].dish.steps[j].seasonings.length; k < kLen; k++) {
-          customTastes.value[i].dish.steps[j].seasonings[k].editingWeight = customTastes.value[i].dish.steps[j].seasonings[k].weight;
-        }
-      }
-    }
-  }
+  customUUID.value = selectedCustomUUID;
 };
 
-const onConfirm = async () => {
-  const uuidToSteps = {}
-  for (let i = 0; i < customTastes.value.length; i++) {
-    for (let j = 0; j < customTastes.value[i].dish.steps.length; j++) {
-      if (["water", "oil"].includes(customTastes.value[i].dish.steps[j].instructionType)) {
-        customTastes.value[i].dish.steps[j].weight = customTastes.value[i].dish.steps[j].editingWeight;
-        customTastes.value[i].dish.steps[j].instructionName = "添加" + props.seasoningMap[customTastes.value[i].dish.steps[j].pumpNumber] + customTastes.value[i].dish.steps[j].weight + "克";
-      } else if (customTastes.value[i].dish.steps[j].instructionType === "seasoning") {
-        const stepNames = [];
-        for (let k = 0; k < customTastes.value[i].dish.steps[j].seasonings.length; k++) {
-          customTastes.value[i].dish.steps[j].seasonings[k].weight = customTastes.value[i].dish.steps[j].seasonings[k].editingWeight;
-          stepNames.push(props.seasoningMap[customTastes.value[i].dish.steps[j].seasonings[k].pumpNumber] + customTastes.value[i].dish.steps[j].seasonings[k].weight + "克");
-        }
-        customTastes.value[i].dish.steps[j].instructionName = "添加" + stepNames.join("，");
-      }
-    }
-    customTastes.value[i]["summary"] = seasoningFormat(customTastes.value[i].dish.steps, props.seasoningMap);
-    uuidToSteps[customTastes.value[i].dish.uuid] = customTastes.value[i].dish.steps
-  }
+const addCustomSteps = () => {
+  emit("add");
+};
 
-  const {data} = await updateCustomDish(uuidToSteps)
-  console.log(data)
+const deleteCustomSteps = async () => {
+  emit("delete", customUUID.value);
+};
+
+const cancel = () => {
+  emit("cancel");
+};
+
+const save = async () => {
+  emit("save");
 };
 
 defineExpose({
-  show
+  show,
 });
 </script>
 

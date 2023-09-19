@@ -19,6 +19,7 @@ export const UseAppStore = defineStore("app", {
       uuid: ""
     },
     runningDish: {},
+    customStepsUUID: "",
     useEasyStepList: true,
     lastStirFryGear: 0,
     dishQrScanningShown: false,
@@ -66,8 +67,9 @@ export const UseAppStore = defineStore("app", {
       };
       this.shiftEditingDishChangedFlag();
     },
-    setRunningDish(dish) {
+    setRunningDish(dish, customStepsUUID) {
       this.runningDish = dish;
+      this.customStepsUUID = customStepsUUID
     },
     shiftUseEasyStepList() {
       this.useEasyStepList = !this.useEasyStepList;
