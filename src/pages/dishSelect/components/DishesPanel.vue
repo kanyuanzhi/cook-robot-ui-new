@@ -67,7 +67,7 @@ onMounted(async () => {
   }
 
   dishesData = await getAPI("dish/list", {
-    pageIndex: 1,
+    pageIndex: pageCurrent.value,
     pageSize: pageSize,
     enableCuisineFilter: props.cuisineId !== 0,
     cuisineFilter: props.cuisineId === 0 ? "" : props.cuisineId,

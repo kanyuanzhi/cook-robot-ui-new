@@ -25,8 +25,6 @@ import { ref, watch } from "vue";
 const props = defineProps(["seasoning", "seasoningOptions"]);
 const emits = defineEmits(["update"]);
 
-console.log(props.seasoning)
-
 const selectedSeasoning = ref(props.seasoning);
 
 watch(selectedSeasoning, (value) => {

@@ -2,7 +2,7 @@
   <q-item class="row">
     <q-item-section class="col-2 " :class="[isWarning?'bg-red-6':'bg-teal-6']">
       <q-item-label class="text-white text-subtitle2 text-center">
-        <span>{{ "" + seasoning.pumpNumber + "号泵" }}</span>
+        <span>{{ "" + seasoning.pump + "号泵" }}</span>
       </q-item-label>
     </q-item-section>
     <q-item-section class="col-3">

@@ -62,7 +62,7 @@ const getTemperatureColor = (temperature) => {
 };
 
 const onTemperatureChange = async (val) => {
-  await sendCommand("heat", String(val));
+  await sendCommand("heat", {temperature: val});
 };
 
 defineExpose({

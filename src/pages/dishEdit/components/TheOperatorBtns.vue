@@ -42,7 +42,7 @@
         <q-separator vertical/>
         <q-btn color="teal-6" label="清空" @click="useAppStore.newEditingDish()"/>
         <q-separator vertical/>
-        <q-btn color="red-6" label="删除" @click="theDeleteDialog.show()"/>
+        <q-btn color="red-6" label="删除" @click="deleteDish"/>
       </q-btn-group>
     </q-card-actions>
     <TheIngredientDialog ref="theIngredientDialog" @submit="onSubmit"/>
@@ -70,6 +70,8 @@ import OperatorBtn from "pages/dishEdit/components/dialogs/OperatorBtn.vue";
 import { UseAppStore } from "stores/appStore";
 import TheDeleteDialog from "pages/dishEdit/components/dialogs/TheDeleteDialog.vue";
 import { newStirFryStep } from "pages/dishEdit/components/dialogs/newStep";
+import { Dialog, Notify } from "quasar";
+import { deleteAPI } from "src/api";
 
 const useAppStore = UseAppStore();
 
@@ -91,7 +93,24 @@ const onSubmit = (val, index) => {
   if (val.instructionType !== "stir_fry" && useAppStore.useEasyStepList) {
     useAppStore.editingDish.steps.push(newStirFryStep(useAppStore.lastStirFryGear, 0));
   }
-  useAppStore.shiftEditingDishChangedFlag()
+  useAppStore.shiftEditingDishChangedFlag();
+};
+
+const deleteDish = () => {
+  Dialog.create({
+    message: "确认删除？",
+    ok: "确认",
+    cancel: "取消",
+    focus: "none",
+  }).onOk(async () => {
+    try {
+      const { message } = await deleteAPI("/dish/delete", { ids: [useAppStore.editingDish.id] });
+      useAppStore.newEditingDish();
+      Notify.create(message);
+    } catch (e) {
+      console.log(e.toString());
+    }
+  });
 };
 </script>
 

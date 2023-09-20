@@ -6,20 +6,25 @@ export const UseAppStore = defineStore("app", {
   state: () => ({
     runningControlShown: false,
     editingDish: {
+      id: 0,
       steps: [],
+      customStepsList: {},
       name: "",
       cuisine: 1,
-      uuid: ""
+      uuid: "",
     },
     editingDishChangedFlag: true,
     originEditingDish: {
+      id: 0,
       steps: [],
+      customStepsList: {},
       name: "",
       cuisine: 1,
-      uuid: ""
+      uuid: "",
     },
     runningDish: {},
     customStepsUUID: "",
+
     useEasyStepList: true,
     lastStirFryGear: 0,
     dishQrScanningShown: false,
@@ -37,73 +42,80 @@ export const UseAppStore = defineStore("app", {
     // getCurrentDish: (state) => state.runningDish,
   },
   actions: {
-    showRunningControl() {
+    showRunningControl () {
       this.runningControlShown = true;
     },
-    closeRunningControl() {
+    closeRunningControl () {
       this.runningControlShown = false;
     },
-    setEditingDish(dish) {
+    setEditingDish (dish) {
       this.editingDish = cloneDeep(dish);
       this.originEditingDish = cloneDeep(dish);
       this.shiftEditingDishChangedFlag();
     },
-    resetEditingDish() {
+    resetEditingDish () {
       this.editingDish = cloneDeep(this.originEditingDish);
       this.shiftEditingDishChangedFlag();
     },
-    newEditingDish() {
+    newEditingDish () {
       this.editingDish = {
+        id: 0,
         steps: [],
+        customStepsList: {},
         name: "",
         cuisine: 1,
-        uuid: ""
+        uuid: "",
       };
       this.originEditingDish = {
+        id: 0,
         steps: [],
+        customStepsList: {},
         name: "",
         cuisine: 1,
-        uuid: ""
+        uuid: "",
       };
       this.shiftEditingDishChangedFlag();
     },
-    setRunningDish(dish, customStepsUUID) {
+    setRunningDish (dish, customStepsUUID) {
+      if (customStepsUUID !== "") {
+        dish.steps = dish.customStepsList[customStepsUUID];
+      }
       this.runningDish = dish;
-      this.customStepsUUID = customStepsUUID
+      this.customStepsUUID = customStepsUUID;
     },
-    shiftUseEasyStepList() {
+    shiftUseEasyStepList () {
       this.useEasyStepList = !this.useEasyStepList;
     },
-    setLastStirFryGear(gear) {
+    setLastStirFryGear (gear) {
       this.lastStirFryGear = gear;
     },
-    shiftEditingDishChangedFlag() {
+    shiftEditingDishChangedFlag () {
       this.editingDishChangedFlag = !this.editingDishChangedFlag;
     },
-    showDishQrScanning() {
+    showDishQrScanning () {
       this.dishQrScanningShown = true;
     },
-    hideDishQrScanning() {
+    hideDishQrScanning () {
       this.dishQrScanningShown = false;
     },
-    showDishDetailsCard(uuid) {
+    showDishDetailsCard (uuid) {
       this.dishDetailsCardUUID = uuid;
       this.dishDetailsCardShown = true;
     },
-    setCuisineTab(tab) {
+    setCuisineTab (tab) {
       this.cuisineTab = tab;
     },
-    setCuisinePage(page) {
+    setCuisinePage (page) {
       this.cuisinePage = page;
     },
-    setIsBackFromDishEdit(isBackFromDishEdit) {
+    setIsBackFromDishEdit (isBackFromDishEdit) {
       this.isBackFromDishEdit = isBackFromDishEdit;
     },
-    setPageTitle(title) {
+    setPageTitle (title) {
       this.pageTitle = title;
     },
-    setBackBtnShown(shown) {
+    setBackBtnShown (shown) {
       this.backBtnShown = shown;
-    }
+    },
   },
 });

@@ -1,10 +1,10 @@
 <template>
   <q-form
-    @submit="onSubmit"
-    @reset="onReset"
+      @submit="onSubmit"
+      @reset="onReset"
   >
     <div class="row q-col-gutter-x-lg">
-      <ThePumpRatioInput v-for="(seasoning,index) in seasoningConfigs" :key="seasoning.uuid"
+      <ThePumpRatioInput v-for="(seasoning,index) in seasonings" :key="seasoning.uuid"
                          class="col-6" :seasoning="seasoning"
                          :is-warning="useControllerStore.liquidSeasoningWarning[index]"/>
     </div>
@@ -26,41 +26,34 @@ import { Notify } from "quasar";
 import { getSeasoningConfigs, updateSeasoningConfigs } from "src/api/seasoning";
 import ThePumpRatioInput from "pages/systemSettings/pumpSetting/ThePumpRatioInput.vue";
 import { UseControllerStore } from "stores/controllerStore";
+import { getAPI, putAPI } from "src/api";
 
 const useControllerStore = UseControllerStore();
 
-const seasoningConfigs = ref([]);
-const liquidSeasoningLevel = ref([
-  useControllerStore.pump1LiquidWarning,
-  useControllerStore.pump2LiquidWarning,
-  useControllerStore.pump3LiquidWarning,
-  useControllerStore.pump4LiquidWarning,
-  useControllerStore.pump5LiquidWarning,
-  useControllerStore.pump6LiquidWarning,
-]);
+const seasonings = ref([]);
 
 onMounted(async () => {
-  const { data } = await getSeasoningConfigs();
-  seasoningConfigs.value = data.data;
-  for (let i = 0; i < seasoningConfigs.value.length; i++) {
-    const seasoning = seasoningConfigs.value[i];
-    Reflect.set(seasoning, "editingRatio", seasoning.ratio);
+  const { data } = await getAPI("/seasoning/list");
+  seasonings.value = data.seasonings;
+  for (let i = 0; i < seasonings.value.length; i++) {
+    Reflect.set(seasonings.value[i], "editingRatio", seasonings.value[i].ratio);
   }
 });
 
 const onSubmit = async () => {
-  const uuidToRatio = {};
-  for (let seasoning of seasoningConfigs.value) {
-    seasoning.ratio = seasoning.editingRatio;
-    uuidToRatio[seasoning.uuid] = seasoning.ratio;
-  }
-  const { data } = await updateSeasoningConfigs(uuidToRatio);
-  if (data.message === "success") {
-    Notify.create("保存成功");
+  try {
+    const pumpRatios = [];
+    for (let seasoning of seasonings.value) {
+      seasoning.ratio = seasoning.editingRatio;
+    }
+    const { message } = await putAPI("/seasoning/update-pumpRatios", { seasonings: seasonings.value });
+    Notify.create(message);
+  } catch (e) {
+    console.log(e.toString());
   }
 };
 const onReset = () => {
-  for (let seasoning of seasoningConfigs.value) {
+  for (let seasoning of seasonings.value) {
     seasoning.editingRatio = seasoning.ratio;
   }
 };

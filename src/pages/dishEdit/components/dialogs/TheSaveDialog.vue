@@ -10,12 +10,12 @@
             <q-item-section avatar>名称</q-item-section>
             <q-item-section>
               <q-input
-                v-model="newName"
-                filled
-                dense
-                autofocus
-                @blur="onInputBlur($event, 'newName')"
-                @focus="onInputFocus($event, 'newName')"
+                  v-model="newName"
+                  filled
+                  dense
+                  autofocus
+                  @blur="onInputBlur($event, 'newName')"
+                  @focus="onInputFocus($event, 'newName')"
               >
               </q-input>
             </q-item-section>
@@ -24,12 +24,12 @@
             <q-item-section avatar>菜系</q-item-section>
             <q-item-section>
               <q-select
-                dense
-                filled
-                v-model="newCuisine"
-                :options="cuisineOptions"
-                options-cover
-                stack-label
+                  dense
+                  filled
+                  v-model="cuisine"
+                  :options="cuisineOptions"
+                  options-cover
+                  stack-label
               >
               </q-select>
             </q-item-section>
@@ -53,13 +53,13 @@
       </q-card>
     </q-dialog>
     <q-dialog
-      v-model="shown"
-      persistent
-      position="bottom"
-      no-focus
-      no-refocus
-      seamless
-      full-width
+        v-model="shown"
+        persistent
+        position="bottom"
+        no-focus
+        no-refocus
+        seamless
+        full-width
     >
       <CustomKeyboard ref="customKeyboard" @change="onChange"/>
     </q-dialog>
@@ -71,9 +71,9 @@ import { ref } from "vue";
 import { Notify } from "quasar";
 import { createDish, updateDish } from "src/api/dish";
 import CustomKeyboard from "pages/dishEdit/components/CustomKeyboard.vue";
-import { getCuisines } from "src/api/cuisine";
 import { UseAppStore } from "stores/appStore";
 import { cloneDeep } from "lodash/lang";
+import { getAPI, postAPI, putAPI } from "src/api";
 
 const useAppStore = UseAppStore();
 
@@ -82,14 +82,14 @@ const shown = ref(false);
 const newName = ref("");
 const cuisineOptions = ref([]);
 const cuisineMap = ref({});
-const newCuisine = ref({});
+const cuisine = ref({});
 
 const show = async () => {
   shown.value = true;
   newName.value = useAppStore.editingDish.name;
   cuisineOptions.value = [];
-  const { data } = await getCuisines();
-  const cuisines = data.data;
+  const { data } = await getAPI("cuisine/list");
+  const cuisines = data.cuisines;
   cuisines.forEach(cuisine => {
     cuisineOptions.value.push({
       label: cuisine.name,
@@ -97,7 +97,7 @@ const show = async () => {
     });
     cuisineMap.value[cuisine.id] = cuisine.name;
   });
-  newCuisine.value = {
+  cuisine.value = {
     label: cuisineMap.value[useAppStore.editingDish.cuisine],
     value: useAppStore.editingDish.cuisine,
   };
@@ -129,32 +129,40 @@ const onSubmit = async (flag) => {
     return;
   }
   const newDish = {
+    id: useAppStore.editingDish.id,
     name: newName.value,
-    cuisine: newCuisine.value.value,
+    cuisine: cuisine.value.value,
     steps: useAppStore.editingDish.steps,
-    uuid: useAppStore.editingDish.uuid
+    uuid: useAppStore.editingDish.uuid,
   };
   if (useAppStore.editingDish.uuid === "" || flag === "create") {
-    const { data } = await createDish(newDish);
-    if (data.message === "success") {
-      useAppStore.editingDish.name = newName.value;
-      useAppStore.editingDish.cuisine = newCuisine.value.value;
-      useAppStore.editingDish.uuid = data.data;
+    try {
+      const { data, message } = await postAPI("dish/add", newDish);
+      useAppStore.editingDish.id = data.dish.id;
+      useAppStore.editingDish.name = data.dish.name;
+      useAppStore.editingDish.cuisine = data.dish.cuisine;
+      useAppStore.editingDish.uuid = data.dish.uuid;
       useAppStore.originEditingDish = cloneDeep(useAppStore.editingDish);
-      Notify.create(flag === "create" ? "新建成功" : "保存成功");
-    } else {
-      Notify.create(flag === "create" ? "新建失败" : "保存失败");
+      Notify.create(message);
+    } catch (e) {
+      Notify.create({
+        message: e.toString(),
+        type: "negative",
+      });
     }
   } else {
-    const { data } = await updateDish(newDish);
-    if (data.message === "success") {
-      useAppStore.editingDish.name = newName.value;
-      useAppStore.editingDish.cuisine = newCuisine.value.value;
-      useAppStore.originEditingDish.name = newName.value;
-      useAppStore.originEditingDish.cuisine = newCuisine.value.value;
-      Notify.create("保存成功");
-    } else {
-      Notify.create("保存失败");
+    const { data, message } = await putAPI("dish/update-with-steps", newDish);
+    try {
+      useAppStore.editingDish.name = data.dish.name;
+      useAppStore.editingDish.cuisine = data.dish.cuisine;
+      useAppStore.originEditingDish.name = data.dish.name;
+      useAppStore.originEditingDish.cuisine = data.dish.cuisine;
+      Notify.create(message);
+    } catch (e) {
+      Notify.create({
+        message: e.toString(),
+        type: "negative",
+      });
     }
   }
   shown.value = false;

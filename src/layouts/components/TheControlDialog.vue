@@ -14,14 +14,14 @@
         <template v-if="useControllerStore.isRunning">
           <div>
             <q-spinner-hourglass
-              v-if="useControllerStore.isPausing"
-              color="teal-6"
-              size="4em"
+                v-if="useControllerStore.isPausing"
+                color="teal-6"
+                size="4em"
             />
             <q-spinner-bars
-              v-else
-              color="teal-6"
-              size="4em"
+                v-else
+                color="teal-6"
+                size="4em"
             />
           </div>
           <template v-if="useControllerStore.isCooking">
@@ -40,20 +40,20 @@
         </template>
         <template v-else>
           <q-btn
-            v-if="useAppStore.runningDish.name !== undefined"
-            padding="10px"
-            size="35px"
-            color="teal-6"
-            round
-            unelevated
-            icon="play_arrow"
-            @click="startCook"/>
+              v-if="useAppStore.runningDish.name !== undefined"
+              padding="10px"
+              size="35px"
+              color="teal-6"
+              round
+              unelevated
+              icon="play_arrow"
+              @click="startCook"/>
           <q-btn
-            v-else
-            color="teal-6"
-            size="20px"
-            label="请选择菜品"
-            @click="router.push('/dishSelect')" v-close-popup/>
+              v-else
+              color="teal-6"
+              size="20px"
+              label="请选择菜品"
+              @click="router.push('/dishSelect')" v-close-popup/>
         </template>
       </q-card-section>
       <q-card-section class="q-py-sm">
@@ -74,7 +74,7 @@
         <div v-else class="row justify-center">
           <q-btn :color="getTemperatureColor(useControllerStore.infraredTemperature)" text-color="white"
                  icon="thermostat" class="text-center" rounded unelevated :push="useControllerStore.isCooking"
-                 @click="()=>{return useControllerStore.isCooking? openTemperatureControlDialog():Notify.create('未在炒制菜品不允许调整温度')}">
+                 @click="onTemperatureBtnClick">
             锅内温度<span class="text-center" style="width: 40px">{{ useControllerStore.infraredTemperature }}</span>℃
           </q-btn>
           <!--          <q-btn v-if="useControllerStore.isCooking"-->
@@ -163,9 +163,9 @@ import { secondsToMMSS } from "src/utils/timeFormat";
 import TheHeatingTemperatureControlDialog from "layouts/components/TheHeatingTemperatureControlDialog.vue";
 import { sendCommand } from "layouts/components/command";
 import TheRunningStepsDisplay from "layouts/components/TheRunningStepsDisplay.vue";
-import { getSeasonings } from "src/api/seasoning";
 import { Dialog, Notify } from "quasar";
 import { UseSettingStore } from "stores/settingStore";
+import { getAPI } from "src/api";
 
 const useAppStore = UseAppStore();
 const useControllerStore = UseControllerStore();
@@ -174,7 +174,14 @@ const router = useRouter();
 
 const runningDishDisplay = computed(() => {
   if (useControllerStore.currentCommandName === "wash") return "清洗中";
-  return useAppStore.runningDish.name === undefined ? "未选择菜品" : useAppStore.runningDish.name;
+  if (useAppStore.runningDish.name === undefined) return "未选择菜品";
+  if (useAppStore.customStepsUUID === "") return useAppStore.runningDish.name;
+  const customUUIDs = [];
+  for (let uuid in useAppStore.runningDish.customStepsList) {
+    customUUIDs.push(uuid);
+  }
+  const customStepsIndex = customUUIDs.indexOf(useAppStore.customStepsUUID);
+  return useAppStore.runningDish.name + "（口味" + (customStepsIndex + 1) + "）";
 });
 
 const cookingTimeDisplay = computed(() => {
@@ -193,7 +200,10 @@ const getTemperatureColor = (temperature) => {
 
 const startCook = async () => {
   if (await checkLiquidSeasoningLevel()) {
-    await sendCommand("cook", useAppStore.runningDish.uuid);
+    await sendCommand("cook", {
+      uuid: useAppStore.runningDish.uuid,
+      customStepsUUID: useAppStore.customStepsUUID,
+    });
   }
 };
 
@@ -204,18 +214,17 @@ const startDishOut = () => {
     ok: {
       push: true,
       color: "teal-6",
-      label: "确认"
+      label: "确认",
     },
-    class: "text-grey-9"
-  })
-    .onOk(async () => {
-      await sendCommand("dish_out");
-    });
+    class: "text-grey-9",
+  }).onOk(async () => {
+    await sendCommand("dish_out");
+  });
 };
 
 const checkLiquidSeasoningLevel = async () => {
-  const { data } = await getSeasonings();
-  const seasonings = data.data;
+  const { data } = await getAPI("seasoning/list");
+  const seasonings = data.seasonings;
   const usedSeasoningPumpNumbers = [];
   const warningSeasoningPumpNumber = [];
   for (let step of useAppStore.runningDish.steps) {
@@ -243,10 +252,21 @@ const checkLiquidSeasoningLevel = async () => {
     warningSeasoningName.push(seasonings[pumpNumber]);
   }
   if (warningSeasoningName.length !== 0) {
-    Notify.create(warningSeasoningName.join("、") + "不足，请添加！");
+    Notify.create({
+      message: warningSeasoningName.join("、") + "不足，请添加！",
+      type: "warning",
+    });
     return false;
   }
   return true;
+};
+
+const onTemperatureBtnClick = () => {
+  if (useControllerStore.isCooking) openTemperatureControlDialog();
+  else Notify.create({
+    message: "未在炒制菜品不允许调整温度",
+    type: "warning",
+  });
 };
 
 const theHeatingTemperatureControlDialog = ref(null);

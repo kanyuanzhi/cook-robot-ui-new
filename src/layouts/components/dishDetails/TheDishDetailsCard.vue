@@ -169,17 +169,13 @@ const onShow = async () => {
 };
 
 const openRunningControlPage = () => {
-  if (taste.value !== dish.value.uuid) {
-    // 选择某口味
-    dish.value.steps = uuidToSteps.value[taste.value]
-    useAppStore.setRunningDish(dish.value, taste.value);
-  } else {
-    // 选择原味
-    useAppStore.setRunningDish(dish.value, "");
-  }
+  useAppStore.setRunningDish(dish.value, taste.value === dish.value.uuid ? "" : taste.value);
   if (useControllerStore.isCooking) {
-    Notify.create("当前有菜品正在炒制，请稍后");
-    return
+    Notify.create({
+      message: "当前有菜品正在炒制，请稍后",
+      type: "warning",
+    });
+    return;
   }
   useAppStore.showRunningControl();
 };
