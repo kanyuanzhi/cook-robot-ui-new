@@ -2,27 +2,27 @@
   <div class="column">
     <div class="col row">
       <div class="col">
-<!--        <q-toggle-->
-<!--          v-model="wlanStatus"-->
-<!--          color="teal-6"-->
-<!--          left-label-->
-<!--        >-->
-<!--          <template v-slot:default>-->
-<!--            <span class="text-teal-6">{{ wlanStatus ? "WLAN开" : "WLAN关" }}</span>-->
-<!--          </template>-->
-<!--        </q-toggle>-->
+        <!--        <q-toggle-->
+        <!--          v-model="wlanStatus"-->
+        <!--          color="teal-6"-->
+        <!--          left-label-->
+        <!--        >-->
+        <!--          <template v-slot:default>-->
+        <!--            <span class="text-teal-6">{{ wlanStatus ? "WLAN开" : "WLAN关" }}</span>-->
+        <!--          </template>-->
+        <!--        </q-toggle>-->
       </div>
       <div class="col text-right">
         <q-toggle
-          v-model="wlanStatus"
-          color="teal-6"
-          left-label
+            v-model="wlanStatus"
+            color="teal-6"
+            left-label
         >
           <template v-slot:default>
             <span class="text-teal-6">{{ wlanStatus ? "WLAN开" : "WLAN关" }}</span>
           </template>
         </q-toggle>
-<!--        <q-btn push color="teal-6" size="md" label="连接隐藏网络" @click="theConnectToHiddenDialog.show()"/>-->
+        <!--        <q-btn push color="teal-6" size="md" label="连接隐藏网络" @click="theConnectToHiddenDialog.show()"/>-->
       </div>
     </div>
     <q-list class="col q-py-md" bordered dense>
@@ -104,12 +104,18 @@ onMounted(async () => {
   if (Platform.is.linux && Platform.is.electron) {
     const status = await window.wlanAPI.getStatus();
     if (status === null) {
-      Notify.create("获取wlan状态错误");
+      Notify.create({
+        message: "获取wlan状态错误",
+        type: "warning",
+      });
       return;
     }
     wlanStatus.value = status;
   } else {
-    Notify.create("当前平台不为linux下的electron，不支持控制WLAN的开启/关闭");
+    Notify.create({
+      message: "当前平台不为linux下的electron，不支持控制WLAN的开启/关闭",
+      type: "warning",
+    });
   }
 
   if (!Platform.is.electron) return;
@@ -137,7 +143,10 @@ const scan = async () => {
   try {
     const networkScanResult = await window.wlanAPI.scan();
     if (networkScanResult === null) {
-      Notify.create("扫描wifi失败");
+      Notify.create({
+        message: "扫描wifi失败",
+        type: "warning",
+      });
       return;
     }
 
@@ -176,7 +185,10 @@ const onConnectionClick = async (connection) => {
       // 记住的密码错误，删除
       await window.storeAPI.remove("rememberedConnections." + connection.ssid);
       delete rememberedConnections.value[connection.ssid];
-      Notify.create("网络安全密钥错误，请重新输入");
+      Notify.create({
+        message: "网络安全密钥错误，请重新输入",
+        type: "warning",
+      });
     } else {
       Notify.create("连接成功");
       return;
@@ -192,14 +204,20 @@ const onConnect = async (ssid, password) => {
     const result = await window.wlanAPI.connect(ssid, password);
     Loading.hide();
     if (result === null) {
-      Notify.create("验证信息错误，请重新输入");
+      Notify.create({
+        message: "验证信息错误，请重新输入",
+        type: "warning",
+      });
     } else {
       Notify.create("连接成功");
       await window.storeAPI.set("rememberedConnections." + ssid, password);
       rememberedConnections.value[ssid] = password;
     }
   } catch (e) {
-    Notify.create(e.toString());
+    Notify.create({
+      message: e.toString(),
+      type: "negative",
+    });
   }
 };
 
@@ -210,10 +228,16 @@ const onDisconnect = async () => {
       currentConnection.value = null;
       Notify.create("断开连接成功");
     } else {
-      Notify.create("断开连接失败");
+      Notify.create({
+        message: "断开连接失败",
+        type: "warning",
+      });
     }
   } catch (e) {
-    Notify.create(e.toString());
+    Notify.create({
+      message: e.toString(),
+      type: "negative",
+    });
   }
 };
 
@@ -229,7 +253,10 @@ const onRemove = async (ssid) => {
       Notify.create("忘记连接失败");
     }
   } catch (e) {
-    Notify.create(e.toString());
+    Notify.create({
+      message: e.toString(),
+      type: "negative",
+    });
   }
 };
 

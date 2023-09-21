@@ -42,10 +42,10 @@
       <q-card-actions align="center">
         <q-btn color="teal-6" unelevated :disable="!isInstallFinished" @click="closeApp">
           <q-spinner-ios
-            v-if="!isInstallFinished"
-            color="white"
-            size="0.7em"
-            class="q-mr-md"
+              v-if="!isInstallFinished"
+              color="white"
+              size="0.7em"
+              class="q-mr-md"
           />
           {{ isInstallFinished ? "退出重启" : "正在更新" }}
         </q-btn>
@@ -91,7 +91,7 @@ const unzipProgressDisplay = computed(() => {
 
 const downloadSpeedDisplay = computed(() => {
   return downloadSpeed.value < 1.024 ? toString(round(downloadSpeed.value * 1024, 0)) + "KB/s" :
-    toString(round(downloadSpeed.value, 2)) + "MB/s";
+      toString(round(downloadSpeed.value, 2)) + "MB/s";
 });
 
 const isInstallFinished = computed(() => {
@@ -99,7 +99,8 @@ const isInstallFinished = computed(() => {
 });
 
 const beginUpdate = () => {
-  const wsUrl = (useSettingStore.useSSL ? "wss" : "ws") + "://" + useSettingStore.middlePlatformIPAddress + ":8889/api/v1/system/update";
+  const wsUrl = (useSettingStore.useSSL ? "wss" : "ws") + "://" + useSettingStore.middlePlatformIPAddress +
+      ":8889/api/v1/softwareUpdater/update";
   ws = new WebSocket(wsUrl);
 
   ws.onopen = function (event) {
@@ -130,12 +131,15 @@ const closeApp = () => {
     shutdown();
     window.windowAPI.close();
   } else {
-    Notify.create("非electron平台无法重启软件");
+    Notify.create({
+      message: "非electron平台无法重启软件",
+      type: "warning",
+    });
   }
 };
 
 defineExpose({
-  show
+  show,
 });
 </script>
 

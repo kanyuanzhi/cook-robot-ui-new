@@ -17,10 +17,10 @@
         <q-item>
           <q-btn v-if="!isCheckPassed" push color="teal-6" size="md" @click="check" :disable="isChecking">
             <q-spinner-ios
-              v-if="isChecking"
-              color="white"
-              size="0.7em"
-              class="q-mr-md"
+                v-if="isChecking"
+                color="white"
+                size="0.7em"
+                class="q-mr-md"
             />
             检查更新
           </q-btn>
@@ -38,10 +38,12 @@ import { checkUpdateInfo, checkUpdatePermission, getQrCode, getSoftwareInfo } fr
 import { Notify } from "quasar";
 import { date } from "quasar";
 import TheUpdatingDialog from "pages/systemSettings/softwareUpdate/TheUpdatingDialog.vue";
+import { getAPI } from "src/api";
+import { has } from "lodash/object";
 
 const {
   extractDate,
-  formatDate
+  formatDate,
 } = date;
 
 const softwareInfo = ref({});
@@ -54,14 +56,8 @@ const isChecking = ref(false);
 
 onMounted(async () => {
   try {
-    const versionData = await getSoftwareInfo();
-    softwareInfo.value = versionData.data.data;
-    const qrCodeData = await getQrCode();
-    if (qrCodeData.data.message === "success") {
-      QrImage.value = qrCodeData.data.data;
-    } else {
-      Notify.create("获取二维码失败，请将设备连接wifi，并保证手机与设备在同一wifi下");
-    }
+    const { data } = await getAPI("softwareUpdater/get-softwareInfo");
+    softwareInfo.value = data;
   } catch (e) {
     Notify.create(e);
   }
@@ -73,30 +69,48 @@ const formattedTime = computed(() => {
 
 const check = async () => {
   isChecking.value = true;
-  const { data } = await checkUpdateInfo();
-  isChecking.value = false;
-  if (data.message === "error") {
-    console.log(data)
-    Notify.create("检查更新失败");
-  } else {
-    if (data.data.isLatest) {
-      Notify.create("当前已是最新版本，无需更新");
-    } else if (!data.data.hasFile) {
-      Notify.create("正在准备更新包，请稍后");
+  try {
+    const { data } = await getAPI("softwareUpdater/check-updateInfo");
+    const { isLatest, latestVersion, hasFile } = data;
+    if (isLatest) {
+      Notify.create({
+        message: "当前已是最新版本，无需更新",
+        type: "warning",
+      });
+    } else if (!hasFile) {
+      Notify.create({
+        message: "正在准备更新包，请稍后重试",
+        type: "warning",
+      });
     } else {
       isCheckPassed.value = true;
-      Notify.create("有新版本" + data.data.latestVersion + "可以更新，请点击开始更新");
+      Notify.create("有新版本" + latestVersion + "可以更新，请点击下方“开始更新”按钮");
     }
+  } catch (e) {
+    Notify.create({
+      message: "检查更新失败",
+      type: "warning",
+    });
+    console.log(e.toString());
   }
+  isChecking.value = false;
 };
 
 const beginUpdate = async () => {
-  const { data } = await checkUpdatePermission();
-  if (!data.data.isPermitted) {
-    Notify.create("机器运行中，请稍后更新");
-    return;
+  try {
+    const { data } = await getAPI("softwareUpdater/check-updatePermission");
+    const { isRunning, isUpdating, isPermitted } = data;
+    if (!isPermitted) {
+      Notify.create({
+        message: "机器运行中，请稍后更新",
+        type: "warning",
+      });
+      return;
+    }
+    theUpdatingDialog.value.show();
+  } catch (e) {
+    console.log(e.toString());
   }
-  theUpdatingDialog.value.show();
 };
 </script>
 
