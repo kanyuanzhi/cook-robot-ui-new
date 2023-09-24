@@ -43,7 +43,7 @@
               <!--              <div v-html="ingredientSummary" style="line-height: 25px"></div>-->
             </div>
           </q-img>
-          <div class="q-pt-md">
+          <div v-if="!dish.isOfficial" class="q-pt-md">
             <q-scroll-area
                 :thumb-style="thumbStyle"
                 :content-style="contentStyle"
@@ -66,13 +66,18 @@
           </div>
         </q-card-section>
         <q-card-section>
-          <div class="row q-gutter-sm">
+          <div v-if="!dish.isOfficial" class="row q-gutter-sm">
             <q-btn color="teal-6" class="col-3 text-subtitle2" push rounded label="大厨编辑"
                    v-close-popup @click="openDishEditPage"/>
             <q-btn color="teal-6" class="col-5 text-subtitle1" push rounded label="开始炒制"
                    v-close-popup @click="openRunningControlPage"/>
             <q-btn color="teal-6" class="col-3 text-subtitle2" push rounded label="口味调整"
                    @click="openTasteCustomizationPage"/>
+          </div>
+          <div v-else class="row q-gutter-sm">
+            <q-btn color="teal-6" class="col-10 text-subtitle1" push rounded label="开始炒制"
+                   v-close-popup @click="openRunningControlPage"/>
+            <q-btn color="teal-6" class="col-1" flat icon="add_circle_outline" size="17px" @click="addToPersonals"/>
           </div>
         </q-card-section>
       </q-card>
@@ -113,7 +118,7 @@ import {
   seasoningFormat,
 } from "layouts/components/dishDetails/displayFormat";
 import TheDishImageUploader from "layouts/components/dishDetails/TheDishImageUploader.vue";
-import { deleteAPI, getAPI, putAPI } from "src/api";
+import { deleteAPI, getAPI, postAPI, putAPI } from "src/api";
 import { assign } from "lodash";
 
 const useControllerStore = UseControllerStore();
@@ -284,6 +289,17 @@ const onEditCustomStepsCancel = () => {
         }
       }
     }
+  }
+};
+
+const addToPersonals = async () => {
+  try {
+    const { message } = await postAPI("dish/add-to-personals", {
+      id: dish.value.id,
+    });
+    Notify.create(message);
+  } catch (e) {
+    console.log(e.toString());
   }
 };
 

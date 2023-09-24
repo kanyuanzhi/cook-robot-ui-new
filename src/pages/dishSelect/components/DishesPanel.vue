@@ -28,65 +28,70 @@
 </template>
 
 <script setup>
-import { onMounted, ref, watch } from "vue"
-import { getAllDishes, getDishes } from "src/api/dish"
-import { ceil } from "lodash"
-import DishPanelCard from "pages/dishSelect/components/DishPanelCard.vue"
-import { UseAppStore } from "stores/appStore"
-import { getAPI } from "src/api"
+import { onMounted, ref, watch } from "vue";
+import { getAllDishes, getDishes } from "src/api/dish";
+import { ceil } from "lodash";
+import DishPanelCard from "pages/dishSelect/components/DishPanelCard.vue";
+import { UseAppStore } from "stores/appStore";
+import { getAPI } from "src/api";
 
-const useAppStore = UseAppStore()
+const useAppStore = UseAppStore();
 
-const pageSize = 12
+const pageSize = 12;
 
-const props = defineProps(["cuisineId"])
-const dishes = ref([])
-const count = ref(0)
-const pageMax = ref(0)
-const pageCurrent = ref(1)
+const props = defineProps(["cuisineId"]);
+const dishes = ref([]);
+const count = ref(0);
+const pageMax = ref(0);
+const pageCurrent = ref(1);
 
 onMounted(async () => {
-  let dishesData
-  let countData
-
-  countData = await getAPI("dish/count", {
-    enableCuisineFilter: props.cuisineId !== 0,
-    cuisineFilter: props.cuisineId === 0 ? "" : props.cuisineId,
-  })
-
-
-  count.value = countData.data.count
-  pageMax.value = ceil(count.value / pageSize)
+  await getPaginationData();
 
   if (useAppStore.isBackFromDishEdit) {
-    pageCurrent.value = useAppStore.cuisinePage
-    useAppStore.setIsBackFromDishEdit(false)
+    pageCurrent.value = useAppStore.cuisinePage;
+    useAppStore.setIsBackFromDishEdit(false);
   } else {
-    pageCurrent.value = 1
-    useAppStore.setCuisinePage(1)
+    pageCurrent.value = 1;
+    useAppStore.setCuisinePage(1);
   }
 
-  dishesData = await getAPI("dish/list", {
+  await getDishesData();
+
+  watch(pageCurrent,
+      async (value) => {
+        await getDishesData();
+        useAppStore.setCuisinePage(pageCurrent.value);
+      });
+});
+
+watch(() => useAppStore.dishSourceTab,
+    async (value) => {
+      await getPaginationData();
+      await getDishesData();
+    });
+
+const getPaginationData = async () => {
+  const countData = await getAPI("dish/count", {
+    enableCuisineFilter: props.cuisineId !== 0,
+    cuisineFilter: props.cuisineId === 0 ? "" : props.cuisineId,
+    isOfficial: useAppStore.dishSourceTab === "official",
+  });
+
+  count.value = countData.data.count;
+  pageMax.value = ceil(count.value / pageSize, 0);
+};
+
+const getDishesData = async () => {
+  const dishesData = await getAPI("dish/list", {
     pageIndex: pageCurrent.value,
     pageSize: pageSize,
     enableCuisineFilter: props.cuisineId !== 0,
     cuisineFilter: props.cuisineId === 0 ? "" : props.cuisineId,
-  })
-  dishes.value = dishesData.data.dishes
-
-  watch(pageCurrent,
-      async (value) => {
-        dishesData = await getAPI("dish/list", {
-          pageIndex: pageCurrent.value,
-          pageSize: pageSize,
-          enableCuisineFilter: props.cuisineId !== 0,
-          cuisineFilter: props.cuisineId === 0 ? "" : props.cuisineId,
-        })
-
-        dishes.value = dishesData.data.dishes
-        useAppStore.setCuisinePage(pageCurrent.value)
-      })
-})
+    isOfficial: useAppStore.dishSourceTab === "official",
+  });
+  dishes.value = dishesData.data.dishes;
+};
 </script>
 
 <style lang="scss" scoped>

@@ -35,6 +35,8 @@ export const UseAppStore = defineStore("app", {
     cuisinePage: 1,
     isBackFromDishEdit: false,
 
+    dishSourceTab: "official", // official|personal
+
     pageTitle: "",
     backBtnShown: false,
   }),

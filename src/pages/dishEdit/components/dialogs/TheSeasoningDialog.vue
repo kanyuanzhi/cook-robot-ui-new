@@ -42,11 +42,11 @@ const emptySeasoning = {
   key: new Date().getTime(),
   label: "",
   pumpNumber: 0,
-  weight: 0
+  weight: 0,
 };
 
 const seasonings = ref([
-  cloneDeep(emptySeasoning)
+  cloneDeep(emptySeasoning),
 ]);
 
 const seasoningOptionsTpl = [];
@@ -55,18 +55,18 @@ const seasoningOptions = ref([]);
 const show = async (index = -1) => {
   shown.value = true;
   stepIndex = index;
-  const {data} = await getAPI("/seasoning/list");
-  const seasoningsData = data.seasonings
+  const { data } = await getAPI("/seasoning/list");
+  const seasoningsData = data.seasonings;
   seasoningsData.forEach(seasoning => {
     if (![7, 8].includes(seasoning.pump)) {// 7、8号阀为自来水阀，不做调料阀
       seasoningOptionsTpl.push(
           {
             label: seasoning.name,
-            pumpNumber: seasoning.pump
-          }
+            pumpNumber: seasoning.pump,
+          },
       );
     }
-  })
+  });
   seasoningOptions.value = seasoningOptionsTpl;
 };
 
@@ -79,10 +79,10 @@ const updateDialogShow = async (step, index) => {
   const seasoningMap = data.data;
   for (let i in seasoningMap) {
     seasoningOptionsTpl.push(
-      {
-        label: seasoningMap[i],
-        pumpNumber: Number(i)
-      }
+        {
+          label: seasoningMap[i],
+          pumpNumber: Number(i),
+        },
     );
   }
   generateSeasoningOptions();
@@ -90,7 +90,10 @@ const updateDialogShow = async (step, index) => {
 
 const onAdd = () => {
   if (seasonings.value.length > 4) {
-    Notify.create("同时添加调料数量不能超过5个");
+    Notify.create({
+      message: "同时添加调料数量不能超过5个",
+      type: "warning",
+    });
     return;
   }
   const tempSeasoning = cloneDeep(emptySeasoning);
@@ -100,7 +103,10 @@ const onAdd = () => {
 
 const onDelete = (index) => {
   if (seasonings.value.length === 1) {
-    Notify.create("至少添加1种调料");
+    Notify.create({
+      message: "至少添加1种调料",
+      type: "warning",
+    });
     return;
   }
   seasonings.value.splice(index, 1);
@@ -153,7 +159,7 @@ const generateSeasoningOptions = () => {
 
 defineExpose({
   show,
-  updateDialogShow
+  updateDialogShow,
 });
 </script>
 

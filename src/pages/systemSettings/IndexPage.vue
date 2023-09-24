@@ -16,6 +16,7 @@
             <q-separator/>
             <q-tab class="" name="networkConnect" label="网络连接" icon="wifi"/>
             <q-tab class="" name="phonePair" label="手机配对" icon="phone_iphone"/>
+            <q-tab class="" name="dataUpdate" label="菜品同步" icon="phone_iphone"/>
             <q-tab class="" name="softwareUpdate" label="软件更新" icon="update"/>
           </q-tabs>
         </template>
@@ -41,6 +42,10 @@
                           name="phonePair">
               <ThePhonePairPanel/>
             </SettingPanel>
+            <SettingPanel title="菜品同步"
+                          name="dataUpdate">
+              <TheDataUpdatePanel/>
+            </SettingPanel>
             <SettingPanel title="软件更新"
                           name="softwareUpdate">
               <TheSoftwareUpdatePanel/>
@@ -60,6 +65,7 @@ import TheSoftwareUpdatePanel from "pages/systemSettings/softwareUpdate/TheSoftw
 import ThePumpSettingPanel from "pages/systemSettings/pumpSetting/ThePumpSettingPanel.vue";
 import SettingPanel from "pages/systemSettings/components/SettingPanel.vue";
 import { UseAppStore } from "stores/appStore";
+import TheDataUpdatePanel from "pages/systemSettings/dataUpdate/TheDataUpdatePanel.vue";
 
 const useAppStore = UseAppStore();
 useAppStore.setPageTitle("系统设置");

@@ -1,6 +1,6 @@
 <template>
   <div class="row">
-    <div class="col-4 offset-4">
+    <div class="col-6 offset-3">
       <q-list class="text-grey-9">
         <q-item dense>
           <q-item-section>软件名称：{{ softwareInfo.name }}</q-item-section>
@@ -10,6 +10,9 @@
         </q-item>
         <q-item dense>
           <q-item-section>设备型号：{{ softwareInfo.machineModel }}</q-item-section>
+        </q-item>
+        <q-item dense>
+          <q-item-section>设备序列号：{{ softwareInfo.serialNumber }}</q-item-section>
         </q-item>
         <q-item dense>
           <q-item-section>更新日期：{{ formattedTime }}</q-item-section>

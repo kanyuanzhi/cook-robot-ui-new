@@ -6,7 +6,7 @@
       >
         <template v-slot:before>
           <q-tabs
-              v-model="tab"
+              v-model="useAppStore.cuisineTab"
               vertical
               class="text-teal-6"
               active-bg-color="teal-6"
@@ -20,25 +20,25 @@
             <!--            <q-route-tab label="菜品制作" to="/dishEdit"/>-->
           </q-tabs>
           <q-tabs
-              v-model="dishSource"
+              v-model="useAppStore.dishSourceTab"
               class="text-teal-6"
               active-bg-color="teal-6"
               active-color="white">
-            <q-tab name="official" label="官方菜谱" class="dish-source"/>
-            <q-tab name="personal" label="我的收藏" class="dish-source"/>
+            <q-tab name="official" label="官方菜品" class="dish-source" :ripple="false"/>
+            <q-tab name="personal" label="我的菜品" class="dish-source" :ripple="false"/>
           </q-tabs>
         </template>
 
         <template v-slot:after>
           <q-tab-panels
-              v-model="tab"
+              v-model="useAppStore.cuisineTab"
               swipeable
               vertical
               transition-prev="jump-up"
               transition-next="jump-up">
-            <DishesPanel :name="0" :cuisine-id="0"></DishesPanel>
-            <DishesPanel v-for="cuisine in cuisines" :key="cuisine.id" :name="cuisine.id"
-                         :cuisine-id="cuisine.id"></DishesPanel>
+            <DishesPanel :cuisine-id="0" :name="0"/>
+            <DishesPanel v-for="cuisine in cuisines" :key="cuisine.id" :cuisine-id="cuisine.id"
+                         :name="cuisine.id"/>
           </q-tab-panels>
         </template>
       </q-splitter>
@@ -47,30 +47,26 @@
 </template>
 
 <script setup>
-import { onMounted, ref, watch } from "vue"
-import DishesPanel from "pages/dishSelect/components/DishesPanel.vue"
-import { UseAppStore } from "stores/appStore"
-import { getAPI } from "src/api"
+import { onMounted, ref, watch } from "vue";
+import DishesPanel from "pages/dishSelect/components/DishesPanel.vue";
+import { UseAppStore } from "stores/appStore";
+import { getAPI } from "src/api";
 
-const useAppStore = UseAppStore()
-useAppStore.setPageTitle("菜品选择")
+const useAppStore = UseAppStore();
+useAppStore.setPageTitle("菜品选择");
 
-const splitterModel = ref(20)
-const cuisines = ref([])
-const tab = ref(null)
-
-const dishSource = ref("")
+const splitterModel = ref(20);
+const cuisines = ref([]);
+const cuisineTab = ref(null);
 
 onMounted(async () => {
-  const { data } = await getAPI("/cuisine/list")
-  cuisines.value = data.cuisines
-  // tab.value = data.data[0].id;
-  tab.value = useAppStore.cuisineTab
-})
+  const { data } = await getAPI("/cuisine/list");
+  cuisines.value = data.cuisines;
+});
 
-watch(tab, () => {
-  useAppStore.setCuisineTab(tab.value)
-})
+watch(cuisineTab, () => {
+  useAppStore.setCuisineTab(cuisineTab.value);
+});
 
 
 </script>

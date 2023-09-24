@@ -1,63 +1,72 @@
 <template>
-  <q-header bordered class="bg-white row" style="border-radius: 10px">
-    <q-toolbar class="col-4">
-      <q-img fit="fill" src="~/assets/logo.png" style="width: 113px; height: 35px;" @click="router.push('/')"/>
-    </q-toolbar>
-    <q-toolbar class="col-4">
-      <q-toolbar-title class="text-teal-9 text-center">{{ useAppStore.pageTitle }}</q-toolbar-title>
-    </q-toolbar>
-    <q-toolbar class="col-4 q-gutter-md">
-      <q-space/>
-      <q-btn v-if="Platform.is.win" label="远控设置" outline rounded color="teal-6" @click="setRemoteControlAddress"/>
-      <q-btn v-if="useAppStore.backBtnShown" label="返回" outline rounded color="teal-6" @click="onBackBtnClick"/>
-      <q-btn v-if="route.path ==='/dishSelect'" label="菜品同步" outline rounded color="teal-6"
-             @click="synchronizeDishes"/>
-      <q-btn label="一键收纳" outline rounded color="teal-6" @click="sendCommand('withdraw')"/>
-      <TheMoreOperations/>
-    </q-toolbar>
-  </q-header>
+  <div class="row">
+    <div class="col-4 offset-4">
+      <q-list class="text-grey-9">
+        <q-item dense>
+          <q-item-section>官方菜品数量：{{ officialDishNumber }}</q-item-section>
+        </q-item>
+        <q-item dense>
+          <q-item-section>我的菜品数量：{{ personalDishNumber }}</q-item-section>
+        </q-item>
+        <q-item>
+          <q-btn push color="teal-6" size="md" label="同步菜品" @click="beginUpdate"/>
+        </q-item>
+      </q-list>
+      <TheUpdatingDialog ref="theUpdatingDialog"/>
+    </div>
+  </div>
 </template>
 
 <script setup>
-import { useRoute, useRouter } from "vue-router";
-import { UseAppStore } from "stores/appStore";
-import { Dialog, Notify, Platform, useQuasar } from "quasar";
-import TheMoreOperations from "layouts/components/TheMoreOperations.vue";
-import { UseSettingStore } from "stores/settingStore";
-import { sendCommand } from "layouts/components/command";
-import { putAPI } from "src/api";
+import { computed, onMounted, ref } from "vue";
+import { checkUpdateInfo, checkUpdatePermission, getQrCode, getSoftwareInfo } from "src/api/system";
+import { Notify, useQuasar } from "quasar";
+import { date } from "quasar";
+import TheUpdatingDialog from "pages/systemSettings/softwareUpdate/TheUpdatingDialog.vue";
+import { getAPI, putAPI } from "src/api";
+import { has } from "lodash/object";
+import router from "src/router";
 
-const router = useRouter();
-const route = useRoute();
-const useAppStore = UseAppStore();
-const useSettingStore = UseSettingStore();
+const {
+  extractDate,
+  formatDate,
+} = date;
 
-const onBackBtnClick = () => {
-  useAppStore.setIsBackFromDishEdit(true);
-  router.push("/dishSelect");
+const officialDishNumber = ref(0);
+const personalDishNumber = ref(0);
+
+const QrImage = ref("");
+const theUpdatingDialog = ref(null);
+
+const isCheckPassed = ref(false);
+const isChecking = ref(false);
+
+onMounted(async () => {
+  await getDishesNumber();
+});
+
+const beginUpdate = async () => {
+  await synchronizeDishes();
+  await getDishesNumber();
 };
 
-const setRemoteControlAddress = () => {
-  Dialog.create({
-    title: "远程控制",
-    message: "请输入远端设备的IP地址（当前地址：" + useSettingStore.middlePlatformIPAddress +
-        "）。若无法得到远端IP地址：（1）将电脑有线网络的IP设置为192.168.6.100，子网掩码设置为255.255.255.0，网关设置为192.168.6.1；" +
-        "（2）将电脑与树莓派用网线相连，在此处输入192.168.6.11。",
-    prompt: {
-      model: "",
-      type: "text",
-      color: "teal-6",
-    },
-    ok: {
-      push: true,
-      color: "teal-6",
-      label: "确认",
-    },
-    class: "text-grey-9",
-  }).onOk((data) => {
-    useSettingStore.setMiddlePlatformIPAddress(data);
-    Notify.create("请打开菜品选择观察页面是否为空？若为空请重新输入远端设备的IP地址。");
-  });
+const getDishesNumber = async () => {
+  try {
+    const officialDishNumberData = await getAPI("dish/count", {
+      enableCuisineFilter: false,
+      cuisineFilter: "",
+      isOfficial: true,
+    });
+    officialDishNumber.value = officialDishNumberData.data.count;
+    const personalDishNumberData = await getAPI("dish/count", {
+      enableCuisineFilter: false,
+      cuisineFilter: "",
+      isOfficial: false,
+    });
+    personalDishNumber.value = personalDishNumberData.data.count;
+  } catch (e) {
+    Notify.create(e);
+  }
 };
 
 const $q = useQuasar();
@@ -69,11 +78,9 @@ const synchronizeDishes = async () => {
       // spinner: QSpinnerGears,
       color: "teal-6",
     },
-    persistent: true,
-    ok: false,
-    focus: "none",
+    persistent: true, // we want the user to not be able to close it
+    ok: false, // we want the user to not be able to close it
   }).onOk(() => {
-    router.go(0);
   });
 
   try {
@@ -137,5 +144,4 @@ const synchronizePersonalDishes = async () => {
 </script>
 
 <style lang="scss" scoped>
-
 </style>
