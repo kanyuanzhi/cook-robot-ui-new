@@ -20,7 +20,7 @@ const api = axios.create({
   // baseURL: process.env.env_API,
   // baseURL: process.env.test_API,
   // withCredentials: true,
-  timeout: 5000,
+  timeout: 20000,
 })
 
 export default boot(({

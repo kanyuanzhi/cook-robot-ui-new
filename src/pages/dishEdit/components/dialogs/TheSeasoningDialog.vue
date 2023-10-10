@@ -75,16 +75,18 @@ const updateDialogShow = async (step, index) => {
   isUpdate = true;
   stepIndex = index;
   seasonings.value = step.seasonings;
-  const { data } = await getSeasonings();
-  const seasoningMap = data.data;
-  for (let i in seasoningMap) {
-    seasoningOptionsTpl.push(
-        {
-          label: seasoningMap[i],
-          pumpNumber: Number(i),
-        },
-    );
-  }
+  const { data } = await getAPI("/seasoning/list");
+  const seasoningsData = data.seasonings;
+  seasoningsData.forEach(seasoning => {
+    if (![7, 8].includes(seasoning.pump)) {// 7、8号阀为自来水阀，不做调料阀
+      seasoningOptionsTpl.push(
+          {
+            label: seasoning.name,
+            pumpNumber: seasoning.pump,
+          },
+      );
+    }
+  });
   generateSeasoningOptions();
 };
 
