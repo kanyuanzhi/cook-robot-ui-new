@@ -27,6 +27,7 @@ import { nextTick, ref, watch } from "vue";
 import { endsWith, startsWith } from "lodash";
 import { Notify } from "quasar";
 import { getDish } from "src/api/dish";
+import { getAPI } from "src/api";
 
 const useAppStore = UseAppStore();
 const test = "dishUUID::837561df-d4f0-4059-be70-dc1208348efb";
@@ -43,13 +44,14 @@ const onKeydownEnter = async (e) => {
   console.log(scanResult.value);
   if (startsWith(scanResult.value, "dishUUID") && scanResult.value.length === 46) {
     const uuid = scanResult.value.split("::")[1];
-    const { data } = await getDish(uuid);
-    if (data.message === "success") {
-      useAppStore.showDishDetailsCard(uuid);
+    try {
+      const { data } = await getAPI("dish/get", { uuid: uuid });
+      useAppStore.showDishDetailsCard(data.dish.uuid);
       useAppStore.hideDishQrScanning();
-    } else {
+    } catch (e) {
       Notify.create("未查询到对应菜品，请重试");
       scanInput.value.focus();
+      return;
     }
   } else {
     Notify.create("非小云智炒二维码");
