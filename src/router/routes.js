@@ -51,6 +51,10 @@ const routes = [
         path: "scan",
         component: () => import("pages/mobilePages/scan/IndexPage.vue")
       },
+      {
+        path: "shopping",
+        component: () => import("pages/mobilePages/shopping/IndexPage.vue")
+      }
     ],
   },
   // Always leave this as last one,

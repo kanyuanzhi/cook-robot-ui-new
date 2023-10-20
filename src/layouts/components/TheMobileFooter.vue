@@ -19,6 +19,12 @@
           <div class="q-mt-xs" style="font-size: 9px">控制</div>
         </template>
       </q-route-tab>
+      <q-route-tab name="shopping" to="/mobile/shopping" >
+        <template v-slot:default>
+          <span><q-icon name="shopping_cart" size="23px"/></span>
+          <div class="q-mt-xs" style="font-size: 9px">买菜</div>
+        </template>
+      </q-route-tab>
 <!--      <q-route-tab name="edit" to="/dishEdit">-->
 <!--        <template v-slot:default>-->
 <!--          <span><q-icon name="edit" size="23px"/></span>-->
