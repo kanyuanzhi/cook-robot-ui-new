@@ -61,12 +61,12 @@ export const UseControllerStore = defineStore("controller", {
       this.bottomTemperature = controllerStatus["bottomTemperature"] / 10;
       this.infraredTemperature = controllerStatus["infraredTemperature"] / 10;
       this.liquidSeasoningWarning = [
-        controllerStatus["pump1LiquidWarning"] === 100,
-        controllerStatus["pump2LiquidWarning"] === 100,
-        controllerStatus["pump3LiquidWarning"] === 100,
-        controllerStatus["pump4LiquidWarning"] === 100,
-        controllerStatus["pump5LiquidWarning"] === 100,
-        controllerStatus["pump6LiquidWarning"] === 100,
+        controllerStatus["pump1LiquidWarning"] === 0,
+        controllerStatus["pump2LiquidWarning"] === 0,
+        controllerStatus["pump3LiquidWarning"] === 0,
+        controllerStatus["pump4LiquidWarning"] === 0,
+        controllerStatus["pump5LiquidWarning"] === 0,
+        controllerStatus["pump6LiquidWarning"] === 0,
       ];
       this.cookingTime = floor(controllerStatus["cookingTime"] / 1000);
       this.currentHeatingTemperature = controllerStatus["currentHeatingTemperature"] /
