@@ -106,36 +106,39 @@
                    icon="restart_alt" push
                    @click="sendCommand('prepare')"/>
             <q-separator vertical/>
-            <q-btn-dropdown class="text-subtitle1" :disable="useControllerStore.isRunning" color="teal-6" label="清洗"
-                            push
-                            icon="mdi-washing-machine">
-              <q-list>
-                <q-item clickable class="bg-teal-6 text-white text-center no-padding" v-close-popup
-                        @click="sendCommand('wash')">
-                  <q-item-section>
-                    <div class="flex flex-center">
-                      <svg fill="#ffffff" width="22" height="22">
-                        <use xlink:href="~/assets/custom-icons.svg#wash"></use>
-                      </svg>
-                      <span class="q-pl-md">洗锅</span>
-                    </div>
-                  </q-item-section>
-                </q-item>
-                <q-separator inset/>
-                <q-item clickable class="bg-teal-6 text-white text-center" v-close-popup @click="sendCommand('pour')">
-                  <q-item-section>
-                    <!--                    <span><q-icon name="svguse:src/assets/custom-icons.svg#pour" size="19px" class="q-pr-md"/>倒水</span>-->
+            <q-btn class="text-subtitle1" :disable="useControllerStore.isRunning" color="teal-6" label="清洗"
+                   icon="mdi-washing-machine" push
+                   @click="sendCommand('wash')"/>
+<!--            <q-btn-dropdown class="text-subtitle1" :disable="useControllerStore.isRunning" color="teal-6" label="清洗"-->
+<!--                            push-->
+<!--                            icon="mdi-washing-machine">-->
+<!--              <q-list>-->
+<!--                <q-item clickable class="bg-teal-6 text-white text-center no-padding" v-close-popup-->
+<!--                        @click="sendCommand('wash')">-->
+<!--                  <q-item-section>-->
+<!--                    <div class="flex flex-center">-->
+<!--                      <svg fill="#ffffff" width="22" height="22">-->
+<!--                        <use xlink:href="~/assets/custom-icons.svg#wash"></use>-->
+<!--                      </svg>-->
+<!--                      <span class="q-pl-md">洗锅</span>-->
+<!--                    </div>-->
+<!--                  </q-item-section>-->
+<!--                </q-item>-->
+<!--                <q-separator inset/>-->
+<!--                <q-item clickable class="bg-teal-6 text-white text-center" v-close-popup @click="sendCommand('pour')">-->
+<!--                  <q-item-section>-->
+<!--                    &lt;!&ndash;                    <span><q-icon name="svguse:src/assets/custom-icons.svg#pour" size="19px" class="q-pr-md"/>倒水</span>&ndash;&gt;-->
 
-                    <div class="flex flex-center">
-                      <svg fill="#ffffff" width="22" height="22">
-                        <use xlink:href="~/assets/custom-icons.svg#pour"></use>
-                      </svg>
-                      <span class="q-pl-md">倒水</span>
-                    </div>
-                  </q-item-section>
-                </q-item>
-              </q-list>
-            </q-btn-dropdown>
+<!--                    <div class="flex flex-center">-->
+<!--                      <svg fill="#ffffff" width="22" height="22">-->
+<!--                        <use xlink:href="~/assets/custom-icons.svg#pour"></use>-->
+<!--                      </svg>-->
+<!--                      <span class="q-pl-md">倒水</span>-->
+<!--                    </div>-->
+<!--                  </q-item-section>-->
+<!--                </q-item>-->
+<!--              </q-list>-->
+<!--            </q-btn-dropdown>-->
             <!--            <q-separator vertical/>-->
             <!--            <q-btn :disable="useControllerStore.isRunning" color="teal-6" label="清洗" icon="mdi-washing-machine"-->
             <!--                   @click="sendCommand('wash')"/>-->
