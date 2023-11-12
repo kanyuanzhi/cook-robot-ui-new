@@ -252,7 +252,7 @@ const checkLiquidSeasoningLevel = async () => {
   }
   const warningSeasoningName = [];
   for (let pumpNumber of warningSeasoningPumpNumber) {
-    warningSeasoningName.push(seasonings[pumpNumber]);
+    warningSeasoningName.push(seasonings[pumpNumber].name);
   }
   if (warningSeasoningName.length !== 0) {
     Notify.create({
