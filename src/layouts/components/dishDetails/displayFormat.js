@@ -6,7 +6,10 @@ export function ingredientFormat (steps) {
     if (step.instructionType === "ingredient") {
       // ingredientList.push(
       //   "菜仓" + step.slotNumber + "：" + step.name + step.weight + "克")
-      ingredientList.push(step.name + step.weight + "克");
+      ingredientList.push({
+        slotNumber: step.slotNumber,
+        format: step.name + step.weight + "克"
+      });
     }
   }
   return ingredientList;

@@ -86,6 +86,9 @@
       <q-card-actions align="around" class="q-pa-md">
         <q-btn-group spread unelevated class="full-width" style="border-radius: 20px">
           <template v-if="useControllerStore.isCooking">
+            <q-btn class="text-subtitle1" color="teal-6" label="终止" icon="stop" push
+                   @click="shutdown"/>
+            <q-separator vertical/>
             <q-btn v-if="!useControllerStore.isPausing" class="text-subtitle1" color="teal-6" label="中途加料"
                    icon="mdi-shaker" push
                    @click="sendCommand('pause_to_add')"/>
@@ -109,36 +112,36 @@
             <q-btn class="text-subtitle1" :disable="useControllerStore.isRunning" color="teal-6" label="清洗"
                    icon="mdi-washing-machine" push
                    @click="sendCommand('wash')"/>
-<!--            <q-btn-dropdown class="text-subtitle1" :disable="useControllerStore.isRunning" color="teal-6" label="清洗"-->
-<!--                            push-->
-<!--                            icon="mdi-washing-machine">-->
-<!--              <q-list>-->
-<!--                <q-item clickable class="bg-teal-6 text-white text-center no-padding" v-close-popup-->
-<!--                        @click="sendCommand('wash')">-->
-<!--                  <q-item-section>-->
-<!--                    <div class="flex flex-center">-->
-<!--                      <svg fill="#ffffff" width="22" height="22">-->
-<!--                        <use xlink:href="~/assets/custom-icons.svg#wash"></use>-->
-<!--                      </svg>-->
-<!--                      <span class="q-pl-md">洗锅</span>-->
-<!--                    </div>-->
-<!--                  </q-item-section>-->
-<!--                </q-item>-->
-<!--                <q-separator inset/>-->
-<!--                <q-item clickable class="bg-teal-6 text-white text-center" v-close-popup @click="sendCommand('pour')">-->
-<!--                  <q-item-section>-->
-<!--                    &lt;!&ndash;                    <span><q-icon name="svguse:src/assets/custom-icons.svg#pour" size="19px" class="q-pr-md"/>倒水</span>&ndash;&gt;-->
+            <!--            <q-btn-dropdown class="text-subtitle1" :disable="useControllerStore.isRunning" color="teal-6" label="清洗"-->
+            <!--                            push-->
+            <!--                            icon="mdi-washing-machine">-->
+            <!--              <q-list>-->
+            <!--                <q-item clickable class="bg-teal-6 text-white text-center no-padding" v-close-popup-->
+            <!--                        @click="sendCommand('wash')">-->
+            <!--                  <q-item-section>-->
+            <!--                    <div class="flex flex-center">-->
+            <!--                      <svg fill="#ffffff" width="22" height="22">-->
+            <!--                        <use xlink:href="~/assets/custom-icons.svg#wash"></use>-->
+            <!--                      </svg>-->
+            <!--                      <span class="q-pl-md">洗锅</span>-->
+            <!--                    </div>-->
+            <!--                  </q-item-section>-->
+            <!--                </q-item>-->
+            <!--                <q-separator inset/>-->
+            <!--                <q-item clickable class="bg-teal-6 text-white text-center" v-close-popup @click="sendCommand('pour')">-->
+            <!--                  <q-item-section>-->
+            <!--                    &lt;!&ndash;                    <span><q-icon name="svguse:src/assets/custom-icons.svg#pour" size="19px" class="q-pr-md"/>倒水</span>&ndash;&gt;-->
 
-<!--                    <div class="flex flex-center">-->
-<!--                      <svg fill="#ffffff" width="22" height="22">-->
-<!--                        <use xlink:href="~/assets/custom-icons.svg#pour"></use>-->
-<!--                      </svg>-->
-<!--                      <span class="q-pl-md">倒水</span>-->
-<!--                    </div>-->
-<!--                  </q-item-section>-->
-<!--                </q-item>-->
-<!--              </q-list>-->
-<!--            </q-btn-dropdown>-->
+            <!--                    <div class="flex flex-center">-->
+            <!--                      <svg fill="#ffffff" width="22" height="22">-->
+            <!--                        <use xlink:href="~/assets/custom-icons.svg#pour"></use>-->
+            <!--                      </svg>-->
+            <!--                      <span class="q-pl-md">倒水</span>-->
+            <!--                    </div>-->
+            <!--                  </q-item-section>-->
+            <!--                </q-item>-->
+            <!--              </q-list>-->
+            <!--            </q-btn-dropdown>-->
             <!--            <q-separator vertical/>-->
             <!--            <q-btn :disable="useControllerStore.isRunning" color="teal-6" label="清洗" icon="mdi-washing-machine"-->
             <!--                   @click="sendCommand('wash')"/>-->
@@ -202,13 +205,37 @@ const getTemperatureColor = (temperature) => {
 };
 
 const startCook = async () => {
-  if (await checkLiquidSeasoningLevel()) {
+  if (!await checkLiquidSeasoningLevel()) {
+    Dialog.create({
+      title: "操作确认",
+      message: warningSeasoningName.value.join("、") + "不足，请确认是否继续炒制？",
+      ok: {
+        push: true,
+        color: "teal-6",
+        label: "确认",
+      },
+      cancel: {
+        push: true,
+        color: "grey-6",
+        label: "取消",
+      },
+      class: "text-grey-9",
+      focus: "none",
+    }).onOk(async () => {
+      await sendCommand("cook", {
+        uuid: useAppStore.runningDish.uuid,
+        customStepsUUID: useAppStore.customStepsUUID,
+      });
+    });
+  } else {
     await sendCommand("cook", {
       uuid: useAppStore.runningDish.uuid,
       customStepsUUID: useAppStore.customStepsUUID,
     });
   }
 };
+
+const warningSeasoningName = ref([]);
 
 const startDishOut = () => {
   Dialog.create({
@@ -222,6 +249,21 @@ const startDishOut = () => {
     class: "text-grey-9",
   }).onOk(async () => {
     await sendCommand("dish_out");
+  });
+};
+
+const shutdown = () => {
+  Dialog.create({
+    title: "操作确认",
+    message: "确认终止炒制？",
+    ok: {
+      push: true,
+      color: "teal-6",
+      label: "确认",
+    },
+    class: "text-grey-9",
+  }).onOk(async () => {
+    await sendCommand("shutdown");
   });
 };
 
@@ -250,13 +292,13 @@ const checkLiquidSeasoningLevel = async () => {
       }
     }
   }
-  const warningSeasoningName = [];
+  warningSeasoningName.value = [];
   for (let pumpNumber of warningSeasoningPumpNumber) {
-    warningSeasoningName.push(seasonings[pumpNumber].name);
+    warningSeasoningName.value.push(seasonings[pumpNumber - 1].name);
   }
-  if (warningSeasoningName.length !== 0) {
+  if (warningSeasoningName.value.length !== 0) {
     Notify.create({
-      message: warningSeasoningName.join("、") + "不足，请添加！",
+      message: warningSeasoningName.value.join("、") + "不足，请添加！",
       type: "warning",
     });
     return false;

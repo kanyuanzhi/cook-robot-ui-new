@@ -50,7 +50,8 @@ export const UseControllerStore = defineStore("controller", {
           const dishData = await getAPI("dish/get",
             { uuid: this.currentDishUUID });
           UseAppStore().
-            setRunningDish(dishData.data.dish, controllerStatus["currentDishCustomStepsUUID"]);
+            setRunningDish(dishData.data.dish,
+              controllerStatus["currentDishCustomStepsUUID"]);
         }
       }
       this.isRunning = controllerStatus["isRunning"];
@@ -69,8 +70,8 @@ export const UseControllerStore = defineStore("controller", {
         controllerStatus["pump6LiquidWarning"] === 0,
       ];
       this.cookingTime = floor(controllerStatus["cookingTime"] / 1000);
-      this.currentHeatingTemperature = controllerStatus["currentHeatingTemperature"] /
-        10;
+      this.currentHeatingTemperature = parseInt(
+          controllerStatus["currentHeatingTemperature"]) / 10;
 
       if (!this.isCooking && this.lastIsCooking) {
         this.isCookFinished = true;

@@ -28,6 +28,7 @@ export async function sendCommand (commandName, commandData = {}) {
     case "withdraw":
       commandType = "multiple";
       break;
+
     case "pause_to_add":
       if (!useControllerStore.isPausePermitted) {
         Notify.create({
@@ -47,17 +48,27 @@ export async function sendCommand (commandName, commandData = {}) {
     case "heat":
       commandType = "single";
       break;
+    case "shutdown":
+      commandType = "single";
+      break;
     default:
-      Notify.create("命令名称错误");
+      Notify.create({
+        message: "命令名称错误",
+        type: "warning",
+      });
+
       return;
   }
   try {
-    const { message } = await postAPI("controller/execute", {
+    const { code, message } = await postAPI("controller/execute", {
       commandType: commandType,
       commandName: commandName,
       commandData: commandData,
     });
-    Notify.create(message);
+    Notify.create({
+      message: message,
+      type: code === 1 ? "positive" : "warning",
+    });
   } catch (e) {
     console.log(e.toString());
   }

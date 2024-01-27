@@ -8,7 +8,7 @@
     </q-toolbar>
     <q-toolbar class="col-4 q-gutter-md">
       <q-space/>
-      <q-btn v-if="Platform.is.win" label="远控设置" outline rounded color="teal-6" @click="setRemoteControlAddress"/>
+<!--      <q-btn v-if="Platform.is.win" label="远控设置" outline rounded color="teal-6" @click="setRemoteControlAddress"/>-->
       <q-btn v-if="useAppStore.backBtnShown" label="返回" outline rounded color="teal-6" @click="onBackBtnClick"/>
       <q-btn v-if="route.path ==='/dishSelect'" label="菜品同步" outline rounded color="teal-6"
              @click="synchronizeDishes"/>

@@ -20,13 +20,13 @@
                 <tbody>
                 <tr>
                   <td v-for="(ingredient, index) in ingredients" :key="index">
-                    <span class="text-body2 text-weight-bold">菜仓{{ index + 1 }}</span>
+                    <span class="text-body2 text-weight-bold">菜仓{{ ingredient.slotNumber }}</span>
                   </td>
                 </tr>
                 <tr>
                   <td v-for="(ingredient, index) in ingredients" :key="index" width="10%"
                       style="word-break: break-all;white-space: normal" class="text-weight-bold">
-                    {{ ingredient }}
+                    {{ ingredient.format }}
                   </td>
                 </tr>
                 <tr>
