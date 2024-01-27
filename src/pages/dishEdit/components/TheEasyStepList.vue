@@ -7,7 +7,7 @@
     </q-card-section>
     <q-separator inset/>
     <q-card-section>
-      <q-list class="scrollable-container" ref="stepList" bordered separator style="height: 390px;overflow-y: auto;">
+      <q-list class="scrollable-container" ref="stepList" bordered separator>
         <q-slide-item v-for="item in newSteps" :key="item.key" class="text-black" @right="onDeleteCouple(item)"
                       right-color="red">
           <template v-slot:right>
@@ -108,7 +108,7 @@ const generateNewSteps = () => {
     newSteps.push({
       key: 0,
       indexes: indexes,
-      coupleSteps: item
+      coupleSteps: item,
     });
   }
   // 生成一组不重复的整数赋给key
@@ -123,10 +123,10 @@ const generateNewSteps = () => {
 const newSteps = ref(generateNewSteps());
 
 watch(
-  () => useAppStore.editingDishChangedFlag,
-  () => {
-    newSteps.value = generateNewSteps();
-  },
+    () => useAppStore.editingDishChangedFlag,
+    () => {
+      newSteps.value = generateNewSteps();
+    },
 );
 
 // watch(
@@ -244,6 +244,11 @@ const onDeleteCouple = (item) => {
 <style lang="scss" scoped>
 .my-card {
   height: calc(100vh - 50px - 32px - 52px);
+}
+
+.scrollable-container {
+  height: calc(100vh - 50px - 32px - 52px - 32px - 44px);
+  overflow-y: auto;
 }
 
 .sortable-drag {

@@ -1,7 +1,9 @@
 <template>
   <q-header bordered class="bg-white row" style="border-radius: 10px">
     <q-toolbar class="col-4">
-      <q-img fit="fill" src="~/assets/logo.png" style="width: 113px; height: 35px;" @click="router.push('/')"/>
+      <q-img v-if="useSoftwareInfoStore.isXZYCModel()" fit="fill" src="~/assets/logo.png" style="width: 113px; height: 35px;" @click="router.push('/')"/>
+      <q-img v-if="useSoftwareInfoStore.isZHModel()" fit="fill" src="~/assets/logo-hz-1.png" style="width: 113px; height: 35px;" @click="router.push('/')"/>
+      <q-img v-if="useSoftwareInfoStore.isZHModel()" fit="fill" src="~/assets/logo-hz-2.png" style="width: 113px; height: 35px;" @click="router.push('/')"/>
     </q-toolbar>
     <q-toolbar class="col-4">
       <q-toolbar-title class="text-teal-9 text-center">{{ useAppStore.pageTitle }}</q-toolbar-title>
@@ -26,11 +28,13 @@ import TheMoreOperations from "layouts/components/TheMoreOperations.vue";
 import { UseSettingStore } from "stores/settingStore";
 import { sendCommand } from "layouts/components/command";
 import { putAPI } from "src/api";
+import { UseSoftwareInfoStore } from "stores/softwareInfoStore";
 
 const router = useRouter();
 const route = useRoute();
 const useAppStore = UseAppStore();
 const useSettingStore = UseSettingStore();
+const useSoftwareInfoStore = UseSoftwareInfoStore();
 
 const onBackBtnClick = () => {
   useAppStore.setIsBackFromDishEdit(true);

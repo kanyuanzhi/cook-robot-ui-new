@@ -5,7 +5,7 @@
     </q-card-section>
     <q-separator inset/>
     <q-card-section>
-      <div class="column justify-between" style="height: 320px">
+      <div class="column justify-between btn-area">
         <div class="col">
           <div class="row justify-around" style="padding-top: 10px">
             <OperatorBtn label="食材" size="lg" color="green" icon="fa-solid fa-wheat-awn"
@@ -117,5 +117,10 @@ const deleteDish = () => {
 <style lang="scss" scoped>
 .my-card {
   height: calc(100vh - 50px - 32px - 52px);
+}
+
+.btn-area {
+  //height: 320px;
+  height: calc(100vh - 50px - 32px - 52px - 44px - 100px);
 }
 </style>

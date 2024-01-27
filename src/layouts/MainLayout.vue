@@ -22,9 +22,16 @@ import TheControlDialog from "layouts/components/TheControlDialog.vue";
 import TheDishQrScanningDialog from "layouts/components/TheDishQrScanningDialog.vue";
 import { UseAppStore } from "stores/appStore";
 import TheDishDetailsCard from "layouts/components/dishDetails/TheDishDetailsCard.vue";
+import { UseSoftwareInfoStore } from "stores/softwareInfoStore";
+import { onMounted, onBeforeMount } from "vue";
 
 const useControllerStore = UseControllerStore();
 const useAppStore = UseAppStore();
+const useSoftwareInfoStore = UseSoftwareInfoStore();
+
+onBeforeMount(async () => {
+  await useSoftwareInfoStore.fetch();
+});
 
 setInterval(useControllerStore.fetchStatus, 200);
 </script>

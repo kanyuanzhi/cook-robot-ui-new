@@ -3,19 +3,19 @@
     <div class="col-6 offset-3">
       <q-list class="text-grey-9">
         <q-item dense>
-          <q-item-section>软件名称：{{ softwareInfo.name }}</q-item-section>
+          <q-item-section>软件名称：{{ useSoftwareInfoStore.name }}</q-item-section>
         </q-item>
         <q-item dense>
-          <q-item-section>软件版本：{{ softwareInfo.version }}</q-item-section>
+          <q-item-section>软件版本：{{ useSoftwareInfoStore.version }}</q-item-section>
         </q-item>
         <q-item dense>
-          <q-item-section>设备型号：{{ softwareInfo.machineModel }}</q-item-section>
+          <q-item-section>设备型号：{{ useSoftwareInfoStore.machineModel }}</q-item-section>
         </q-item>
         <q-item dense>
-          <q-item-section>设备序列号：{{ softwareInfo.serialNumber }}</q-item-section>
+          <q-item-section>设备序列号：{{ useSoftwareInfoStore.serialNumber }}</q-item-section>
         </q-item>
         <q-item dense>
-          <q-item-section>更新日期：{{ formattedTime }}</q-item-section>
+          <q-item-section>更新日期：{{ useSoftwareInfoStore.updateTime }}</q-item-section>
         </q-item>
         <q-item>
           <q-btn v-if="!isCheckPassed" push color="teal-6" size="md" @click="check" :disable="isChecking">
@@ -37,37 +37,22 @@
 
 <script setup>
 import { computed, onMounted, ref } from "vue";
-import { checkUpdateInfo, checkUpdatePermission, getQrCode, getSoftwareInfo } from "src/api/system";
 import { Notify } from "quasar";
 import { date } from "quasar";
 import TheUpdatingDialog from "pages/systemSettings/softwareUpdate/TheUpdatingDialog.vue";
 import { getAPI } from "src/api";
-import { has } from "lodash/object";
+import { UseSoftwareInfoStore } from "stores/softwareInfoStore";
 
-const {
-  extractDate,
-  formatDate,
-} = date;
+const useSoftwareInfoStore = UseSoftwareInfoStore();
 
-const softwareInfo = ref({});
-
-const QrImage = ref("");
 const theUpdatingDialog = ref(null);
 
 const isCheckPassed = ref(false);
 const isChecking = ref(false);
 
 onMounted(async () => {
-  try {
-    const { data } = await getAPI("softwareUpdater/get-softwareInfo");
-    softwareInfo.value = data;
-  } catch (e) {
-    Notify.create(e);
-  }
-});
-
-const formattedTime = computed(() => {
-  return formatDate(softwareInfo.value.updateTime, "YYYY-MM-DD HH:mm:ss");
+  console.log(123213)
+  await useSoftwareInfoStore.fetch();
 });
 
 const check = async () => {

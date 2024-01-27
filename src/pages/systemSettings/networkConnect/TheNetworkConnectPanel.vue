@@ -26,7 +26,7 @@
       </div>
     </div>
     <q-list class="col q-py-md" bordered dense>
-      <q-scroll-area style="height: 300px">
+      <q-scroll-area class="scrollable-container">
         <q-item v-if="currentConnection!==null" clickable v-ripple class="q-px-xl text-teal-6"
                 @click="theDisconnectAndDeleteDialog.show(currentConnection.ssid)">
           <q-item-section class="row">
@@ -280,4 +280,8 @@ const wifiBar = (quality) => {
 </script>
 
 <style lang="scss" scoped>
+.scrollable-container {
+  height: calc(100vh - 51px - 51px - 32px - 16px - 120px);
+  //overflow-y: auto;
+}
 </style>

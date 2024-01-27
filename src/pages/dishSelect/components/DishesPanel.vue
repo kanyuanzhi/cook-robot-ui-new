@@ -4,6 +4,7 @@
       <div class="row q-col-gutter-md">
         <div class="col-4" v-for="dish in dishes" :key="dish.uuid">
           <DishPanelCard :dish-image="dish.image" :dish-name="dish.name"
+                         :img-height="imgHeight" :card-section-width="cardSectionWidth" :dish-name-display-count="dishNameDisplayCount"
                          @click="useAppStore.showDishDetailsCard(dish.uuid)"/>
         </div>
       </div>
@@ -29,15 +30,21 @@
 
 <script setup>
 import { onMounted, ref, watch } from "vue";
-import { getAllDishes, getDishes } from "src/api/dish";
 import { ceil } from "lodash";
 import DishPanelCard from "pages/dishSelect/components/DishPanelCard.vue";
 import { UseAppStore } from "stores/appStore";
 import { getAPI } from "src/api";
+import { UseSoftwareInfoStore } from "stores/softwareInfoStore";
+import { machineModelStyleMap } from "pages/machineModelStyleMap";
 
 const useAppStore = UseAppStore();
+const useSoftwareInfoStore = UseSoftwareInfoStore();
 
-const pageSize = 12;
+const imgHeight = ref(null);
+const cardSectionWidth = ref(null);
+const dishNameDisplayCount = ref(null);
+const pageSize = ref(null);
+// const pageSize = 12;
 
 const props = defineProps(["cuisineId"]);
 const dishes = ref([]);
@@ -46,6 +53,13 @@ const pageMax = ref(0);
 const pageCurrent = ref(1);
 
 onMounted(async () => {
+  await useSoftwareInfoStore.fetch()
+  imgHeight.value = machineModelStyleMap[useSoftwareInfoStore.machineModel]["dishPanelCardImageHeight"];
+  cardSectionWidth.value = machineModelStyleMap[useSoftwareInfoStore.machineModel]["dishPanelCardSectionWidth"];
+  dishNameDisplayCount.value = machineModelStyleMap[useSoftwareInfoStore.machineModel]["dishPanelCardNameDisplayCount"];
+  pageSize.value = machineModelStyleMap[useSoftwareInfoStore.machineModel]["dishesPanelPageSize"];
+  console.log(pageSize.value)
+
   await getPaginationData();
 
   if (useAppStore.isBackFromDishEdit) {
@@ -79,13 +93,13 @@ const getPaginationData = async () => {
   });
 
   count.value = countData.data.count;
-  pageMax.value = ceil(count.value / pageSize, 0);
+  pageMax.value = ceil(count.value / pageSize.value, 0);
 };
 
 const getDishesData = async () => {
   const dishesData = await getAPI("dish/list", {
     pageIndex: pageCurrent.value,
-    pageSize: pageSize,
+    pageSize: pageSize.value,
     enableCuisineFilter: props.cuisineId !== 0,
     cuisineFilter: props.cuisineId === 0 ? "" : props.cuisineId,
     isOfficial: useAppStore.dishSourceTab === "official",
@@ -96,8 +110,9 @@ const getDishesData = async () => {
 
 <style lang="scss" scoped>
 .cards-wrapper {
-  //height: calc(100vh - 50px - 32px - 20px - 20px - 10px)
-  height: 450px
+  height: calc(100vh - 50px - 32px - 20px - 20px - 10px - 20px)
+  //height: 450px
+  //height: 650px
 }
 
 .pagination-wrapper {
