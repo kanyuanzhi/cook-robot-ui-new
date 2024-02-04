@@ -38,8 +38,8 @@ export const UseSoftwareInfoStore = defineStore("softwareInfo", {
         return false;
       }
     },
-    isZHModel () {
-      if (this.machineModel === "XZYC202401ZH") {
+    isHZModel () {
+      if (this.machineModel === "XZYC202401HZ") {
         return true;
       } else{
         return false;
