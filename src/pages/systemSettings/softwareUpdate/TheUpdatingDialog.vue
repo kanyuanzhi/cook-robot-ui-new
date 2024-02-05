@@ -4,7 +4,10 @@
       <q-card-section>
         <q-item>
           <q-item-section side>
-            <q-item-label class="text-subtitle1 text-teal-6">下载速度</q-item-label>
+            <q-item-label class="text-subtitle1 text-teal-6">{{
+                $t("systemSettings.dataUpdate.downloadSpeed")
+              }}
+            </q-item-label>
           </q-item-section>
           <q-item-section>
             <q-badge class="text-subtitle2" color="white" text-color="teal-6" :label="downloadSpeedDisplay"/>
@@ -12,7 +15,10 @@
         </q-item>
         <q-item>
           <q-item-section side>
-            <q-item-label class="text-subtitle1 text-teal-6">下载进度</q-item-label>
+            <q-item-label class="text-subtitle1 text-teal-6">{{
+                $t("systemSettings.dataUpdate.downloadProgress")
+              }}
+            </q-item-label>
           </q-item-section>
           <q-item-section>
             <q-linear-progress animation-speed="100" rounded size="15px" :value="downloadProgress" color="teal-6"/>
@@ -26,7 +32,10 @@
         </q-item>
         <q-item>
           <q-item-section side>
-            <q-item-label class="text-subtitle1 text-teal-6">安装进度</q-item-label>
+            <q-item-label class="text-subtitle1 text-teal-6">{{
+                $t("systemSettings.dataUpdate.installProgress")
+              }}
+            </q-item-label>
           </q-item-section>
           <q-item-section>
             <q-linear-progress animation-speed="100" rounded size="15px" :value="unzipProgress" color="secondary"/>
@@ -47,7 +56,10 @@
               size="0.7em"
               class="q-mr-md"
           />
-          {{ isInstallFinished ? "退出重启" : "正在更新" }}
+          {{
+            isInstallFinished ? $t("systemSettings.dataUpdate.reboot") : $t(
+                "systemSettings.dataUpdate.updating")
+          }}
         </q-btn>
       </q-card-actions>
     </q-card>
@@ -62,6 +74,7 @@ import { round, toString } from "lodash";
 import { UseAppStore } from "stores/appStore";
 import { Platform } from "quasar";
 import { UseSettingStore } from "stores/settingStore";
+import { useI18n } from "vue-i18n";
 
 const useAppStore = UseAppStore();
 const useSettingStore = UseSettingStore();
@@ -98,13 +111,15 @@ const isInstallFinished = computed(() => {
   return isDownloadFinished.value && isUnzipFinished.value;
 });
 
+const {t} = useI18n();
+
 const beginUpdate = () => {
   const wsUrl = (useSettingStore.useSSL ? "wss" : "ws") + "://" + useSettingStore.middlePlatformIPAddress +
       ":8889/api/v1/softwareUpdater/update";
   ws = new WebSocket(wsUrl);
 
   ws.onopen = function (event) {
-    console.log("WebSocket连接已建立");
+    console.log(t("systemSettings.dataUpdate.websocketEstablishedMsg"));
   };
 
   ws.onmessage = function (event) {
@@ -117,11 +132,11 @@ const beginUpdate = () => {
   };
 
   ws.onerror = function (event) {
-    console.log("WebSocket错误：", event);
+    console.log(t("systemSettings.dataUpdate.websocketFailedMsg"), event);
   };
 
   ws.onclose = function (event) {
-    console.log("WebSocket连接已关闭");
+    console.log(t("systemSettings.dataUpdate.websocketClosedMsg"));
     ws.close();
   };
 };
@@ -132,7 +147,7 @@ const closeApp = () => {
     window.windowAPI.close();
   } else {
     Notify.create({
-      message: "非electron平台无法重启软件",
+      message: t("systemSettings.dataUpdate.notSupportMsg"),
       type: "warning",
     });
   }

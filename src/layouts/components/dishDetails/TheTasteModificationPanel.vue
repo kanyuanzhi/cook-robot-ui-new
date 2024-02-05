@@ -8,7 +8,9 @@
                 v-for="(seasoningStep,index) in seasoningSteps"
                 :key="seasoningStep.uuid">
           <div class="col-3 flex flex-center text-subtitle2 text-white bg-teal-6 text-weight-bold">
-            第{{ index + 1 }}次加料
+            {{ $t("dishDetails.tasteModificationPanel.th") }}{{ index + 1 }}{{
+              $t("dishDetails.tasteModificationPanel.addSeasoning")
+            }}
           </div>
           <q-separator vertical/>
           <template v-if="seasoningStep.instructionType!=='seasoning'">

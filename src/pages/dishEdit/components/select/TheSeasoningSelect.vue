@@ -1,6 +1,6 @@
 <template>
   <q-item dense>
-    <q-item-section avatar>种类</q-item-section>
+    <q-item-section avatar>{{ $t("dishEdit.select.seasoning.title") }}</q-item-section>
     <q-item-section>
       <q-select
         dense

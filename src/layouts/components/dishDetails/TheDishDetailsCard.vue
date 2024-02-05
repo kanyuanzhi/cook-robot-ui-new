@@ -20,7 +20,9 @@
                 <tbody>
                 <tr>
                   <td v-for="(ingredient, index) in ingredients" :key="index">
-                    <span class="text-body2 text-weight-bold">菜仓{{ ingredient.slotNumber }}</span>
+                    <span class="text-body2 text-weight-bold">{{ $t("dishDetails.slot") }}{{
+                        ingredient.slotNumber
+                      }}</span>
                   </td>
                 </tr>
                 <tr>
@@ -32,7 +34,7 @@
                 <tr>
                   <td :colspan="ingredients.length" class="text-left"
                       style="word-break: break-all;white-space: normal;">
-                    <span class="text-weight-bold text-body2">调料：</span>{{
+                    <span class="text-weight-bold text-body2">{{ $t("dishDetails.seasoning") }}</span>{{
                       seasoningFormat(uuidToSteps[taste], seasoningMap)
                     }}
                   </td>
@@ -58,24 +60,24 @@
                   dense
                   inline-label
               >
-                <q-tab :name="dish.uuid" label="原味" :ripple="false"/>
+                <q-tab :name="dish.uuid" :label="t('dishDetails.original')" :ripple="false"/>
                 <q-tab v-for="(steps,index) in customStepsArray" :key="index" :name="customUUIDs[index]"
-                       :label="`口味`+(index+1)" :ripple="false"/>
+                       :label="$t('dishDetails.taste')+(index+1)" :ripple="false"/>
               </q-tabs>
             </q-scroll-area>
           </div>
         </q-card-section>
         <q-card-section>
           <div v-if="!dish.isOfficial" class="row q-gutter-sm">
-            <q-btn color="teal-6" class="col-3 text-subtitle2" push rounded label="大厨编辑"
+            <q-btn color="teal-6" class="col-3 text-subtitle2" push rounded :label="$t('dishDetails.dishEdit')"
                    v-close-popup @click="openDishEditPage"/>
-            <q-btn color="teal-6" class="col-5 text-subtitle1" push rounded label="开始炒制"
+            <q-btn color="teal-6" class="col-5 text-subtitle1" push rounded :label="$t('dishDetails.startCook')"
                    v-close-popup @click="openRunningControlPage"/>
-            <q-btn color="teal-6" class="col-3 text-subtitle2" push rounded label="口味调整"
+            <q-btn color="teal-6" class="col-3 text-subtitle2" push rounded :label="$t('dishDetails.tasteCustomization')"
                    @click="openTasteCustomizationPage"/>
           </div>
           <div v-else class="row q-gutter-sm">
-            <q-btn color="teal-6" class="col-10 text-subtitle1" push rounded label="开始炒制"
+            <q-btn color="teal-6" class="col-10 text-subtitle1" push rounded :label="$t('dishDetails.startCook')"
                    v-close-popup @click="openRunningControlPage"/>
             <q-btn color="teal-6" class="col-1" flat icon="add_circle_outline" size="17px" @click="addToPersonals"/>
           </div>
@@ -120,11 +122,12 @@ import {
 import TheDishImageUploader from "layouts/components/dishDetails/TheDishImageUploader.vue";
 import { deleteAPI, getAPI, postAPI, putAPI } from "src/api";
 import { assign } from "lodash";
+import { useI18n } from "vue-i18n";
 
 const useControllerStore = UseControllerStore();
 const useAppStore = UseAppStore();
 const router = useRouter();
-
+const { t } = useI18n();
 const dish = ref({});
 
 const ingredientSummary = ref("");
@@ -177,7 +180,7 @@ const openRunningControlPage = () => {
   useAppStore.setRunningDish(dish.value, taste.value === dish.value.uuid ? "" : taste.value);
   if (useControllerStore.isCooking) {
     Notify.create({
-      message: "当前有菜品正在炒制，请稍后",
+      message: t("dishDetails.cookingWarningMsg"),
       type: "warning",
     });
     return;

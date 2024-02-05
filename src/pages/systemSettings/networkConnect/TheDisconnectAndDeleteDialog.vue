@@ -2,12 +2,12 @@
   <q-dialog v-model="shown" @hide="onHide">
     <q-card style="min-width: 350px">
       <q-card-section>
-        <div class="text-subtitle1">请选择操作：</div>
+        <div class="text-subtitle1">{{ $t("systemSettings.networkConnect.chooseOperation") }}</div>
       </q-card-section>
 
       <q-card-actions align="right" class="text-teal-6">
-        <q-btn push label="断开连接" color="teal-6" size="md" v-close-popup @click="emits('disconnect')"/>
-        <q-btn push label="忘记连接" color="grey-6" size="md" v-close-popup @click="emits('remove',ssid )"/>
+        <q-btn push :label="$t('systemSettings.networkConnect.closeConnect')" color="teal-6" size="md" v-close-popup @click="emits('disconnect')"/>
+        <q-btn push :label="$t('systemSettings.networkConnect.forgetConnect')" color="grey-6" size="md" v-close-popup @click="emits('remove',ssid )"/>
       </q-card-actions>
     </q-card>
   </q-dialog>

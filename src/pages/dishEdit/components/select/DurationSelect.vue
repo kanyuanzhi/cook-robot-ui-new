@@ -1,6 +1,6 @@
 <template>
   <q-item>
-    <q-item-section avatar>时间控制</q-item-section>
+    <q-item-section avatar>{{ $t("dishEdit.select.duration.title") }}</q-item-section>
     <q-item-section>
       <div class="row q-col-gutter-md">
         <div class="col">
@@ -15,7 +15,7 @@
             :disable="disable"
           >
             <template v-slot:append>
-              <span class="text-body2">分</span>
+              <span class="text-body2">{{ $t("dishEdit.select.duration.min") }}</span>
             </template>
           </q-select>
         </div>
@@ -31,7 +31,7 @@
             :disable="disable"
           >
             <template v-slot:append>
-              <span class="text-body2">秒</span>
+              <span class="text-body2">{{ $t("dishEdit.select.duration.sec") }}</span>
             </template>
           </q-select>
         </div>

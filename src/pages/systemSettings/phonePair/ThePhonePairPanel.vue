@@ -9,6 +9,9 @@ import { onMounted, ref } from "vue";
 import { getQrCode } from "src/api/system";
 import { Notify } from "quasar";
 import { getAPI } from "src/api";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
 
 const QrImage = ref("");
 
@@ -18,7 +21,7 @@ onMounted(async () => {
     QrImage.value = data.qrCode;
   } catch (e) {
     Notify.create({
-      message: "获取二维码失败，请将设备连接wifi，并保证手机与设备在同一wifi下",
+      message: t("systemSettings.phonePair.pairFailMsg"),
       type: "warning",
     });
     console.log(e.toString());

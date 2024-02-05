@@ -3,38 +3,38 @@
     <q-dialog v-model="shown" @hide="onHide">
       <q-card style="width: 600px" class="q-mt-md">
         <q-card-section class="bg-teal-6 text-white q-py-sm">
-          <div class="text-h6">添加火力</div>
+          <div class="text-h6">{{ $t("dishEdit.fireDialog.title") }}</div>
         </q-card-section>
         <q-card-section>
           <q-item>
-            <q-item-section avatar>加热温度</q-item-section>
+            <q-item-section avatar>{{ $t("dishEdit.fireDialog.heatingTemperature") }}</q-item-section>
             <q-item-section>
               <q-slider
-                v-model="temperature"
-                :min="0"
-                :max="220"
-                :step="1"
-                color="red-6"
+                  v-model="temperature"
+                  :min="0"
+                  :max="220"
+                  :step="1"
+                  color="red-6"
               />
             </q-item-section>
             <q-item-section side style="width: 130px;"><span class="text-black"><span>{{
                 temperature
-              }}</span>摄氏度（℃）</span></q-item-section>
+              }}</span>{{ $t("dishEdit.fireDialog.unit") }}</span></q-item-section>
           </q-item>
 
 
           <q-item>
-            <q-item-section avatar>控制方式</q-item-section>
+            <q-item-section avatar>{{ $t("dishEdit.fireDialog.judgeType") }}</q-item-section>
             <q-item-section>
               <q-btn-toggle
-                v-model="judgeType"
-                no-caps
-                size="md"
-                unelevated
-                toggle-color="teal-6"
-                color="white"
-                text-color="grey-7"
-                :options="useSettingStore.isNewMachine?newMachineOptions:oldMachineOptions"
+                  v-model="judgeType"
+                  no-caps
+                  size="md"
+                  unelevated
+                  toggle-color="teal-6"
+                  color="white"
+                  text-color="grey-7"
+                  :options="useSettingStore.isNewMachine?newMachineOptions:oldMachineOptions"
               />
             </q-item-section>
           </q-item>
@@ -43,12 +43,13 @@
             <q-item-section>
             <span class="text-grey-7" style="font-size: 12px">
               <span class="text-red">*</span>
-              控制加热达到以下设定温度后，继续下一步骤，选择无则加热后直接开始下一步骤
+              {{ $t("dishEdit.fireDialog.instruction") }}
             </span>
             </q-item-section>
           </q-item>
 
-          <NumberSelect ref="numberSelect" label="温度监测" unit="摄氏度（℃）" :min="0" :max="220" :step="5"
+          <NumberSelect ref="numberSelect" :label="$t('dishEdit.fireDialog.targetTemperature')"
+                        :unit="$t('dishEdit.fireDialog.unit')" :min="0" :max="220" :step="5"
                         :number="targetTemperature" :disable="judgeType===3||judgeType === 4"
                         @update="(v)=>targetTemperature=v"/>
 
@@ -57,8 +58,8 @@
           <!--                          @update="(v)=>{duration=v}"/>-->
         </q-card-section>
         <q-card-actions align="right">
-          <q-btn v-close-popup flat color="teal-6">取消</q-btn>
-          <q-btn color="teal-6" unelevated @click="onSubmit">提交</q-btn>
+          <q-btn v-close-popup flat color="teal-6">{{ $t("common.cancel") }}</q-btn>
+          <q-btn color="teal-6" unelevated @click="onSubmit">{{ $t("common.submit") }}</q-btn>
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -71,8 +72,11 @@ import DurationSelect from "pages/dishEdit/components/select/DurationSelect.vue"
 import NumberSelect from "pages/dishEdit/components/select/NumberSelect.vue";
 import { newHeatStep } from "pages/dishEdit/components/dialogs/newStep";
 import { UseSettingStore } from "stores/settingStore";
+import { useI18n } from "vue-i18n";
 
 const useSettingStore = UseSettingStore();
+
+const { t } = useI18n();
 
 const emits = defineEmits(["update", "submit"]);
 
@@ -122,30 +126,30 @@ const onHide = () => {
 
 const newMachineOptions = [
   {
-    label: "温度",
-    value: 2
+    label: t("dishEdit.fireDialog.judgeTypeOption.targetJudge"),
+    value: 2,
   },
   // {label: '时间', value: 3},
   {
-    label: "无",
-    value: 4
-  }
+    label: t("dishEdit.fireDialog.judgeTypeOption.noJudge"),
+    value: 4,
+  },
 ];
 
 const oldMachineOptions = [
   {
     label: "锅底温度",
-    value: 1
+    value: 1,
   },
   {
     label: "红外温度",
-    value: 2
+    value: 2,
   },
   // {label: '时间', value: 3},
   {
     label: "无",
-    value: 4
-  }
+    value: 4,
+  },
 ];
 
 defineExpose({

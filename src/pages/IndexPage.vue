@@ -4,28 +4,28 @@
       <div class="col-5 q-pr-md">
         <div class="column justify-start click-area select-area q-pa-xl" @click="router.push('/dishSelect')">
           <div class="col-2">
-            <span class="text-blue-8 text-weight-bold text-h4">菜品选择</span>
+            <span class="text-blue-8 text-weight-bold text-h4">{{ $t("home.base.dish") }}</span>
           </div>
           <div class="col-2">
-            <span class="text-grey-9 text-weight-bold text-h6">多种菜品任你选择</span>
+            <span class="text-grey-9 text-weight-bold text-h6">{{ $t("home.base.dishSummary") }}</span>
           </div>
         </div>
       </div>
       <div class="col-7 column q-gutter-y-md">
         <div class="col column q-pa-xl click-area interact-area">
           <div class="col-6">
-            <span class="text-amber-8 text-weight-bold text-h4">人机互动</span>
+            <span class="text-amber-8 text-weight-bold text-h4">{{ $t("home.base.reaction") }}</span>
           </div>
           <div class="col-6">
-            <span class="text-grey-9 text-weight-bold text-h6">多种互动任你选择</span>
+            <span class="text-grey-9 text-weight-bold text-h6">{{ $t("home.base.reactionSummary") }}</span>
           </div>
         </div>
         <div class="col column q-pa-xl click-area shop-area">
           <div class="col-6">
-            <span class="text-orange-10 text-weight-bold text-h4">商城选购</span>
+            <span class="text-orange-10 text-weight-bold text-h4">{{ $t("home.base.shop") }}</span>
           </div>
           <div class="col-6">
-            <span class="text-grey-9 text-weight-bold text-h6">多种商品任你选择</span>
+            <span class="text-grey-9 text-weight-bold text-h6">{{ $t("home.base.shopSummary") }}</span>
           </div>
         </div>
       </div>
@@ -41,11 +41,13 @@
 <script setup>
 import { useRouter } from "vue-router";
 import { UseAppStore } from "stores/appStore";
+import { useI18n } from "vue-i18n";
 
 const router = useRouter();
 
-const useAppStore = UseAppStore()
-useAppStore.setPageTitle("主页")
+const useAppStore = UseAppStore();
+const { t } = useI18n();
+useAppStore.setPageTitle(t("home.base.title"));
 </script>
 
 <style lang="scss" scoped>

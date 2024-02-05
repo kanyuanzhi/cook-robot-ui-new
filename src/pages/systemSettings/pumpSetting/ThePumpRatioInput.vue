@@ -2,7 +2,7 @@
   <q-item class="row">
     <q-item-section class="col-2 " :class="[isWarning?'bg-red-6':'bg-teal-6']">
       <q-item-label class="text-white text-subtitle2 text-center">
-        <span>{{ "" + seasoning.pump + "号泵" }}</span>
+        <span>{{ "" + seasoning.pump + $t("systemSettings.pumpSetting.pump") }}</span>
       </q-item-label>
     </q-item-section>
     <q-item-section class="col-3">
@@ -28,14 +28,19 @@
 <script setup>
 import { defineProps, ref, watch, defineModel } from "vue";
 import { Notify, Platform } from "quasar";
+import { useI18n } from "vue-i18n";
 
 const props = defineProps(["seasoning", "disable", "isWarning"]);
-
+const { t } = useI18n();
 const onMinus = () => {
   if (props.seasoning.editingRatio <= 0) {
     // eslint-disable-next-line vue/no-mutating-props
     props.seasoning.editingRatio = 0;
-    Notify.create("比例不能小于0");
+    Notify.create({
+      icon: "report_problem",
+      color: "orange",
+      message: t("systemSettings.pumpSetting.ratioWrongMsg"),
+    });
     return;
   }
   // eslint-disable-next-line vue/no-mutating-props
@@ -50,7 +55,7 @@ const onPlus = () => {
 const inputStyle = {
   textAlign: "center",
   // fontSize: "14px",
-  color: "#009688"
+  color: "#009688",
 };
 
 </script>

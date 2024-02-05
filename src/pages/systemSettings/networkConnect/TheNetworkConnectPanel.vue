@@ -2,15 +2,6 @@
   <div class="column">
     <div class="col row">
       <div class="col">
-        <!--        <q-toggle-->
-        <!--          v-model="wlanStatus"-->
-        <!--          color="teal-6"-->
-        <!--          left-label-->
-        <!--        >-->
-        <!--          <template v-slot:default>-->
-        <!--            <span class="text-teal-6">{{ wlanStatus ? "WLAN开" : "WLAN关" }}</span>-->
-        <!--          </template>-->
-        <!--        </q-toggle>-->
       </div>
       <div class="col text-right">
         <q-toggle
@@ -19,7 +10,8 @@
             left-label
         >
           <template v-slot:default>
-            <span class="text-teal-6">{{ wlanStatus ? "WLAN开" : "WLAN关" }}</span>
+            <span class="text-teal-6">{{ wlanStatus ?
+                $t("systemSettings.networkConnect.open") : $t("systemSettings.networkConnect.close") }}</span>
           </template>
         </q-toggle>
         <!--        <q-btn push color="teal-6" size="md" label="连接隐藏网络" @click="theConnectToHiddenDialog.show()"/>-->
@@ -43,9 +35,9 @@
                 @click="onConnectionClick(connection)">
           <q-item-section class="row">
             <span>
-              <span class="q-mr-lg">{{ connection.ssid || "隐藏的网络" }}</span>
+              <span class="q-mr-lg">{{ connection.ssid || $t("systemSettings.networkConnect.hiddenNet") }}</span>
               <span>{{ connection.mac }}</span>
-              <span>{{ connection.isRemembered ? "（已保存）" : "" }}</span>
+              <span>{{ connection.isRemembered ? $t("systemSettings.networkConnect.isSaved") : "" }}</span>
             </span>
           </q-item-section>
           <q-item-section avatar>
@@ -76,6 +68,8 @@ import TheConnectDialog from "pages/systemSettings/networkConnect/TheConnectDial
 import TheDisconnectAndDeleteDialog from "pages/systemSettings/networkConnect/TheDisconnectAndDeleteDialog.vue";
 import TheConnectToHiddenDialog from "pages/systemSettings/networkConnect/TheConnectToHiddenDialog.vue";
 import { toPairs } from "lodash";
+import { useI18n } from "vue-i18n";
+const {t} = useI18n();
 
 const wlanStatus = ref(true);
 
@@ -94,9 +88,6 @@ const currentConnection = ref(null); // 当前连接
 //   ssid:"B2";
 // }
 const rememberedConnections = ref({}); // 记住密码的连接
-// {
-//   ssid: "password",
-//  }
 
 let scanInterval;
 
@@ -105,7 +96,7 @@ onMounted(async () => {
     const status = await window.wlanAPI.getStatus();
     if (status === null) {
       Notify.create({
-        message: "获取wlan状态错误",
+        message: t("systemSettings.networkConnect.getStatusWrongMsg"),
         type: "warning",
       });
       return;
@@ -113,7 +104,7 @@ onMounted(async () => {
     wlanStatus.value = status;
   } else {
     Notify.create({
-      message: "当前平台不为linux下的electron，不支持控制WLAN的开启/关闭",
+      message: t("systemSettings.networkConnect.systemWrongMsg"),
       type: "warning",
     });
   }
@@ -144,7 +135,7 @@ const scan = async () => {
     const networkScanResult = await window.wlanAPI.scan();
     if (networkScanResult === null) {
       Notify.create({
-        message: "扫描wifi失败",
+        message: t("systemSettings.networkConnect.scanWrongMsg"),
         type: "warning",
       });
       return;
@@ -177,7 +168,7 @@ const scan = async () => {
 
 const onConnectionClick = async (connection) => {
   if (rememberedConnections.value[connection.ssid] !== undefined) { //已记住该连接的密码
-    Loading.setDefaults({ message: "连接中，请稍后..." });
+    Loading.setDefaults({ message: t("systemSettings.networkConnect.loadingMsg") });
     Loading.show();
     const result = await window.wlanAPI.connect(connection.ssid, rememberedConnections.value[connection.ssid]);
     Loading.hide();
@@ -186,11 +177,11 @@ const onConnectionClick = async (connection) => {
       await window.storeAPI.remove("rememberedConnections." + connection.ssid);
       delete rememberedConnections.value[connection.ssid];
       Notify.create({
-        message: "网络安全密钥错误，请重新输入",
+        message: t("systemSettings.networkConnect.validateWrongMsg"),
         type: "warning",
       });
     } else {
-      Notify.create("连接成功");
+      Notify.create(t("systemSettings.networkConnect.connectSuccessMsg"));
       return;
     }
   }
@@ -199,17 +190,17 @@ const onConnectionClick = async (connection) => {
 
 const onConnect = async (ssid, password) => {
   try {
-    Loading.setDefaults({ message: "连接中，请稍后..." });
+    Loading.setDefaults({ message: t("systemSettings.networkConnect.loadingMsg") });
     Loading.show();
     const result = await window.wlanAPI.connect(ssid, password);
     Loading.hide();
     if (result === null) {
       Notify.create({
-        message: "验证信息错误，请重新输入",
+        message: t("systemSettings.networkConnect.validateWrongMsg"),
         type: "warning",
       });
     } else {
-      Notify.create("连接成功");
+      Notify.create(t("systemSettings.networkConnect.connectSuccessMsg"));
       await window.storeAPI.set("rememberedConnections." + ssid, password);
       rememberedConnections.value[ssid] = password;
     }
@@ -226,10 +217,10 @@ const onDisconnect = async () => {
     const result = await window.wlanAPI.disconnect();
     if (result !== null) {
       currentConnection.value = null;
-      Notify.create("断开连接成功");
+      Notify.create(t("systemSettings.networkConnect.closeConnectSuccessMsg"));
     } else {
       Notify.create({
-        message: "断开连接失败",
+        message: t("systemSettings.networkConnect.closeConnectWrongMsg"),
         type: "warning",
       });
     }
@@ -248,9 +239,9 @@ const onRemove = async (ssid) => {
       currentConnection.value = null;
       await window.storeAPI.remove("rememberedConnections." + ssid);
       delete rememberedConnections.value[ssid];
-      Notify.create("忘记连接成功");
+      Notify.create(t("systemSettings.networkConnect.forgetConnectSuccessMsg"));
     } else {
-      Notify.create("忘记连接失败");
+      Notify.create(t("systemSettings.networkConnect.forgetConnectWrongMsg"));
     }
   } catch (e) {
     Notify.create({

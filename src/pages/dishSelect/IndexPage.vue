@@ -12,9 +12,9 @@
               active-bg-color="teal-6"
               active-color="white"
               switch-indicator>
-            <q-tab :name="0" label="全部" :ripple="false" :class="cuisineTabClass"
+            <q-tab :name="0" :label="$t('dishSelect.base.allDish')" :ripple="false" :class="cuisineTabClass"
                    style="border-top-right-radius: 20px;border-bottom-right-radius: 20px;"/>
-            <q-tab v-for="cuisine in cuisines" :key="cuisine.id" :name="cuisine.id" :label="cuisine.name"
+            <q-tab v-for="cuisine in cuisines" :key="cuisine.id" :name="cuisine.id" :label="$t('common.'+cuisine.name)"
                    :ripple="false" :class="cuisineTabClass"
                    style="border-top-right-radius: 20px;border-bottom-right-radius: 20px;"/>
             <q-separator/>
@@ -25,9 +25,11 @@
               class="text-teal-6"
               active-bg-color="teal-6"
               active-color="white">
-            <q-tab name="official" label="官方菜品" :ripple="false" :class="dishSourceTabClass"
+            <q-tab name="official" :label="$t('dishSelect.base.officialDish')" :ripple="false"
+                   :class="dishSourceTabClass"
             />
-            <q-tab name="personal" label="我的菜品" :ripple="false" :class="dishSourceTabClass"
+            <q-tab name="personal" :label="$t('dishSelect.base.personalDish')" :ripple="false"
+                   :class="dishSourceTabClass"
             />
           </q-tabs>
         </template>
@@ -56,9 +58,12 @@ import { UseAppStore } from "stores/appStore";
 import { getAPI } from "src/api";
 import { UseSoftwareInfoStore } from "stores/softwareInfoStore";
 import { machineModelStyleMap } from "pages/machineModelStyleMap";
+import { useI18n } from "vue-i18n";
 
 const useAppStore = UseAppStore();
-useAppStore.setPageTitle("菜品选择");
+const { t } = useI18n();
+
+useAppStore.setPageTitle(t("dishSelect.base.title"));
 const useSoftwareInfoStore = UseSoftwareInfoStore();
 
 const splitterModel = ref(20);
@@ -69,7 +74,7 @@ const cuisineTabClass = ref(null);
 const dishSourceTabClass = ref(null);
 
 onMounted(async () => {
-  await useSoftwareInfoStore.fetch()
+  await useSoftwareInfoStore.fetch();
   cuisineTabClass.value = machineModelStyleMap[useSoftwareInfoStore.machineModel]["cuisineTabClass"];
   dishSourceTabClass.value = machineModelStyleMap[useSoftwareInfoStore.machineModel]["dishSourceTabClass"];
 

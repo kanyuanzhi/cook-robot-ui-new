@@ -4,7 +4,7 @@
       <!--      <q-card style="width: 400px" class="q-px-sm q-mt-md">-->
       <q-card style="width: 600px" class="q-mt-md">
         <q-card-section class="bg-teal-6 text-white q-py-sm">
-          <div class="text-h6">添加调料</div>
+          <div class="text-h6">{{ $t("dishEdit.seasoningDialog.title") }}</div>
         </q-card-section>
         <q-card-section>
           <TheSeasoningItem v-for="(seasoning,index) in seasonings" :key="seasoning.key" :index="index"
@@ -13,9 +13,9 @@
                             @weight-select="onWeightSelect"/>
         </q-card-section>
         <q-card-actions align="right">
-          <q-btn v-close-popup flat color="teal-6">取消</q-btn>
-          <q-btn color="teal-6" @click="onAdd">添加新调料</q-btn>
-          <q-btn color="teal-6" unelevated @click="onSubmit">提交</q-btn>
+          <q-btn v-close-popup flat color="teal-6">{{ $t("common.cancel") }}</q-btn>
+          <q-btn color="teal-6" @click="onAdd">{{ $t("dishEdit.seasoningDialog.add") }}</q-btn>
+          <q-btn color="teal-6" unelevated @click="onSubmit">{{ $t("common.submit") }}</q-btn>
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -30,6 +30,9 @@ import { Notify } from "quasar";
 import { getSeasonings } from "src/api/seasoning";
 import { newSeasoningStep } from "pages/dishEdit/components/dialogs/newStep";
 import { getAPI } from "src/api";
+import { useI18n } from "vue-i18n";
+
+const {t} = useI18n();
 
 const emits = defineEmits(["update", "submit"]);
 
@@ -93,7 +96,7 @@ const updateDialogShow = async (step, index) => {
 const onAdd = () => {
   if (seasonings.value.length > 4) {
     Notify.create({
-      message: "同时添加调料数量不能超过5个",
+      message: t("dishEdit.seasoningDialog.maxWarningMsg"),
       type: "warning",
     });
     return;
@@ -106,7 +109,7 @@ const onAdd = () => {
 const onDelete = (index) => {
   if (seasonings.value.length === 1) {
     Notify.create({
-      message: "至少添加1种调料",
+      message: t("dishEdit.seasoningDialog.minWarningMsg"),
       type: "warning",
     });
     return;

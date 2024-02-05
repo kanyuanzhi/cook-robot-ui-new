@@ -1,20 +1,23 @@
 <template>
   <q-header bordered class="bg-white row" style="border-radius: 10px">
     <q-toolbar class="col-4">
-      <q-img v-if="useSoftwareInfoStore.isXZYCModel()" fit="fill" src="~/assets/logo.png" style="width: 113px; height: 35px;" @click="router.push('/')"/>
-      <q-img v-if="useSoftwareInfoStore.isHZModel()" fit="fill" src="~/assets/logo-hz-1.png" style="width: 113px; height: 35px;" @click="router.push('/')"/>
-<!--      <q-img v-if="useSoftwareInfoStore.isHZModel()" fit="fill" src="~/assets/logo-hz-2.png" style="width: 113px; height: 35px;" @click="router.push('/')"/>-->
+      <q-img v-if="useSoftwareInfoStore.isXZYCModel()" fit="fill" src="~/assets/logo.png"
+             style="width: 113px; height: 35px;" @click="router.push('/')"/>
+      <q-img v-if="useSoftwareInfoStore.isHZModel()" fit="fill" src="~/assets/logo-hz-1.png"
+             style="width: 113px; height: 35px;" @click="router.push('/')"/>
+      <!--      <q-img v-if="useSoftwareInfoStore.isHZModel()" fit="fill" src="~/assets/logo-hz-2.png" style="width: 113px; height: 35px;" @click="router.push('/')"/>-->
     </q-toolbar>
     <q-toolbar class="col-4">
       <q-toolbar-title class="text-teal-9 text-center">{{ useAppStore.pageTitle }}</q-toolbar-title>
     </q-toolbar>
     <q-toolbar class="col-4 q-gutter-md">
       <q-space/>
-<!--      <q-btn v-if="Platform.is.win" label="远控设置" outline rounded color="teal-6" @click="setRemoteControlAddress"/>-->
-      <q-btn v-if="useAppStore.backBtnShown" label="返回" outline rounded color="teal-6" @click="onBackBtnClick"/>
-      <q-btn v-if="route.path ==='/dishSelect'" label="菜品同步" outline rounded color="teal-6"
+      <!--      <q-btn v-if="Platform.is.win" label="远控设置" outline rounded color="teal-6" @click="setRemoteControlAddress"/>-->
+      <q-btn v-if="useAppStore.backBtnShown" :label="$t('header.back')" outline rounded color="teal-6"
+             @click="onBackBtnClick"/>
+      <q-btn v-if="route.path ==='/dishSelect'" :label="$t('header.dishSync')" outline rounded color="teal-6"
              @click="synchronizeDishes"/>
-      <q-btn label="一键收纳" outline rounded color="teal-6" @click="sendCommand('withdraw')"/>
+      <q-btn :label="$t('header.withdraw')" outline rounded color="teal-6" @click="sendCommand('withdraw')"/>
       <TheMoreOperations/>
     </q-toolbar>
   </q-header>
@@ -29,6 +32,7 @@ import { UseSettingStore } from "stores/settingStore";
 import { sendCommand } from "layouts/components/command";
 import { putAPI } from "src/api";
 import { UseSoftwareInfoStore } from "stores/softwareInfoStore";
+import { useI18n } from "vue-i18n";
 
 const router = useRouter();
 const route = useRoute();
@@ -65,6 +69,7 @@ const setRemoteControlAddress = () => {
 };
 
 const $q = useQuasar();
+const { t } = useI18n();
 
 const synchronizeDishes = async () => {
   const dialog = $q.dialog({
@@ -91,26 +96,39 @@ const synchronizeDishes = async () => {
       localNeedDeleteDishesNumber,
     } = await synchronizePersonalDishes();
     dialog.update({
-      title: "同步完成",
-      message: "<div class='text-subtitle1'><span class='text-weight-bold text-teal-9'>官方菜品：</span>新增<span class='text-weight-bold text-teal-9'>" +
-          newAddedDishesNumber +
-          "</span>个，" +
-          "更新<span class='text-weight-bold text-teal-9'>" + updatesDishesNumber + "</span>个，" +
-          "删除<span class='text-weight-bold text-teal-9'>" + deletedDishesNumber + "</span>个；<br>" +
-          "<span class='text-weight-bold text-teal-9'>我的菜品：</span>本地新增<span class='text-weight-bold text-teal-9'>" +
+      title: t("systemSettings.dataUpdate.syncFinished"),
+      message: "<div class='text-subtitle1'><span class='text-weight-bold text-teal-9'>" +
+          t("systemSettings.dataUpdate.officialDish") + "</span>" +
+          t("systemSettings.dataUpdate.add") + "<span class='text-weight-bold text-teal-9'>" + newAddedDishesNumber +
+          "</span>" + t("systemSettings.dataUpdate.unit") +
+          t("systemSettings.dataUpdate.update") + "<span class='text-weight-bold text-teal-9'>" + updatesDishesNumber +
+          "</span>" + t("systemSettings.dataUpdate.unit") +
+          t("systemSettings.dataUpdate.delete") + "<span class='text-weight-bold text-teal-9'>" + deletedDishesNumber +
+          "</span>" + t("systemSettings.dataUpdate.unit") + "<br>" +
+          "<span class='text-weight-bold text-teal-9'>" +
+          t("systemSettings.dataUpdate.personalDish") + "</span>" +
+          t("systemSettings.dataUpdate.localAdd") + "<span class='text-weight-bold text-teal-9'>" +
           localNeedAddDishesNumber +
-          "</span>个，" +
-          "更新<span class='text-weight-bold text-teal-9'>" + localNeedUpdateDishesNumber + "</span>个，" +
-          "删除<span class='text-weight-bold text-teal-9'>" + localNeedDeleteDishesNumber + "</span>个；" +
-          "远端新增<span class='text-weight-bold text-teal-9'>" + remoteNeedAddDishesNumber +
-          "</span>个，" +
-          "更新<span class='text-weight-bold text-teal-9'>" + remoteNeedUpdateDishesNumber + "</span>个，" +
-          "删除<span class='text-weight-bold text-teal-9'>" + remoteNeedDeleteDishesNumber +
-          "</span>个。</div>",
+          "</span>" + t("systemSettings.dataUpdate.unit") +
+          t("systemSettings.dataUpdate.update") + "<span class='text-weight-bold text-teal-9'>" +
+          localNeedUpdateDishesNumber +
+          "</span>" + t("systemSettings.dataUpdate.unit") +
+          t("systemSettings.dataUpdate.delete") + "<span class='text-weight-bold text-teal-9'>" +
+          localNeedDeleteDishesNumber +
+          "</span>" + t("systemSettings.dataUpdate.unit") +
+          t("systemSettings.dataUpdate.remoteAdd") + "<span class='text-weight-bold text-teal-9'>" +
+          remoteNeedAddDishesNumber +
+          "</span>" + t("systemSettings.dataUpdate.unit") +
+          t("systemSettings.dataUpdate.update") + "<span class='text-weight-bold text-teal-9'>" +
+          remoteNeedUpdateDishesNumber +
+          "</span>" + t("systemSettings.dataUpdate.unit") +
+          t("systemSettings.dataUpdate.delete") + "<span class='text-weight-bold text-teal-9'>" +
+          remoteNeedDeleteDishesNumber +
+          "</span>" + t("systemSettings.dataUpdate.unit") + "</div>",
       html: true,
       progress: false,
       ok: {
-        label: "确认",
+        label: t("common.confirm"),
         color: "teal-6",
         push: true,
       },

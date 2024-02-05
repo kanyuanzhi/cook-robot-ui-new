@@ -3,13 +3,13 @@
     <div class="col-4 offset-4">
       <q-list class="text-grey-9">
         <q-item dense>
-          <q-item-section>官方菜品数量：{{ officialDishNumber }}</q-item-section>
+          <q-item-section>{{ $t("systemSettings.dataUpdate.officialDishNumber") + officialDishNumber }}</q-item-section>
         </q-item>
         <q-item dense>
-          <q-item-section>我的菜品数量：{{ personalDishNumber }}</q-item-section>
+          <q-item-section>{{ $t("systemSettings.dataUpdate.personalDishNumber") + personalDishNumber }}</q-item-section>
         </q-item>
         <q-item>
-          <q-btn push color="teal-6" size="md" label="同步菜品" @click="beginUpdate"/>
+          <q-btn push color="teal-6" size="md" :label="$t('systemSettings.dataUpdate.syncDish')" @click="beginUpdate"/>
         </q-item>
       </q-list>
       <TheUpdatingDialog ref="theUpdatingDialog"/>
@@ -26,20 +26,12 @@ import TheUpdatingDialog from "pages/systemSettings/softwareUpdate/TheUpdatingDi
 import { getAPI, putAPI } from "src/api";
 import { has } from "lodash/object";
 import router from "src/router";
-
-const {
-  extractDate,
-  formatDate,
-} = date;
+import { useI18n } from "vue-i18n";
 
 const officialDishNumber = ref(0);
 const personalDishNumber = ref(0);
 
-const QrImage = ref("");
 const theUpdatingDialog = ref(null);
-
-const isCheckPassed = ref(false);
-const isChecking = ref(false);
 
 onMounted(async () => {
   await getDishesNumber();
@@ -70,10 +62,11 @@ const getDishesNumber = async () => {
 };
 
 const $q = useQuasar();
+const { t } = useI18n();
 
 const synchronizeDishes = async () => {
   const dialog = $q.dialog({
-    title: "同步中，请稍后...",
+    title: t("systemSettings.dataUpdate.syncing"),
     progress: {
       // spinner: QSpinnerGears,
       color: "teal-6",
@@ -94,26 +87,39 @@ const synchronizeDishes = async () => {
       localNeedDeleteDishesNumber,
     } = await synchronizePersonalDishes();
     dialog.update({
-      title: "同步完成",
-      message: "<div class='text-subtitle1'><span class='text-weight-bold text-teal-9'>官方菜品：</span>新增<span class='text-weight-bold text-teal-9'>" +
-          newAddedDishesNumber +
-          "</span>个，" +
-          "更新<span class='text-weight-bold text-teal-9'>" + updatesDishesNumber + "</span>个，" +
-          "删除<span class='text-weight-bold text-teal-9'>" + deletedDishesNumber + "</span>个；<br>" +
-          "<span class='text-weight-bold text-teal-9'>我的菜品：</span>本地新增<span class='text-weight-bold text-teal-9'>" +
+      title: t("systemSettings.dataUpdate.syncFinished"),
+      message: "<div class='text-subtitle1'><span class='text-weight-bold text-teal-9'>" +
+          t("systemSettings.dataUpdate.officialDish") + "</span>" +
+          t("systemSettings.dataUpdate.add") + "<span class='text-weight-bold text-teal-9'>" + newAddedDishesNumber +
+          "</span>" + t("systemSettings.dataUpdate.unit") +
+          t("systemSettings.dataUpdate.update") + "<span class='text-weight-bold text-teal-9'>" + updatesDishesNumber +
+          "</span>" + t("systemSettings.dataUpdate.unit") +
+          t("systemSettings.dataUpdate.delete") + "<span class='text-weight-bold text-teal-9'>" + deletedDishesNumber +
+          "</span>" + t("systemSettings.dataUpdate.unit") + "<br>" +
+          "<span class='text-weight-bold text-teal-9'>" +
+          t("systemSettings.dataUpdate.personalDish") + "</span>" +
+          t("systemSettings.dataUpdate.localAdd") + "<span class='text-weight-bold text-teal-9'>" +
           localNeedAddDishesNumber +
-          "</span>个，" +
-          "更新<span class='text-weight-bold text-teal-9'>" + localNeedUpdateDishesNumber + "</span>个，" +
-          "删除<span class='text-weight-bold text-teal-9'>" + localNeedDeleteDishesNumber + "</span>个；" +
-          "远端新增<span class='text-weight-bold text-teal-9'>" + remoteNeedAddDishesNumber +
-          "</span>个，" +
-          "更新<span class='text-weight-bold text-teal-9'>" + remoteNeedUpdateDishesNumber + "</span>个，" +
-          "删除<span class='text-weight-bold text-teal-9'>" + remoteNeedDeleteDishesNumber +
-          "</span>个。</div>",
+          "</span>" + t("systemSettings.dataUpdate.unit") +
+          t("systemSettings.dataUpdate.update") + "<span class='text-weight-bold text-teal-9'>" +
+          localNeedUpdateDishesNumber +
+          "</span>" + t("systemSettings.dataUpdate.unit") +
+          t("systemSettings.dataUpdate.delete") + "<span class='text-weight-bold text-teal-9'>" +
+          localNeedDeleteDishesNumber +
+          "</span>" + t("systemSettings.dataUpdate.unit") +
+          t("systemSettings.dataUpdate.remoteAdd") + "<span class='text-weight-bold text-teal-9'>" +
+          remoteNeedAddDishesNumber +
+          "</span>" + t("systemSettings.dataUpdate.unit") +
+          t("systemSettings.dataUpdate.update") + "<span class='text-weight-bold text-teal-9'>" +
+          remoteNeedUpdateDishesNumber +
+          "</span>" + t("systemSettings.dataUpdate.unit") +
+          t("systemSettings.dataUpdate.delete") + "<span class='text-weight-bold text-teal-9'>" +
+          remoteNeedDeleteDishesNumber +
+          "</span>" + t("systemSettings.dataUpdate.unit") + "</div>",
       html: true,
       progress: false,
       ok: {
-        label: "确认",
+        label: t("common.confirm"),
         color: "teal-6",
         push: true,
       },

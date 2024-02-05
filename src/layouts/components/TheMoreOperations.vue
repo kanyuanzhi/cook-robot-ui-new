@@ -6,7 +6,7 @@
           <q-icon name="mdi-scan-helper" color="white" size="18px"/>
         </q-item-section>
         <q-item-section>
-          <q-item-label>扫码炒菜</q-item-label>
+          <q-item-label>{{ $t("header.moreOptions.qrScan") }}</q-item-label>
         </q-item-section>
       </q-item>
 
@@ -17,7 +17,7 @@
           <q-icon name="bi-check2-square" color="white" size="18px"/>
         </q-item-section>
         <q-item-section>
-          <q-item-label>菜品选择</q-item-label>
+          <q-item-label>{{ $t("header.moreOptions.dishSelect") }}</q-item-label>
         </q-item-section>
       </q-item>
       <q-separator dark inset/>
@@ -27,7 +27,7 @@
           <q-icon name="bi-pencil-square" color="white" size="18px"/>
         </q-item-section>
         <q-item-section>
-          <q-item-label>菜品制作</q-item-label>
+          <q-item-label>{{ $t("header.moreOptions.dishCook") }}</q-item-label>
         </q-item-section>
       </q-item>
       <q-separator dark inset/>
@@ -37,7 +37,7 @@
           <q-icon name="bi-gear" color="white" size="18px"/>
         </q-item-section>
         <q-item-section>
-          <q-item-label>系统设置</q-item-label>
+          <q-item-label>{{ $t("header.moreOptions.systemSettings") }}</q-item-label>
         </q-item-section>
       </q-item>
     </q-list>

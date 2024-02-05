@@ -1,4 +1,6 @@
 import { sum } from "lodash";
+import { i18n } from "boot/i18n";
+const t = i18n.global.t;
 
 export function ingredientFormat (steps) {
   const ingredientList = [];
@@ -8,7 +10,7 @@ export function ingredientFormat (steps) {
       //   "菜仓" + step.slotNumber + "：" + step.name + step.weight + "克")
       ingredientList.push({
         slotNumber: step.slotNumber,
-        format: step.name + step.weight + "克"
+        format: step.name + step.weight + t("dishDetails.displayFormat.unit")
       });
     }
   }
@@ -38,10 +40,10 @@ export function seasoningFormat (steps, seasoningMap) {
   for (let pumpNumber in seasoningInfo) {
     if (seasoningInfo[pumpNumber].weight.length !== 0) {
       seasoningList.push(seasoningInfo[pumpNumber].label +
-        sum(seasoningInfo[pumpNumber].weight) + "克");
+        sum(seasoningInfo[pumpNumber].weight) + t("dishDetails.displayFormat.unit"));
     }
   }
-  return seasoningList.join("，");
+  return seasoningList.join(t("dishDetails.displayFormat.comma"));
 }
 
 export const colors = [

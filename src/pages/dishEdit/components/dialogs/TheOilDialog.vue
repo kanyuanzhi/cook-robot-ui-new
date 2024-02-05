@@ -3,16 +3,17 @@
     <q-dialog v-model="shown" @hide="onHide">
       <q-card style="width: 400px" class="q-mt-md">
         <q-card-section class="bg-teal-6 text-white q-py-sm">
-          <div class="text-h6">添加食用油</div>
+          <div class="text-h6">{{ $t("dishEdit.oilDialog.title") }}</div>
         </q-card-section>
         <q-card-section>
-          <NumberSelect ref="numberSelect" label="分量" unit="克" :min="1" :max="100" :step="1"
+          <NumberSelect ref="numberSelect" :label="$t('dishEdit.oilDialog.weight')"
+                        :unit="$t('dishEdit.oilDialog.unit')" :min="1" :max="100" :step="1"
                         :number="weight" @update="(v)=>weight=v"/>
         </q-card-section>
 
         <q-card-actions align="right">
-          <q-btn v-close-popup flat color="teal-6">取消</q-btn>
-          <q-btn color="teal-6" unelevated @click="onSubmit">提交</q-btn>
+          <q-btn v-close-popup flat color="teal-6">{{ $t("common.cancel") }}</q-btn>
+          <q-btn color="teal-6" unelevated @click="onSubmit">{{ $t("common.submit") }}</q-btn>
         </q-card-actions>
       </q-card>
     </q-dialog>

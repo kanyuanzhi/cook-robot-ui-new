@@ -3,7 +3,7 @@
     <q-card style="width: 520px;height: 200px" class="">
       <q-card-section>
         <div class="bg-teal-6 q-py-sm text-center" style="border-radius: 10px;">
-          <span class="text-subtitle1 text-weight-bold text-white">加热温度</span>
+          <span class="text-subtitle1 text-weight-bold text-white">{{ $t("controlDialog.heatingTemperature") }}</span>
         </div>
       </q-card-section>
       <q-card-section>
@@ -13,12 +13,12 @@
           </q-item-section>
           <q-item-section>
             <q-slider
-              v-model="temperature"
-              :min="0"
-              :max="220"
-              :step="1"
-              :color="colorDisplay"
-              @change="onTemperatureChange"/>
+                v-model="temperature"
+                :min="0"
+                :max="220"
+                :step="1"
+                :color="colorDisplay"
+                @change="onTemperatureChange"/>
           </q-item-section>
           <q-item-section avatar class="text-center">
             <q-chip class="text-subtitle2 text-weight-bold" :color="colorDisplay" text-color="white">
@@ -44,7 +44,7 @@ const temperature = ref(0);
 
 const show = () => {
   shown.value = true;
-  temperature.value = useControllerStore.currentHeatingTemperature
+  temperature.value = useControllerStore.currentHeatingTemperature;
 };
 
 const colorDisplay = computed(() => {
@@ -62,11 +62,11 @@ const getTemperatureColor = (temperature) => {
 };
 
 const onTemperatureChange = async (val) => {
-  await sendCommand("heat", {temperature: val});
+  await sendCommand("heat", { temperature: val });
 };
 
 defineExpose({
-  show
+  show,
 });
 </script>
 

@@ -3,18 +3,20 @@
     <q-dialog v-model="shown" @hide="onHide" position="top">
       <q-card style="min-width: 350px;margin-top: 100px">
         <q-card-section>
-          <div class="text-subtitle1">请输入网络名称与安全密钥</div>
+          <div class="text-subtitle1">{{ $t("systemSettings.networkConnect.inputAuthorityNameAndPassword") }}</div>
         </q-card-section>
 
         <q-card-section class="q-pt-none">
-          <q-input ref="ssidInput" color="teal-6" label="网络名称" v-model="ssid" @focus="onFocus('ssid')"
+          <q-input ref="ssidInput" color="teal-6" :label="$t('systemSettings.networkConnect.authorityName')"
+                   v-model="ssid" @focus="onFocus('ssid')"
                    @blur="onBlur('ssid')" autofocus/>
-          <q-input ref="passwordInput" color="teal-6" label="安全密钥" v-model="password" @focus="onFocus('password')"
+          <q-input ref="passwordInput" color="teal-6" :label="$t('systemSettings.networkConnect.authorityPassword')"  v-model="password" @focus="onFocus('password')"
                    @blur="onBlur('password')"/>
         </q-card-section>
 
         <q-card-actions align="right" class="text-teal-6">
-          <q-btn push label="确认" color="teal-6" v-close-popup @click="emits('connect', ssid, password)"/>
+          <q-btn push :label="$t('systemSettings.common.confirm')"
+                 color="teal-6" v-close-popup @click="emits('connect', ssid, password)"/>
         </q-card-actions>
       </q-card>
     </q-dialog>

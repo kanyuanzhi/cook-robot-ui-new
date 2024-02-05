@@ -17,6 +17,9 @@
 <script setup>
 import { onMounted, ref, watch } from "vue";
 import { Notify } from "quasar";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
 
 const props = defineProps(["seasoning", "seasoningMap"]);
 
@@ -30,7 +33,7 @@ watch(weightValue, () => {
 
 const onWeightMinus = () => {
   if (weightValue.value === 0) {
-    Notify.create("调料分量不能小于0");
+    Notify.create(t("dishDetails.tasteWeightInput.minWarningMsg"));
     return;
   }
   weightValue.value--;
@@ -42,7 +45,7 @@ const onWeightPlus = () => {
 
 const inputStyle = {
   textAlign: "center",
-  color: "#009688"
+  color: "#009688",
 };
 
 </script>

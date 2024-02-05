@@ -3,19 +3,31 @@
     <div class="col-6 offset-3">
       <q-list class="text-grey-9">
         <q-item dense>
-          <q-item-section>软件名称：{{ useSoftwareInfoStore.name }}</q-item-section>
+          <q-item-section>{{ $t("systemSettings.softwareUpdate.name") + useSoftwareInfoStore.name }}</q-item-section>
         </q-item>
         <q-item dense>
-          <q-item-section>软件版本：{{ useSoftwareInfoStore.version }}</q-item-section>
+          <q-item-section>{{
+              $t("systemSettings.softwareUpdate.version") + useSoftwareInfoStore.version
+            }}
+          </q-item-section>
         </q-item>
         <q-item dense>
-          <q-item-section>设备型号：{{ useSoftwareInfoStore.machineModel }}</q-item-section>
+          <q-item-section>{{
+              $t("systemSettings.softwareUpdate.model") + useSoftwareInfoStore.machineModel
+            }}
+          </q-item-section>
         </q-item>
         <q-item dense>
-          <q-item-section>设备序列号：{{ useSoftwareInfoStore.serialNumber }}</q-item-section>
+          <q-item-section>{{
+              $t("systemSettings.softwareUpdate.serialNumber") + useSoftwareInfoStore.serialNumber
+            }}
+          </q-item-section>
         </q-item>
         <q-item dense>
-          <q-item-section>更新日期：{{ useSoftwareInfoStore.updateTime }}</q-item-section>
+          <q-item-section>{{
+              $t("systemSettings.softwareUpdate.updateTime") + useSoftwareInfoStore.updateTime
+            }}
+          </q-item-section>
         </q-item>
         <q-item>
           <q-btn v-if="!isCheckPassed" push color="teal-6" size="md" @click="check" :disable="isChecking">
@@ -25,9 +37,10 @@
                 size="0.7em"
                 class="q-mr-md"
             />
-            检查更新
+            {{ $t("systemSettings.softwareUpdate.checkUpdate") }}
           </q-btn>
-          <q-btn v-else push color="teal-6" size="md" label="开始更新" @click="beginUpdate"/>
+          <q-btn v-else push color="teal-6" size="md" :label="$t('systemSettings.softwareUpdate.startUpdate')"
+                 @click="beginUpdate"/>
         </q-item>
       </q-list>
       <TheUpdatingDialog ref="theUpdatingDialog"/>
@@ -42,6 +55,9 @@ import { date } from "quasar";
 import TheUpdatingDialog from "pages/systemSettings/softwareUpdate/TheUpdatingDialog.vue";
 import { getAPI } from "src/api";
 import { UseSoftwareInfoStore } from "stores/softwareInfoStore";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
 
 const useSoftwareInfoStore = UseSoftwareInfoStore();
 
@@ -51,7 +67,6 @@ const isCheckPassed = ref(false);
 const isChecking = ref(false);
 
 onMounted(async () => {
-  console.log(123213)
   await useSoftwareInfoStore.fetch();
 });
 
@@ -62,21 +77,22 @@ const check = async () => {
     const { isLatest, latestVersion, hasFile } = data;
     if (isLatest) {
       Notify.create({
-        message: "当前已是最新版本，无需更新",
+        message: t("systemSettings.softwareUpdate.noNeedUpdateMsg"),
         type: "warning",
       });
     } else if (!hasFile) {
       Notify.create({
-        message: "正在准备更新包，请稍后重试",
+        message: t("systemSettings.softwareUpdate.preparingMsg"),
         type: "warning",
       });
     } else {
       isCheckPassed.value = true;
-      Notify.create("有新版本" + latestVersion + "可以更新，请点击下方“开始更新”按钮");
+      Notify.create(t("systemSettings.softwareUpdate.hasNewVersionMsg") +
+          latestVersion + t("systemSettings.softwareUpdate.permitUpdateMsg"));
     }
   } catch (e) {
     Notify.create({
-      message: "检查更新失败",
+      message: t("systemSettings.softwareUpdate.checkUpdateFailedMsg"),
       type: "warning",
     });
     console.log(e.toString());
@@ -90,7 +106,7 @@ const beginUpdate = async () => {
     const { isRunning, isUpdating, isPermitted } = data;
     if (!isPermitted) {
       Notify.create({
-        message: "机器运行中，请稍后更新",
+        message: t("systemSettings.softwareUpdate.isRunningMsg"),
         type: "warning",
       });
       return;

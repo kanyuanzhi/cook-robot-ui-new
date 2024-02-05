@@ -3,11 +3,11 @@
     <q-dialog v-model="shown" @hide="onHide" position="top">
       <q-card style="width: 400px;margin-top: 50px" class="q-mt-md">
         <q-card-section class="bg-teal-6 text-white q-py-sm">
-          <div class="text-h6">保存菜品</div>
+          <div class="text-h6">{{ $t("dishEdit.saveDishDialog.title") }}</div>
         </q-card-section>
         <q-card-section>
           <q-item>
-            <q-item-section avatar>名称</q-item-section>
+            <q-item-section avatar>{{ $t("dishEdit.saveDishDialog.dishName") }}</q-item-section>
             <q-item-section>
               <q-input
                   v-model="newName"
@@ -21,7 +21,7 @@
             </q-item-section>
           </q-item>
           <q-item>
-            <q-item-section avatar>菜系</q-item-section>
+            <q-item-section avatar>{{ $t("dishEdit.saveDishDialog.cuisine") }}</q-item-section>
             <q-item-section>
               <q-select
                   dense
@@ -39,15 +39,15 @@
             <q-item-section>
             <span class="text-grey-7" style="font-size: 12px">
               <span class="text-red">*</span>
-              保存操作将会重置该菜品已有的三种自定义口味
+              {{ $t("dishEdit.saveDishDialog.note") }}
             </span>
             </q-item-section>
           </q-item>
         </q-card-section>
         <q-card-actions align="right">
-          <q-btn v-close-popup flat color="">取消</q-btn>
-          <q-btn unelevated size="md" color="teal-6" @click="onSubmit('save')">保存</q-btn>
-          <q-btn unelevated color="teal-6" @click="onSubmit('create')">新建</q-btn>
+          <q-btn v-close-popup flat color="">{{ $t("common.cancel") }}</q-btn>
+          <q-btn unelevated size="md" color="teal-6" @click="onSubmit('save')">{{ $t("common.save") }}</q-btn>
+          <q-btn unelevated color="teal-6" @click="onSubmit('create')">{{ $t("common.create") }}</q-btn>
         </q-card-actions>
 
       </q-card>
@@ -74,8 +74,10 @@ import CustomKeyboard from "pages/dishEdit/components/CustomKeyboard.vue";
 import { UseAppStore } from "stores/appStore";
 import { cloneDeep } from "lodash/lang";
 import { getAPI, postAPI, putAPI } from "src/api";
+import { useI18n } from "vue-i18n";
 
 const useAppStore = UseAppStore();
+const { t } = useI18n();
 
 const shown = ref(false);
 
@@ -125,7 +127,7 @@ const onChange = (input, inputName) => {
 };
 const onSubmit = async (flag) => {
   if (newName.value.trim() === "") {
-    Notify.create("请输入菜品名称");
+    Notify.create(t("dishEdit.saveDishDialog.emptyNameMsg"));
     return;
   }
   const newDish = {
@@ -143,10 +145,10 @@ const onSubmit = async (flag) => {
       useAppStore.editingDish.cuisine = data.dish.cuisine;
       useAppStore.editingDish.uuid = data.dish.uuid;
       useAppStore.originEditingDish = cloneDeep(useAppStore.editingDish);
-      Notify.create(message);
+      Notify.create(t("common.createSuccess"));
     } catch (e) {
       Notify.create({
-        message: e.toString(),
+        message: t("common.createFailed"),
         type: "negative",
       });
     }
@@ -157,10 +159,10 @@ const onSubmit = async (flag) => {
       useAppStore.editingDish.cuisine = data.dish.cuisine;
       useAppStore.originEditingDish.name = data.dish.name;
       useAppStore.originEditingDish.cuisine = data.dish.cuisine;
-      Notify.create(message);
+      Notify.create(t("common.updateSuccess"));
     } catch (e) {
       Notify.create({
-        message: e.toString(),
+        message: t("common.updateFailed"),
         type: "negative",
       });
     }

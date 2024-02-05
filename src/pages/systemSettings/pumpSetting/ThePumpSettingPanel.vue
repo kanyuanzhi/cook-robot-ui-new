@@ -10,11 +10,15 @@
     </div>
     <div class="row  q-mt-lg">
       <div class="col-8">
-        <span class="text-teal-8">“绿色”标签表示调料充足，<span class="text-red-6">“红色”</span>标签表示调料不足。</span>
+        <span class="text-teal-8">{{
+            $t("systemSettings.pumpSetting.green") + $t("systemSettings.pumpSetting.sufficientText")
+          }}
+          <span class="text-red-6">{{ $t("systemSettings.pumpSetting.red") }}</span>
+          {{ $t("systemSettings.pumpSetting.insufficientText") }}</span>
       </div>
       <div class="col-4 text-right">
-        <q-btn label="取消" type="reset" text-color="teal-6" push class="q-mr-sm white"/>
-        <q-btn label="保存" type="submit" push color="teal-6"/>
+        <q-btn :label="$t('common.cancel')" type="reset" text-color="teal-6" push class="q-mr-sm white"/>
+        <q-btn :label="$t('common.save')" type="submit" push color="teal-6"/>
       </div>
     </div>
   </q-form>
@@ -27,6 +31,7 @@ import { getSeasoningConfigs, updateSeasoningConfigs } from "src/api/seasoning";
 import ThePumpRatioInput from "pages/systemSettings/pumpSetting/ThePumpRatioInput.vue";
 import { UseControllerStore } from "stores/controllerStore";
 import { getAPI, putAPI } from "src/api";
+import { useI18n } from "vue-i18n";
 
 const useControllerStore = UseControllerStore();
 
@@ -40,6 +45,9 @@ onMounted(async () => {
   }
 });
 
+const { t } = useI18n();
+const msg = ref(t("common.updateSuccess"));
+
 const onSubmit = async () => {
   try {
     const pumpRatios = [];
@@ -47,7 +55,8 @@ const onSubmit = async () => {
       seasoning.ratio = seasoning.editingRatio;
     }
     const { message } = await putAPI("/seasoning/update-pumpRatios", { seasonings: seasonings.value });
-    Notify.create(message);
+
+    Notify.create(msg.value);
   } catch (e) {
     console.log(e.toString());
   }

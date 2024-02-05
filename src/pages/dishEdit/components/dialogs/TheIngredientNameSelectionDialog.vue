@@ -2,7 +2,7 @@
   <q-dialog v-model="shown" @hide="onHide">
     <q-card class="column" style="width: 80%">
       <q-card-section>
-        <div class="text-subtitle1">选择食材</div>
+        <div class="text-subtitle1">{{ $t("dishEdit.ingredientDialog.nameSelect.title") }}</div>
       </q-card-section>
       <q-separator/>
       <q-card-section class="row q-gutter-md">

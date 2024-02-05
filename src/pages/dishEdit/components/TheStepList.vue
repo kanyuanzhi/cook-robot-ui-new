@@ -2,7 +2,7 @@
   <q-card bordered flat class="my-card" style="width: 100%">
     <q-card-section class="text-center q-py-sm bg-teal-6 text-white">
       <div class="text-subtitle1">
-        步骤{{ useAppStore.editingDish.name === "" ? "" : "（" + useAppStore.editingDish.name + "）" }}
+        {{ $t("dishEdit.stepList.title") }}{{ useAppStore.editingDish.name === "" ? "" : "（" + useAppStore.editingDish.name + "）" }}
       </div>
     </q-card-section>
     <q-separator inset/>

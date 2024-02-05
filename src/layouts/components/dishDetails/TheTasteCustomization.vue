@@ -3,7 +3,8 @@
     <q-card style="width: 400px">
       <q-card-section>
         <div class="bg-teal-6 q-py-sm text-center" style="border-radius: 10px;">
-          <span class="text-subtitle1 text-weight-bold text-white">{{ dishName }}口味调整（单位：克）</span>
+          <span class="text-subtitle1 text-weight-bold text-white">
+            {{ dishName }}{{ $t("dishDetails.tasteCustomizationDialog.title") }}</span>
         </div>
       </q-card-section>
       <q-card-section class="q-pa-none">
@@ -30,17 +31,17 @@
               dense
           >
             <q-tab v-for="(steps, index) in customStepsArray" :key="customUUIDs[index]" :name="customUUIDs[index]"
-                   :label="'口味'+(index+1)" :ripple="false"/>
+                   :label="$t('dishDetails.taste')+(index+1)" :ripple="false"/>
           </q-tabs>
         </q-scroll-area>
       </q-card-section>
       <q-card-section class="bg-white text-teal-6">
         <div class="row q-gutter-sm">
-          <q-btn color="teal-6" class="col text-subtitle2" label="删除" :disable="customUUID===undefined" rounded push
+          <q-btn color="teal-6" class="col text-subtitle2" :label="$t('common.delete')" :disable="customUUID===undefined" rounded push
                  @click="deleteCustomSteps"/>
-          <q-btn color="teal-6" class="col text-subtitle2" label="新建" rounded push @click="addCustomSteps"/>
-          <q-btn color="teal-6" class="col text-subtitle2" label="取消" rounded push v-close-popup @click="cancel"/>
-          <q-btn color="teal-6" class="col text-subtitle2" label="保存" rounded push v-close-popup @click="save"/>
+          <q-btn color="teal-6" class="col text-subtitle2" :label="$t('common.create')" rounded push @click="addCustomSteps"/>
+          <q-btn color="teal-6" class="col text-subtitle2" :label="$t('common.cancel')" rounded push v-close-popup @click="cancel"/>
+          <q-btn color="teal-6" class="col text-subtitle2" :label="$t('common.save')" rounded push v-close-popup @click="save"/>
         </div>
       </q-card-section>
     </q-card>

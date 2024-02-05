@@ -2,7 +2,8 @@
   <div class="row">
     <TheSeasoningSelect class="col" ref="theSeasoningSelect" :seasoning="seasoning"
                         :seasoning-options="seasoningOptions" @update="onSeasoningUpdate"/>
-    <NumberSelect class="col" label="分量" unit="克" :number="seasoning.weight" :min="minWeight" :max="maxWeight"
+    <NumberSelect class="col" :label="$t('dishEdit.seasoningItem.label')"
+                  :unit="$t('dishEdit.seasoningItem.unit')" :number="seasoning.weight" :min="minWeight" :max="maxWeight"
                   :step="weightStep" @update="onWeightUpdate"/>
     <q-btn size="xs" flat icon="clear" text-color="grey-8" @click="emits('delete')"></q-btn>
   </div>

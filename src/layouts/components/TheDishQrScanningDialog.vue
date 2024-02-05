@@ -2,7 +2,7 @@
   <q-dialog v-model="useAppStore.dishQrScanningShown" position="standard" @hide="onHide">
     <q-card style="width: 360px;" @mousedown.prevent>
       <q-card-section class="text-center bg-teal-6" @mousedown.prevent>
-        <div class="text-h6 text-white">扫码炒菜</div>
+        <div class="text-h6 text-white">{{ $t("header.moreOptions.qrScan") }}</div>
       </q-card-section>
       <q-card-section>
         <div class="column items-center">
@@ -15,7 +15,7 @@
         </div>
       </q-card-section>
       <q-card-section class="q-pt-none">
-        <div class="text-teal-9 text-center text-subtitle1">请将二维码对准扫码器</div>
+        <div class="text-teal-9 text-center text-subtitle1">{{ $t("header.qrScan.instruction") }}</div>
       </q-card-section>
     </q-card>
   </q-dialog>
@@ -28,8 +28,11 @@ import { endsWith, startsWith } from "lodash";
 import { Notify } from "quasar";
 import { getDish } from "src/api/dish";
 import { getAPI } from "src/api";
+import { useI18n } from "vue-i18n";
 
 const useAppStore = UseAppStore();
+const { t } = useI18n();
+
 const test = "dishUUID::837561df-d4f0-4059-be70-dc1208348efb";
 
 const scanResult = ref("");
@@ -49,12 +52,20 @@ const onKeydownEnter = async (e) => {
       useAppStore.showDishDetailsCard(data.dish.uuid);
       useAppStore.hideDishQrScanning();
     } catch (e) {
-      Notify.create("未查询到对应菜品，请重试");
+      Notify.create({
+        icon: "report_problem",
+        color: "orange",
+        message: t("header.qrScan.dishNotFound"),
+      });
       scanInput.value.focus();
       return;
     }
   } else {
-    Notify.create("非小云智炒二维码");
+    Notify.create({
+      icon: "report_problem",
+      color: "orange",
+      message: t("header.qrScan.wrongQr"),
+    });
   }
   scanResult.value = "";
 };

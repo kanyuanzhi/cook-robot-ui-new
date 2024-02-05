@@ -2,17 +2,18 @@
   <q-dialog v-model="shown" @hide="onHide">
     <q-card style="width: 600px" class="q-mt-md">
       <q-card-section class="bg-teal-6 text-white q-py-sm">
-        <div class="text-h6">添加翻炒</div>
+        <div class="text-h6">{{ $t("dishEdit.stirFryDialog.title") }}</div>
       </q-card-section>
       <q-card-section>
-        <GearSlider ref="gearSlider" :gear="gear" label="档位" color="amber-10" :gear-min="0" :gear-max="5"
+        <GearSlider ref="gearSlider" :gear="gear" :label="$t('dishEdit.stirFryDialog.gear')"
+                    color="amber-10" :gear-min="0" :gear-max="5"
                     @update="(v)=>{gear=v}"/>
 
         <DurationSelect ref="durationSelect" :duration="duration" @update="(v)=>{duration=v}"/>
       </q-card-section>
       <q-card-actions align="right">
-        <q-btn v-close-popup flat color="teal-6">取消</q-btn>
-        <q-btn color="teal-6" unelevated @click="onSubmit">提交</q-btn>
+        <q-btn v-close-popup flat color="teal-6">{{ $t("common.cancel") }}</q-btn>
+        <q-btn color="teal-6" unelevated @click="onSubmit">{{ $t("common.submit") }}</q-btn>
       </q-card-actions>
     </q-card>
   </q-dialog>

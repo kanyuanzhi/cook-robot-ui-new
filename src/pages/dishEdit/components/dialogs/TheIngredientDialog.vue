@@ -3,18 +3,18 @@
     <q-dialog v-model="shown" @hide="onHide" position="top">
       <q-card style="width: 400px" class="q-mt-md">
         <q-card-section class="bg-teal-6 text-white q-py-sm">
-          <div class="text-h6">添加食材</div>
+          <div class="text-h6">{{ $t("dishEdit.ingredientDialog.title") }}</div>
         </q-card-section>
         <q-card-section>
           <q-item>
-            <q-item-section avatar>食材</q-item-section>
+            <q-item-section avatar>{{ $t("dishEdit.ingredientDialog.ingredient") }}</q-item-section>
             <q-item-section>
               <q-input
-                v-model="name"
-                filled
-                dense
-                @blur="onInputBlur($event, 'name')"
-                @focus="onInputFocus($event, 'name')"
+                  v-model="name"
+                  filled
+                  dense
+                  @blur="onInputBlur($event, 'name')"
+                  @focus="onInputFocus($event, 'name')"
               >
                 <template v-slot:after>
                   <q-btn round dense flat icon="toc" @click="theIngredientNameSelectionDialog.show()"/>
@@ -24,14 +24,14 @@
           </q-item>
 
           <q-item>
-            <q-item-section avatar>形状</q-item-section>
+            <q-item-section avatar>{{ $t("dishEdit.ingredientDialog.shape") }}</q-item-section>
             <q-item-section>
               <q-input
-                v-model="shape"
-                filled
-                dense
-                @blur="onInputBlur($event, 'shape')"
-                @focus="onInputFocus($event, 'shape')"
+                  v-model="shape"
+                  filled
+                  dense
+                  @blur="onInputBlur($event, 'shape')"
+                  @focus="onInputFocus($event, 'shape')"
               >
                 <template v-slot:after>
                   <q-btn round dense flat icon="toc" @click="theIngredientShapeSelectionDialog.show()"/>
@@ -40,25 +40,27 @@
             </q-item-section>
           </q-item>
 
-          <NumberSelect ref="numberSelect" label="分量" unit="克" :min="0" :max="500" :step="5"
+          <NumberSelect ref="numberSelect" :label="$t('dishEdit.ingredientDialog.weight')"
+                        :unit="$t('dishEdit.ingredientDialog.unit')" :min="0" :max="500" :step="5"
                         :number="weight" @update="(v)=>weight=v"/>
 
-          <SlotRadio ref="slotRadio" :slotNumber="slotNumber" label="菜盒" :slot-count="4" @update="(v)=>slotNumber=v"/>
+          <SlotRadio ref="slotRadio" :slotNumber="slotNumber" :label="$t('dishEdit.ingredientDialog.slot')"
+                     :slot-count="4" @update="(v)=>slotNumber=v"/>
         </q-card-section>
         <q-card-actions align="right">
-          <q-btn v-close-popup flat color="teal-6">取消</q-btn>
-          <q-btn color="teal-6" unelevated @click="onSubmit">提交</q-btn>
+          <q-btn v-close-popup flat color="teal-6">{{ $t("common.cancel") }}</q-btn>
+          <q-btn color="teal-6" unelevated @click="onSubmit">{{ $t("common.submit") }}</q-btn>
         </q-card-actions>
       </q-card>
     </q-dialog>
     <q-dialog
-      v-model="shown"
-      persistent
-      position="bottom"
-      no-focus
-      no-refocus
-      seamless
-      full-width
+        v-model="shown"
+        persistent
+        position="bottom"
+        no-focus
+        no-refocus
+        seamless
+        full-width
     >
       <CustomKeyboard ref="customKeyboard" @change="onChange" @enter="onSubmit"/>
     </q-dialog>

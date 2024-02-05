@@ -3,30 +3,32 @@
     <q-dialog v-model="shown" @hide="onHide" position="top">
       <q-card style="min-width: 350px;margin-top: 100px">
         <q-card-section>
-          <div class="text-subtitle1">请输入网络安全密钥</div>
+          <div class="text-subtitle1">{{ $t("systemSettings.networkConnect.inputAuthorityPassword") }}</div>
         </q-card-section>
 
         <q-card-section class="q-pt-none">
-          <q-input color="teal-6" label="安全密钥" v-model="password" autofocus/>
+          <q-input color="teal-6" :label="$t('systemSettings.networkConnect.authorityPassword')"
+                   v-model="password" autofocus/>
         </q-card-section>
 
         <q-card-actions align="right" class="text-teal-6">
-          <q-btn push label="确认" color="teal-6" v-close-popup @click="emits('connect', ssid, password)"/>
+          <q-btn push :label="$t('systemSettings.common.confirm')" color="teal-6" v-close-popup
+                 @click="emits('connect', ssid, password)"/>
         </q-card-actions>
       </q-card>
     </q-dialog>
     <q-dialog
-      v-model="shown"
-      no-focus
-      no-refocus
-      seamless
-      full-width
-      position="bottom"
+        v-model="shown"
+        no-focus
+        no-refocus
+        seamless
+        full-width
+        position="bottom"
     >
       <CustomKeyboard
-        ref="customKeyboard"
-        @change="onChange"
-        @connect="emits('connect', ssid, password)"
+          ref="customKeyboard"
+          @change="onChange"
+          @connect="emits('connect', ssid, password)"
       />
     </q-dialog>
   </div>
@@ -60,7 +62,7 @@ const onHide = () => {
 };
 
 defineExpose({
-  show
+  show,
 });
 </script>
 

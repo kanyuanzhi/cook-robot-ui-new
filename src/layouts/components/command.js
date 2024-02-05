@@ -1,10 +1,13 @@
-import { Notify } from "quasar";
+import { LocalStorage, Notify } from "quasar";
 import { UseAppStore } from "stores/appStore";
 import { UseControllerStore } from "stores/controllerStore";
 import { postAPI } from "src/api";
+import { i18n } from "src/boot/i18n";
 
 const useAppStore = UseAppStore();
 const useControllerStore = UseControllerStore();
+
+const t = i18n.global.t;
 
 export async function sendCommand (commandName, commandData = {}) {
   let commandType;
@@ -32,7 +35,7 @@ export async function sendCommand (commandName, commandData = {}) {
     case "pause_to_add":
       if (!useControllerStore.isPausePermitted) {
         Notify.create({
-          message: "为确保安全，请在机器运行至翻炒位时中途加料",
+          message: t("command.pauseToAddWarningMsg"),
           type: "warning",
         });
         return;
@@ -53,7 +56,7 @@ export async function sendCommand (commandName, commandData = {}) {
       break;
     default:
       Notify.create({
-        message: "命令名称错误",
+        message: t("command.nameErrorMsg"),
         type: "warning",
       });
 
@@ -65,10 +68,17 @@ export async function sendCommand (commandName, commandData = {}) {
       commandName: commandName,
       commandData: commandData,
     });
-    Notify.create({
-      message: message,
-      type: code === 1 ? "positive" : "warning",
-    });
+    if (code === 1) {
+      Notify.create({
+        message: t("common.executeSuccessMsg"),
+        type: "positive",
+      });
+    } else {
+      Notify.create({
+        message: message,
+        type: "warning",
+      });
+    }
   } catch (e) {
     console.log(e.toString());
   }

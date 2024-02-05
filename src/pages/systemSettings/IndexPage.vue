@@ -2,53 +2,58 @@
   <q-page>
     <div class="q-pa-sm">
       <q-splitter
-        v-model="splitterModel"
+          v-model="splitterModel"
       >
         <template v-slot:before>
           <q-tabs
-            v-model="tab"
-            vertical
-            class="text-teal-6"
-            active-bg-color="teal-6"
-            active-color="white"
+              v-model="tab"
+              vertical
+              class="text-teal-6"
+              active-bg-color="teal-6"
+              active-color="white"
           >
-            <q-tab class="" name="pumpSetting" label="料泵设置" icon="timelapse"/>
+            <q-tab class="" name="pumpSetting" :label="$t('systemSettings.base.pumpSetting.label')" icon="timelapse"/>
             <q-separator/>
-            <q-tab class="" name="networkConnect" label="网络连接" icon="wifi"/>
-            <q-tab class="" name="phonePair" label="手机配对" icon="phone_iphone"/>
-            <q-tab class="" name="dataUpdate" label="菜品同步" icon="phone_iphone"/>
-            <q-tab class="" name="softwareUpdate" label="软件更新" icon="update"/>
+            <q-tab class="" name="networkConnect" :label="$t('systemSettings.base.networkConnect.label')" icon="wifi"/>
+            <q-tab class="" name="phonePair" :label="$t('systemSettings.base.phonePair.label')" icon="phone_iphone"/>
+            <q-tab class="" name="dataUpdate" :label="$t('systemSettings.base.dataUpdate.label')" icon="phone_iphone"/>
+            <q-tab class="" name="softwareUpdate" :label="$t('systemSettings.base.softwareUpdate.label')" icon="update"/>
+            <q-tab class="" name="languageShift" :label="$t('systemSettings.base.languageShift.label')" icon="language"/>
           </q-tabs>
         </template>
 
         <template v-slot:after>
           <q-tab-panels
-            v-model="tab"
-            vertical
-            transition-prev="jump-up"
-            transition-next="jump-up"
+              v-model="tab"
+              vertical
+              transition-prev="jump-up"
+              transition-next="jump-up"
           >
-            <SettingPanel title="料泵设置"
-                          summary="各泵开启时长（毫秒）与出料分量（克）的比例关系。例：100表示下料1克需要开启泵100毫秒。"
+            <SettingPanel :title="$t('systemSettings.base.pumpSetting.label')"
+                          :summary="$t('systemSettings.base.pumpSetting.summary')"
                           name="pumpSetting">
               <ThePumpSettingPanel/>
             </SettingPanel>
-            <SettingPanel title="网络连接"
+            <SettingPanel :title="$t('systemSettings.base.networkConnect.label')"
                           name="networkConnect">
               <TheNetworkConnectPanel/>
             </SettingPanel>
-            <SettingPanel title="手机配对"
-                          summary="请打开手机App扫描以下二维码完成配对。"
+            <SettingPanel :title="$t('systemSettings.base.phonePair.label')"
+                          :summary="$t('systemSettings.base.phonePair.summary')"
                           name="phonePair">
               <ThePhonePairPanel/>
             </SettingPanel>
-            <SettingPanel title="菜品同步"
+            <SettingPanel :title="$t('systemSettings.base.dataUpdate.label')"
                           name="dataUpdate">
               <TheDataUpdatePanel/>
             </SettingPanel>
-            <SettingPanel title="软件更新"
+            <SettingPanel :title="$t('systemSettings.base.softwareUpdate.label')"
                           name="softwareUpdate">
               <TheSoftwareUpdatePanel/>
+            </SettingPanel>
+            <SettingPanel :title="$t('systemSettings.base.languageShift.label')"
+                          name="languageShift">
+              <TheLanguageShiftPanel/>
             </SettingPanel>
           </q-tab-panels>
         </template>
@@ -66,9 +71,13 @@ import ThePumpSettingPanel from "pages/systemSettings/pumpSetting/ThePumpSetting
 import SettingPanel from "pages/systemSettings/components/SettingPanel.vue";
 import { UseAppStore } from "stores/appStore";
 import TheDataUpdatePanel from "pages/systemSettings/dataUpdate/TheDataUpdatePanel.vue";
+import TheLanguageShiftPanel from "pages/systemSettings/languageShift/TheLanguageShiftPanel.vue";
+import { useI18n } from "vue-i18n";
 
 const useAppStore = UseAppStore();
-useAppStore.setPageTitle("系统设置");
+const { t } = useI18n();
+
+useAppStore.setPageTitle(t("systemSettings.base.title"));
 
 const splitterModel = ref(20);
 

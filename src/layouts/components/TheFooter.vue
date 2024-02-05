@@ -4,13 +4,13 @@
       <q-toolbar class="col-12">
         <q-toolbar-title class="text-center">
           <q-spinner-dots
-            v-if="useControllerStore.isRunning"
-            size="2em"
+              v-if="useControllerStore.isRunning"
+              size="2em"
           />
           <span>&nbsp; {{ statusBarDisplay }} &nbsp;</span>
           <q-spinner-dots
-            v-if="useControllerStore.isRunning"
-            size="2em"
+              v-if="useControllerStore.isRunning"
+              size="2em"
           />
         </q-toolbar-title>
       </q-toolbar>
@@ -24,33 +24,36 @@
 import { UseAppStore } from "stores/appStore";
 import { UseControllerStore } from "stores/controllerStore";
 import { computed } from "vue";
+import { useI18n } from "vue-i18n";
 
 const useAppStore = UseAppStore();
 const useControllerStore = UseControllerStore();
+const { t } = useI18n();
 
 const statusBarDisplay = computed(() => {
-  if (!useControllerStore.isRunning) return "待机等待";
+  if (!useControllerStore.isRunning) return t("footer.status.waiting");
   if (useControllerStore.isPausing) {
-    return !useControllerStore.isPausingWithMovingFinished ? "中途加料：移动至加料位中" : "中途加料：现在可以加料";
+    return !useControllerStore.isPausingWithMovingFinished ? t("footer.status.pauseToAdd.moving")
+        : t("footer.status.pauseToAdd.permit");
   }
-  if (!useControllerStore.isPausingWithMovingBackFinished) return "中途加料：恢复原位置中";
+  if (!useControllerStore.isPausingWithMovingBackFinished) return t("footer.status.pauseToAdd.resetting");
   switch (useControllerStore.currentCommandName) {
     case "cook":
-      return "炒制" + useAppStore.runningDish.name + "中";
+      return t("footer.status.firing") + useAppStore.runningDish.name + t("footer.ing");
     case "wash":
-      return "清洗中";
+      return t("footer.status.washing");
     case "pour":
-      return "倒水中";
+      return t("footer.status.pouring");
     case "reset":
-      return "复位中";
+      return t("footer.status.resetting");
     case "prepare":
-      return "备菜中";
+      return t("footer.status.preparing");
     case "dish_out":
-      return "出菜中";
+      return t("footer.status.dishOuting");
     case "withdraw":
-      return "收纳中";
+      return t("footer.status.withdrawing");
     default:
-      return "状态错误";
+      return t("footer.status.err");
   }
 });
 </script>

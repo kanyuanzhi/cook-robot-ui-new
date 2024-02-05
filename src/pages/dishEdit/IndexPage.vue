@@ -20,9 +20,12 @@ import TheStepList from "pages/dishEdit/components/TheStepList.vue";
 import TheOperatorBtns from "pages/dishEdit/components/TheOperatorBtns.vue";
 import { UseAppStore } from "stores/appStore";
 import TheEasyStepList from "pages/dishEdit/components/TheEasyStepList.vue";
+import { useI18n } from "vue-i18n";
 
 const useAppStore = UseAppStore();
-useAppStore.setPageTitle("菜品制作");
+const { t } = useI18n();
+
+useAppStore.setPageTitle(t("dishEdit.base.title"));
 
 const dish = ref(useAppStore.editingDish);
 
