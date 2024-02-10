@@ -32,7 +32,7 @@ const { locale } = useI18n({ useScope: "global" });
 const localeOptions = [
   { value: "zh-CN", label: "中文简体" },
   { value: "zh-TW", label: "中文繁體" },
-  // { value: "en-US", label: "English" },
+  { value: "en-US", label: "English" },
 ];
 
 watch(
