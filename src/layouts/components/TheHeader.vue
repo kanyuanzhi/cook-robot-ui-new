@@ -15,11 +15,14 @@
       <!--      <q-btn v-if="Platform.is.win" label="远控设置" outline rounded color="teal-6" @click="setRemoteControlAddress"/>-->
       <q-btn v-if="useAppStore.backBtnShown" :label="$t('header.back')" outline rounded color="teal-6"
              @click="onBackBtnClick"/>
+      <q-btn v-if="route.path ==='/dishSelect'" :label="$t('header.search')" outline rounded color="teal-6"
+             @click="theSearchDialog.show()"/>
       <q-btn v-if="route.path ==='/dishSelect'" :label="$t('header.dishSync')" outline rounded color="teal-6"
              @click="synchronizeDishes"/>
       <q-btn :label="$t('header.withdraw')" outline rounded color="teal-6" @click="sendCommand('withdraw')"/>
       <TheMoreOperations/>
     </q-toolbar>
+    <TheSearchDialog ref="theSearchDialog"/>
   </q-header>
 </template>
 
@@ -33,12 +36,17 @@ import { sendCommand } from "layouts/components/command";
 import { putAPI } from "src/api";
 import { UseSoftwareInfoStore } from "stores/softwareInfoStore";
 import { useI18n } from "vue-i18n";
+import { ref } from "vue";
+import TheSearchDialog from "layouts/components/TheSearchDialog.vue";
 
 const router = useRouter();
 const route = useRoute();
 const useAppStore = UseAppStore();
 const useSettingStore = UseSettingStore();
 const useSoftwareInfoStore = UseSoftwareInfoStore();
+
+const theSearchDialog = ref(null);
+
 
 const onBackBtnClick = () => {
   useAppStore.setIsBackFromDishEdit(true);

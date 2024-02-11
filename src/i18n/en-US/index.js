@@ -68,6 +68,7 @@ export default {
   },
   header: {
     back: "Back",
+    search: "Search",
     dishSync: "	Dish Sync",
     withdraw: "Withdraw",
     moreOptions: {
@@ -81,6 +82,7 @@ export default {
       dishNotFound: "please try again",
       wrongQr: "QR Code Error",
     },
+    searchDish: "Search Dishes",
   },
   dishSelect: {
     base: {

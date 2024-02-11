@@ -33,5 +33,5 @@ onBeforeMount(async () => {
   await useSoftwareInfoStore.fetch();
 });
 
-setInterval(useControllerStore.fetchStatus, 200);
+// setInterval(useControllerStore.fetchStatus, 200);
 </script>

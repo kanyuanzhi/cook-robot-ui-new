@@ -61,6 +61,7 @@ export default {
   },
   header: {
     back: "返回",
+    search: "搜索",
     dishSync: "菜品同步",
     withdraw: "一鍵收納",
     moreOptions: {
@@ -74,6 +75,7 @@ export default {
       dishNotFound: "未査詢到對應菜品，請重試",
       wrongQr: "非小雲智炒二維碼",
     },
+    searchDish: "搜索菜品",
   },
   dishSelect: {
     base: {

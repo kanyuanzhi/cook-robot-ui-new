@@ -4,7 +4,8 @@
       <div class="row q-col-gutter-md">
         <div class="col-4" v-for="dish in dishes" :key="dish.uuid">
           <DishPanelCard :dish-image="dish.image" :dish-name="dish.name"
-                         :img-height="imgHeight" :card-section-width="cardSectionWidth" :dish-name-display-count="dishNameDisplayCount"
+                         :img-height="imgHeight" :card-section-width="cardSectionWidth"
+                         :dish-name-display-count="dishNameDisplayCount"
                          @click="useAppStore.showDishDetailsCard(dish.uuid)"/>
         </div>
       </div>
@@ -29,7 +30,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref, watch } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { ceil } from "lodash";
 import DishPanelCard from "pages/dishSelect/components/DishPanelCard.vue";
 import { UseAppStore } from "stores/appStore";
@@ -44,23 +45,23 @@ const imgHeight = ref(null);
 const cardSectionWidth = ref(null);
 const dishNameDisplayCount = ref(null);
 const pageSize = ref(null);
-// const pageSize = 12;
 
 const props = defineProps(["cuisineId"]);
 const dishes = ref([]);
 const count = ref(0);
 const pageMax = ref(0);
 const pageCurrent = ref(1);
+// const filter = ref("");
 
 onMounted(async () => {
-  await useSoftwareInfoStore.fetch()
+  await useSoftwareInfoStore.fetch();
   imgHeight.value = machineModelStyleMap[useSoftwareInfoStore.machineModel]["dishPanelCardImageHeight"];
   cardSectionWidth.value = machineModelStyleMap[useSoftwareInfoStore.machineModel]["dishPanelCardSectionWidth"];
   dishNameDisplayCount.value = machineModelStyleMap[useSoftwareInfoStore.machineModel]["dishPanelCardNameDisplayCount"];
   pageSize.value = machineModelStyleMap[useSoftwareInfoStore.machineModel]["dishesPanelPageSize"];
-  console.log(pageSize.value)
 
-  await getPaginationData();
+  // await getPaginationData();
+  await getDishesData();
 
   if (useAppStore.isBackFromDishEdit) {
     pageCurrent.value = useAppStore.cuisinePage;
@@ -69,42 +70,49 @@ onMounted(async () => {
     pageCurrent.value = 1;
     useAppStore.setCuisinePage(1);
   }
-
-  await getDishesData();
-
-  watch(pageCurrent,
-      async (value) => {
-        await getDishesData();
-        useAppStore.setCuisinePage(pageCurrent.value);
-      });
 });
 
-watch(() => useAppStore.dishSourceTab,
+watch(pageCurrent,
     async (value) => {
-      await getPaginationData();
+      // await getPaginationData();
+      await getDishesData();
+      useAppStore.setCuisinePage(pageCurrent.value);
+    });
+
+watch(() => useAppStore.searchFilter,
+    async (value, oldValue, onCleanup) => {
       await getDishesData();
     });
 
-const getPaginationData = async () => {
-  const countData = await getAPI("dish/count", {
-    enableCuisineFilter: props.cuisineId !== 0,
-    cuisineFilter: props.cuisineId === 0 ? "" : props.cuisineId,
-    isOfficial: useAppStore.dishSourceTab === "official",
-  });
+watch(() => useAppStore.dishSourceTab,
+    async (value) => {
+      // await getPaginationData();
+      await getDishesData();
+    });
 
-  count.value = countData.data.count;
-  pageMax.value = ceil(count.value / pageSize.value, 0);
-};
+// const getPaginationData = async () => {
+//   const countData = await getAPI("dish/count", {
+//     enableCuisineFilter: props.cuisineId !== 0,
+//     cuisineFilter: props.cuisineId === 0 ? "" : props.cuisineId,
+//     isOfficial: useAppStore.dishSourceTab === "official",
+//   });
+//
+//   count.value = countData.data.count;
+//   pageMax.value = ceil(count.value / pageSize.value, 0);
+// };
 
 const getDishesData = async () => {
-  const dishesData = await getAPI("dish/list", {
+  const { data } = await getAPI("dish/list", {
     pageIndex: pageCurrent.value,
     pageSize: pageSize.value,
     enableCuisineFilter: props.cuisineId !== 0,
     cuisineFilter: props.cuisineId === 0 ? "" : props.cuisineId,
     isOfficial: useAppStore.dishSourceTab === "official",
+    filter: useAppStore.searchFilter,
   });
-  dishes.value = dishesData.data.dishes;
+  count.value = data.count;
+  pageMax.value = ceil(count.value / pageSize.value, 0);
+  dishes.value = data.dishes;
 };
 </script>
 
