@@ -35,7 +35,6 @@ const show = () => {
   setTimeout(() => {
     theHeaderKeyboard.value.setInput(useAppStore.searchFilter, "default");
   }, 100);
-  // theHeaderKeyboard.value.setInput(useAppStore.searchFilter, "default")
 };
 
 const onChange = (input, name) => {

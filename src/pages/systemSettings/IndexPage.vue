@@ -19,6 +19,7 @@
             <q-tab class="" name="dataUpdate" :label="$t('systemSettings.base.dataUpdate.label')" icon="phone_iphone"/>
             <q-tab class="" name="softwareUpdate" :label="$t('systemSettings.base.softwareUpdate.label')" icon="update"/>
             <q-tab class="" name="languageShift" :label="$t('systemSettings.base.languageShift.label')" icon="language"/>
+            <q-tab v-if="useAppStore.isTest" class="" name="test" label="测试" icon="home"/>
           </q-tabs>
         </template>
 
@@ -55,6 +56,10 @@
                           name="languageShift">
               <TheLanguageShiftPanel/>
             </SettingPanel>
+            <SettingPanel title="测试"
+                          name="test">
+              <TheTestPanel/>
+            </SettingPanel>
           </q-tab-panels>
         </template>
       </q-splitter>
@@ -73,6 +78,7 @@ import { UseAppStore } from "stores/appStore";
 import TheDataUpdatePanel from "pages/systemSettings/dataUpdate/TheDataUpdatePanel.vue";
 import TheLanguageShiftPanel from "pages/systemSettings/languageShift/TheLanguageShiftPanel.vue";
 import { useI18n } from "vue-i18n";
+import TheTestPanel from "pages/systemSettings/test/TheTestPanel.vue";
 
 const useAppStore = UseAppStore();
 const { t } = useI18n();

@@ -54,6 +54,30 @@ export async function sendCommand (commandName, commandData = {}) {
     case "shutdown":
       commandType = "single";
       break;
+    case "open_water_source_valve":
+      commandType = "single";
+      break;
+    case "close_water_source_valve":
+      commandType = "single";
+      break;
+    case "open_water_pump_valve":
+      commandType = "single";
+      break;
+    case "close_water_pump_valve":
+      commandType = "single";
+      break;
+    case "open_nozzle_valve":
+      commandType = "single";
+      break;
+    case "close_nozzle_valve":
+      commandType = "single";
+      break;
+    case "open_pump_7_valve":
+      commandType = "single";
+      break;
+    case "close_pump_7_valve":
+      commandType = "single";
+      break;
     default:
       Notify.create({
         message: t("command.nameErrorMsg"),

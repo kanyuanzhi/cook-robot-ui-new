@@ -8,7 +8,7 @@
       <!--      <q-img v-if="useSoftwareInfoStore.isHZModel()" fit="fill" src="~/assets/logo-hz-2.png" style="width: 113px; height: 35px;" @click="router.push('/')"/>-->
     </q-toolbar>
     <q-toolbar class="col-4">
-      <q-toolbar-title class="text-teal-9 text-center">{{ useAppStore.pageTitle }}</q-toolbar-title>
+      <q-toolbar-title class="text-teal-9 text-center" @dblclick="useAppStore.shiftIsTest()">{{ useAppStore.pageTitle }}</q-toolbar-title>
     </q-toolbar>
     <q-toolbar class="col-4 q-gutter-md">
       <q-space/>

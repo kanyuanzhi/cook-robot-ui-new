@@ -41,6 +41,8 @@ export const UseAppStore = defineStore("app", {
     backBtnShown: false,
 
     searchFilter: "", // search filter for dish list
+
+    isTest: false,
   }),
   getters: {
     // getCurrentDish: (state) => state.runningDish,
@@ -123,6 +125,9 @@ export const UseAppStore = defineStore("app", {
     },
     setSearchFilter (filter) {
       this.searchFilter = filter;
+    },
+    shiftIsTest () {
+      this.isTest = !this.isTest;
     }
   },
 });
