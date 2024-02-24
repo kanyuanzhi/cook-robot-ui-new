@@ -14,7 +14,7 @@
               switch-indicator>
             <q-tab :name="0" :label="$t('dishSelect.base.allDish')" :ripple="false" :class="cuisineTabClass"
                    style="border-top-right-radius: 20px;border-bottom-right-radius: 20px;"/>
-            <q-tab v-for="cuisine in cuisines" :key="cuisine.id" :name="cuisine.id" :label="$t('common.'+cuisine.name)"
+            <q-tab v-for="cuisine in cuisines" :key="cuisine.id" :name="cuisine.id" :label="formatCuisineName(cuisine)"
                    :ripple="false" :class="cuisineTabClass"
                    style="border-top-right-radius: 20px;border-bottom-right-radius: 20px;"/>
             <q-separator/>
@@ -86,6 +86,15 @@ watch(cuisineTab, () => {
   useAppStore.setCuisineTab(cuisineTab.value);
 });
 
+const formatCuisineName = (cuisine) => {
+  if (useAppStore.getLocal() === "cn") {
+    return cuisine.name;
+  } else if (useAppStore.getLocal() === "en") {
+    return cuisine.nameEn;
+  } else if (useAppStore.getLocal() === "tw") {
+    return cuisine.nameTw;
+  }
+};
 
 </script>
 

@@ -1,8 +1,10 @@
 import { cloneDeep } from "lodash/lang";
 import { Notify } from "quasar";
 import { UseSettingStore } from "stores/settingStore";
+import { i18n } from "boot/i18n";
 
 const useSettingStore = UseSettingStore();
+const t = i18n.global.t;
 
 function newStep (type, name) {
   const step = {
@@ -14,8 +16,8 @@ function newStep (type, name) {
 }
 
 export function newIngredientStep (name, shape, weight, slotNumber) {
-  const stepName = "添加" + name + (shape === "" ? "" : "（" + shape + "）") +
-    weight + "克，使用" + slotNumber + "号菜盒";
+  const stepName = t("newStep.add") + name + (shape === "" ? "" : "（" + shape + "）") + t("newStep.space") +
+    weight + t("newStep.ingredientLink") + slotNumber + t("newStep.slot");
   const step =
     newStep("ingredient", stepName);
   step["name"] = name;
@@ -31,16 +33,16 @@ export function newSeasoningStep (seasonings) {
   for (let i = 0, len = seasonings.length; i < len; i++) {
     if (seasonings[i].label === "") continue;
     newSeasonings.push(cloneDeep(seasonings[i]));
-    stepNames.push(seasonings[i].label + seasonings[i].weight + "克");
+    stepNames.push(seasonings[i].label + t("newStep.space") + seasonings[i].weight + t("newStep.kilogram"));
   }
   if (newSeasonings.length === 0) {
     Notify.create({
-      message: "至少添加1种调料",
+      message: t("newStep.addAtLeastOneSeasoningMsg"),
       type: "warning",
     });
     return null;
   }
-  const stepName = "添加" + stepNames.join("，");
+  const stepName = t("newStep.add") + stepNames.join("，");
   const step =
     newStep("seasoning", stepName);
   step["seasonings"] = newSeasonings;
@@ -52,28 +54,28 @@ export function newHeatStep (
   let judgeStr = "";
   switch (judgeType) {
     case 1:
-      judgeStr = "持续监测锅底温度至" + targetTemperature + "℃";
+      judgeStr = t("newStep.watchBottomTemperature") + targetTemperature + "℃";
       break;
     case 2:
       // judgeStr = "持续监测红外温度至" + targetTemperature + "℃";
       judgeStr = (useSettingStore.isNewMachine
-        ? "持续监测温度至"
-        : "持续监测红外温度至") + targetTemperature + "℃";
+        ? t("newStep.watchTemperature")
+        : t("newStep.watchInfraredTemperature")) + targetTemperature + "℃";
       break;
     case 3:
-      judgeStr = "持续" + duration + "秒";
+      judgeStr = t("newStep.last") + duration + t("newStep.second");
       break;
     case 4:
-      judgeStr = "无温度监测";
+      judgeStr = t("newStep.noTemperatureWatch");
       break;
     default:
       Notify.create({
-        message: "温度控制方式错误",
+        message: t("newStep.temperatureJudgeError"),
         type: "negative",
       });
       return;
   }
-  const stepName = "加热" + temperature + "℃，" + judgeStr;
+  const stepName = t("newStep.heat") + temperature + "℃，" + judgeStr;
   const step =
     newStep("heat", stepName);
   step["temperature"] = temperature;
@@ -84,7 +86,8 @@ export function newHeatStep (
 }
 
 export function newStirFryStep (gear, duration) {
-  const stepName = "翻炒" + gear + "档，持续" + duration + "秒";
+  const stepName = t("newStep.stirFry") + gear + t("newStep.stirFryLink")
+    + duration + t("newStep.second");
   const step =
     newStep("stir_fry", stepName);
   step["gear"] = gear;
@@ -93,7 +96,7 @@ export function newStirFryStep (gear, duration) {
 }
 
 export function newWaterStep (weight) {
-  const stepName = "添加纯净水" + weight + "克";
+  const stepName = t("newStep.addWater") + weight + t("newStep.kilogram");
   const step =
     newStep("water", stepName);
   step["weight"] = weight;
@@ -102,7 +105,7 @@ export function newWaterStep (weight) {
 }
 
 export function newOilStep (weight) {
-  const stepName = "添加食用油" + weight + "克";
+  const stepName = t("newStep.addOil") + weight + t("newStep.kilogram");
   const step =
     newStep("oil", stepName);
   step["weight"] = weight;

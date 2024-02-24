@@ -35,6 +35,7 @@ export default {
     "浙菜": "Zhe Jiang",
     "徽菜": "An Hui",
     "其他": "Others",
+    space: " ",
   },
   home: {
     base: {
@@ -49,14 +50,14 @@ export default {
   },
   footer: {
     status: {
-      ing: "Ing",
+      ing: "",
       waiting: "Waiting",
       pauseToAdd: {
         moving: "Add Seasoning Halfway Through: Waiting",
         permit: "Add Seasoning Halfway Through: In progress",
         resetting: "Add Seasoning Halfway Through: Ending",
       },
-      firing: "Stir-fry",
+      firing: "Cooking ",
       washing: "Washing",
       pouring: "Pouring",
       resetting: "Resetting",
@@ -94,7 +95,7 @@ export default {
   },
   dishEdit: {
     base: {
-      title: "Dish Edit"
+      title: "Dish Edit",
     },
     stepList: {
       title: "Step",
@@ -187,7 +188,7 @@ export default {
     heatControl: "HeatingControl",
 
     shutdown: "End",
-    pauseToAdd: "Add seasoning halfway through",
+    pauseToAdd: "Add",
     resume: "Continue",
     doorUnlock: "Unlock",
     prepare: "Prepare",
@@ -205,6 +206,7 @@ export default {
     changeTemperatureWarningMsg: "Temperature adjustment is currently prohibited",
 
     heatingTemperature: "Heating Temperature",
+    taste: "TASTE ",
   },
   systemSettings: {
     base: {
@@ -268,21 +270,21 @@ export default {
       pairFailMsg: "if you fail to get the QR code, please connect the device to the same WiFi as your phone.",
     },
     dataUpdate: {
-      officialDishNumber: "The number of official dishes: ",
-      personalDishNumber: "The number of my dishes: ",
+      officialDishNumber: "Official dishes: ",
+      personalDishNumber: "Personal dishes: ",
       syncDish: "Start Sync",
       syncing: "Syncing...",
       syncFinished: "Sync finished",
 
-      officialDish: "Official dish: ",
-      personalDish: "Personal dish: ",
+      officialDish: "Official dishes: ",
+      personalDish: "Personal dishes: ",
 
-      update: "Update",
-      delete: "Delete",
-      add: "Add",
-      unit: "piece，",
-      localAdd: "Added locally",
-      remoteAdd: "Remotely added",
+      update: "Update ",
+      delete: "Delete ",
+      add: "Add ",
+      unit: ", ",
+      localAdd: "Locally Add ",
+      remoteAdd: "Remotely add ",
     },
     softwareUpdate: {
       name: "Name: ",
@@ -328,30 +330,56 @@ export default {
     original: "Original",
     taste: "Taste",
 
-    dishEdit: "Menu Editing",
+    dishEdit: "Edit",
     startCook: "Start Cook",
-    tasteCustomization: " Taste Customization",
+    tasteCustomization: " Taste",
 
     cookingWarningMsg: "There are currently dishes stir-fried, please wait",
-    add: "Add",
+    add: "Add ",
     unit: "g",
 
     tasteCustomizationDialog: {
-      title: "Taste adjustments(g)",
+      title: " Taste Customize(g)",
     },
 
     tasteModificationPanel: {
-      th: "the",
-      addSeasoning: "Add",
+      th: "",
+      addSeasoning: "",
     },
 
-    tasteWeightInput:{
+    tasteWeightInput: {
       minWarningMsg: "The amount of seasoning should not be less than 0",
     },
 
-    displayFormat:{
+    displayFormat: {
       unit: "g",
       comma: "，",
-    }
+    },
+
+    successMsg: "Operate Successfully",
+  },
+  newStep: {
+    add: "add ",
+    ingredientLink: "g, use ",
+    slot: " box",
+    addAtLeastOneSeasoningMsg: "Add at least one seasoning",
+
+    watchBottomTemperature: "Continuously monitor the temperature at the bottom of the pot to ",
+    watchTemperature: "Continuously monitor temperature to",
+    watchInfraredTemperature: "Continuously monitor infrared temperature to ",
+    last: "last ",
+    second: "s",
+    noTemperatureWatch: "No temperature monitoring",
+    temperatureJudgeError: "Temperature control method error",
+    heat: "Heat ",
+
+    stirFry: "stir-fry ",
+    stirFryLink: " Gear, last ",
+
+    addWater: "add water ",
+    kilogram: "g",
+
+    addOil: "add oil ",
+    space: " ",
   },
 };

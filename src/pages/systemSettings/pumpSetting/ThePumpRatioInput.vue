@@ -7,7 +7,7 @@
     </q-item-section>
     <q-item-section class="col-3">
       <q-item-label class="text-teal-6 text-subtitle2 text-center">
-        <span>{{ seasoning.name }}</span>
+        <span>{{ formatSeasoningName(seasoning) }}</span>
       </q-item-label>
     </q-item-section>
     <q-item-section class="col-6">
@@ -29,8 +29,11 @@
 import { defineProps, ref, watch, defineModel } from "vue";
 import { Notify, Platform } from "quasar";
 import { useI18n } from "vue-i18n";
+import { UseAppStore } from "stores/appStore";
 
 const props = defineProps(["seasoning", "disable", "isWarning"]);
+const useAppStore = UseAppStore();
+
 const { t } = useI18n();
 const onMinus = () => {
   if (props.seasoning.editingRatio <= 0) {
@@ -50,6 +53,16 @@ const onMinus = () => {
 const onPlus = () => {
   // eslint-disable-next-line vue/no-mutating-props
   props.seasoning.editingRatio++;
+};
+
+const formatSeasoningName = (seasoning) => {
+  if (useAppStore.getLocal() === "cn") {
+    return seasoning.name;
+  } else if (useAppStore.getLocal() === "en") {
+    return seasoning.nameEn;
+  } else if (useAppStore.getLocal() === "tw") {
+    return seasoning.nameTw;
+  }
 };
 
 const inputStyle = {

@@ -28,6 +28,7 @@ export default {
     "浙菜": "浙菜",
     "徽菜": "徽菜",
     "其他": "其他",
+    space: "",
   },
   home: {
     base: {
@@ -192,6 +193,7 @@ export default {
     shutdownWarningMsg: "確認終止炒制？",
     changeTemperatureWarningMsg: "未在炒制菜品不允許調整溫度",
     heatingTemperature: "加熱溫度",
+    taste: "口味",
   },
   systemSettings: {
     base: {
@@ -317,11 +319,32 @@ export default {
       addSeasoning: "次加料",
     },
     tasteWeightInput: {
-      minWarningMsg: "調料分量不能小於0",
+      minWarningMsg: "調料份量不能小於0",
     },
     displayFormat: {
       unit: "克",
       comma: "，",
     },
+    successMsg: "操作成功",
+  },
+  newStep: {
+    add: "添加",
+    ingredientLink: "克，使用",
+    slot: "號菜盒",
+    addAtLeastOneSeasoningMsg: "至少添加1種調料",
+    watchBottomTemperature: "持續監測鍋底溫度至",
+    watchTemperature: "持續監測溫度至",
+    watchInfraredTemperature: "持續監測紅外溫度至",
+    last: "持續",
+    second: "秒",
+    noTemperatureWatch: "無溫度監測",
+    temperatureJudgeError: "溫度控制方式錯誤",
+    heat: "加熱",
+    stirFry: "翻炒",
+    stirFryLink: "檔，持續",
+    addWater: "添加純淨水",
+    kilogram: "克",
+    addOil: "添加食用油",
+    space: "",
   },
 };

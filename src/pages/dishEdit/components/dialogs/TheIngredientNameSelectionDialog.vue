@@ -7,12 +7,12 @@
       <q-separator/>
       <q-card-section class="row q-gutter-md">
         <div v-for="type in ingredientTypes" :key="type.id" class="col">
-          <div class="q-pl-md text-weight-bold">{{ type.name }}</div>
+          <div class="q-pl-md text-weight-bold">{{ formatTypeName(type) }}</div>
           <q-list dense>
             <q-scroll-area style="height: 400px; max-width: 300px;">
               <q-item v-for="(ingredient, index) in ingredients[type.id]" :key="ingredient.id" dense clickable v-ripple
-                      @click="onSelect($event, ingredient.name)">
-                <q-item-section>{{ index + 1 + '. ' + ingredient.name }}</q-item-section>
+                      @click="onSelect($event, formatIngredientName(ingredient))">
+                <q-item-section>{{ index + 1 + ". " + formatIngredientName(ingredient) }}</q-item-section>
               </q-item>
             </q-scroll-area>
           </q-list>
@@ -25,8 +25,10 @@
 <script setup>
 import { ref } from "vue";
 import { getAPI } from "src/api";
+import { UseAppStore } from "stores/appStore";
 
 const emit = defineEmits(["select"]);
+const appStore = UseAppStore();
 
 const shown = ref(false);
 
@@ -49,15 +51,35 @@ const show = async () => {
   }
 };
 
+const formatTypeName = (type) => {
+  if (appStore.getLocal() === "cn") {
+    return type.name;
+  } else if (appStore.getLocal() === "en") {
+    return type.nameEn;
+  } else if (appStore.getLocal() === "tw") {
+    return type.nameTw;
+  }
+};
+
+const formatIngredientName = (ingredient) => {
+  if (appStore.getLocal() === "cn") {
+    return ingredient.name;
+  } else if (appStore.getLocal() === "en") {
+    return ingredient.nameEn;
+  } else if (appStore.getLocal() === "tw") {
+    return ingredient.nameTw;
+  }
+};
+
 const onSelect = (e, val) => {
   emit("select", val);
   shown.value = false;
 };
 
 const onHide = () => {
-  ingredients.value = {}
-  ingredientTypes.value = []
-}
+  ingredients.value = {};
+  ingredientTypes.value = [];
+};
 
 defineExpose({
   show,

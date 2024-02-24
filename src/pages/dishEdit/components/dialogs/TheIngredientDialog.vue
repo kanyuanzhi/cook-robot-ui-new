@@ -121,8 +121,10 @@ const onInputFocus = (e, inputName) => {
 const onInputBlur = (e, inputName) => {
 };
 
+import * as OpenCC from 'opencc-js';
+const converter = OpenCC.Converter({ from: 'cn', to: 'tw' });
 const onChange = (input, inputName) => {
-  inputNameToPara[inputName].value = input;
+  inputNameToPara[inputName].value = converter(input);
 };
 
 const theIngredientNameSelectionDialog = ref(null);

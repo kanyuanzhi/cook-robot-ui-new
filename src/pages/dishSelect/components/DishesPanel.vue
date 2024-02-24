@@ -109,6 +109,7 @@ const getDishesData = async () => {
     cuisineFilter: props.cuisineId === 0 ? "" : props.cuisineId,
     isOfficial: useAppStore.dishSourceTab === "official",
     filter: useAppStore.searchFilter,
+    local: useAppStore.getLocal(),
   });
   count.value = data.count;
   pageMax.value = ceil(count.value / pageSize.value, 0);

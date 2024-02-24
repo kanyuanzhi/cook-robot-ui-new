@@ -26,7 +26,7 @@
           </div>
           <template v-if="useControllerStore.isCooking">
             <div class="text-teal-6 text-weight-bold text-subtitle1 text-center q-pt-lg">
-              <span>{{ useControllerStore.currentInstructionInfo.name }}</span>
+              <span>{{ formatInstructionName(useControllerStore.currentInstructionInfo.name) }}</span>
             </div>
             <TheRunningStepsDisplay class="q-my-sm" style="width: 60%"/>
 
@@ -70,14 +70,18 @@
                  @click="openTemperatureControlDialog()"/>
           <q-chip :color="getTemperatureColor(useControllerStore.infraredTemperature)" text-color="white"
                   icon="thermostat">
-            {{ $t('controlDialog.infraredTemperature') }}<span class="text-center" style="width: 40px">{{ useControllerStore.infraredTemperature }}</span>℃
+            {{ $t("controlDialog.infraredTemperature") }}<span class="text-center" style="width: 40px">{{
+              useControllerStore.infraredTemperature
+            }}</span>℃
           </q-chip>
         </div>
         <div v-else class="row justify-center">
           <q-btn :color="getTemperatureColor(useControllerStore.infraredTemperature)" text-color="white"
                  icon="thermostat" class="text-center" rounded unelevated :push="useControllerStore.isCooking"
                  @click="onTemperatureBtnClick">
-            {{ $t('controlDialog.inPotTemperature') }}<span class="text-center" style="width: 40px">{{ useControllerStore.infraredTemperature }}</span>℃
+            {{ $t("controlDialog.inPotTemperature") }}<span class="text-center" style="width: 40px">{{
+              useControllerStore.infraredTemperature
+            }}</span>℃
           </q-btn>
           <!--          <q-btn v-if="useControllerStore.isCooking"-->
           <!--                 :color="getTemperatureColor(useControllerStore.currentHeatingTemperature)" rounded unelevated-->
@@ -91,10 +95,12 @@
             <q-btn class="text-subtitle1" color="teal-6" :label="$t('controlDialog.shutdown')" icon="stop" push
                    @click="shutdown"/>
             <q-separator vertical/>
-            <q-btn v-if="!useControllerStore.isPausing" class="text-subtitle1" color="teal-6" :label="$t('controlDialog.pauseToAdd')"
+            <q-btn v-if="!useControllerStore.isPausing" class="text-subtitle1" color="teal-6"
+                   :label="$t('controlDialog.pauseToAdd')"
                    icon="mdi-shaker" push
                    @click="sendCommand('pause_to_add')"/>
-            <q-btn v-else class="text-subtitle1" color="teal-6" :label="$t('controlDialog.resume')" icon="fa-solid fa-play" push
+            <q-btn v-else class="text-subtitle1" color="teal-6" :label="$t('controlDialog.resume')"
+                   icon="fa-solid fa-play" push
                    @click="sendCommand('resume')"/>
             <!--            <q-btn v-if="!useControllerStore.isPausing" :disable="!useControllerStore.isPausingWithMovingBackFinished"-->
             <!--                   color="teal-6" label="中途加料" icon="mdi-shaker"-->
@@ -107,11 +113,13 @@
                    @click="sendCommand('door_unlock')"/>
           </template>
           <template v-else>
-            <q-btn class="text-subtitle1" :disable="useControllerStore.isRunning" color="teal-6" :label="$t('controlDialog.prepare')"
+            <q-btn class="text-subtitle1" :disable="useControllerStore.isRunning" color="teal-6"
+                   :label="$t('controlDialog.prepare')"
                    icon="restart_alt" push
                    @click="sendCommand('prepare')"/>
             <q-separator vertical/>
-            <q-btn class="text-subtitle1" :disable="useControllerStore.isRunning" color="teal-6" :label="$t('controlDialog.wash')"
+            <q-btn class="text-subtitle1" :disable="useControllerStore.isRunning" color="teal-6"
+                   :label="$t('controlDialog.wash')"
                    icon="mdi-washing-machine" push
                    @click="sendCommand('wash')"/>
             <!--            <q-btn-dropdown class="text-subtitle1" :disable="useControllerStore.isRunning" color="teal-6" label="清洗"-->
@@ -151,7 +159,8 @@
             <q-btn class="text-subtitle1" color="teal-6" :label="$t('controlDialog.doorUnlock')" icon="lock_open" push
                    @click="sendCommand('door_unlock')"/>
             <q-separator vertical/>
-            <q-btn class="text-subtitle1" :disable="useControllerStore.isRunning" color="teal-6" :label="$t('controlDialog.dishOut')"
+            <q-btn class="text-subtitle1" :disable="useControllerStore.isRunning" color="teal-6"
+                   :label="$t('controlDialog.dishOut')"
                    icon="fa-solid fa-plate-wheat"
                    push @click="startDishOut"/>
           </template>
@@ -181,7 +190,7 @@ const useControllerStore = UseControllerStore();
 const useSettingStore = UseSettingStore();
 const router = useRouter();
 
-const {t}=useI18n();
+const { t } = useI18n();
 
 const runningDishDisplay = computed(() => {
   if (useControllerStore.currentCommandName === "wash") return t("controlDialog.washing");
@@ -192,11 +201,12 @@ const runningDishDisplay = computed(() => {
     customUUIDs.push(uuid);
   }
   const customStepsIndex = customUUIDs.indexOf(useAppStore.customStepsUUID);
-  return useAppStore.runningDish.name + "（口味" + (customStepsIndex + 1) + "）";
+  return useAppStore.runningDish.name + "（" + t("controlDialog.taste") + (customStepsIndex + 1) + "）";
 });
 
 const cookingTimeDisplay = computed(() => {
-  return (useControllerStore.isPausing ? t("controlDialog.pausing") : "") + secondsToMMSS(useControllerStore.cookingTime);
+  return (useControllerStore.isPausing ? t("controlDialog.pausing") : "") +
+      secondsToMMSS(useControllerStore.cookingTime);
 });
 
 const getTemperatureColor = (temperature) => {
@@ -213,7 +223,8 @@ const startCook = async () => {
   if (!await checkLiquidSeasoningLevel()) {
     Dialog.create({
       title: t("common.operateConfirmMsg"),
-      message: warningSeasoningName.value.join(t("common.caesuraSign")) + t("controlDialog.seasoningInsufficientWaringMsg"),
+      message: warningSeasoningName.value.join(t("common.caesuraSign")) +
+          t("controlDialog.seasoningInsufficientWaringMsg"),
       ok: {
         push: true,
         color: "teal-6",
@@ -260,7 +271,7 @@ const startDishOut = () => {
 const shutdown = () => {
   Dialog.create({
     title: t("common.operateConfirmMsg"),
-    message:  t("controlDialog.shutdownWarningMsg"),
+    message: t("controlDialog.shutdownWarningMsg"),
     ok: {
       push: true,
       color: "teal-6",
@@ -303,7 +314,8 @@ const checkLiquidSeasoningLevel = async () => {
   }
   if (warningSeasoningName.value.length !== 0) {
     Notify.create({
-      message: warningSeasoningName.value.join(t("common.caesuraSign")) + t("controlDialog.seasoningInsufficientPrompt"),
+      message: warningSeasoningName.value.join(t("common.caesuraSign")) +
+          t("controlDialog.seasoningInsufficientPrompt"),
       type: "warning",
     });
     return false;
@@ -317,6 +329,18 @@ const onTemperatureBtnClick = () => {
     message: t("controlDialog.changeTemperatureWarningMsg"),
     type: "warning",
   });
+};
+
+const formatInstructionName = (name) => {
+  if (useAppStore.getLocal() === "en") {
+    if (name === "启动中") return "Starting";
+    if (name === "停止中") return "Stopping";
+  }
+  if (useAppStore.getLocal() === "tw") {
+    if (name === "启动中") return "啟動中";
+    if (name === "停止中") return "停止中";
+  }
+  return name;
 };
 
 const theHeatingTemperatureControlDialog = ref(null);

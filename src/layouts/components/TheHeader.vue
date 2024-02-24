@@ -6,6 +6,8 @@
       <q-img v-if="useSoftwareInfoStore.isHZModel()" fit="fill" src="~/assets/logo-hz-1.png"
              style="width: 113px; height: 35px;" @click="router.push('/')"/>
       <!--      <q-img v-if="useSoftwareInfoStore.isHZModel()" fit="fill" src="~/assets/logo-hz-2.png" style="width: 113px; height: 35px;" @click="router.push('/')"/>-->
+      <q-btn v-if="route.path ==='/dishSelect'" :label="$t('header.search')" outline rounded color="teal-6" class="q-ml-md"
+             @click="theSearchDialog.show()"/>
     </q-toolbar>
     <q-toolbar class="col-4">
       <q-toolbar-title class="text-teal-9 text-center" @dblclick="useAppStore.shiftIsTest()">{{ useAppStore.pageTitle }}</q-toolbar-title>
@@ -15,8 +17,6 @@
       <!--      <q-btn v-if="Platform.is.win" label="远控设置" outline rounded color="teal-6" @click="setRemoteControlAddress"/>-->
       <q-btn v-if="useAppStore.backBtnShown" :label="$t('header.back')" outline rounded color="teal-6"
              @click="onBackBtnClick"/>
-      <q-btn v-if="route.path ==='/dishSelect'" :label="$t('header.search')" outline rounded color="teal-6"
-             @click="theSearchDialog.show()"/>
       <q-btn v-if="route.path ==='/dishSelect'" :label="$t('header.dishSync')" outline rounded color="teal-6"
              @click="synchronizeDishes"/>
       <q-btn :label="$t('header.withdraw')" outline rounded color="teal-6" @click="sendCommand('withdraw')"/>
@@ -81,7 +81,7 @@ const { t } = useI18n();
 
 const synchronizeDishes = async () => {
   const dialog = $q.dialog({
-    title: "同步中，请稍后...",
+    title: t("systemSettings.dataUpdate.syncing"),
     progress: {
       // spinner: QSpinnerGears,
       color: "teal-6",

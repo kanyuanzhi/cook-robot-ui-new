@@ -25,8 +25,10 @@
 import { useI18n } from "vue-i18n";
 import { ref, watch } from "vue";
 import { UseSettingStore } from "stores/settingStore";
+import { UseAppStore } from "stores/appStore";
 
 const settingStore = UseSettingStore()
+const appStore = UseAppStore();
 
 const { locale } = useI18n({ useScope: "global" });
 const localeOptions = [
@@ -39,6 +41,13 @@ watch(
   () => locale.value,
   (val) => {
     settingStore.setLang(val);
+    if (val === "zh-CN") {
+      appStore.setLocal("cn");
+    } else if (val === "zh-TW") {
+      appStore.setLocal("tw");
+    } else if (val === "en-US") {
+      appStore.setLocal("en");
+    }
   }
 );
 

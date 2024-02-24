@@ -94,15 +94,25 @@ const show = async () => {
   const cuisines = data.cuisines;
   cuisines.forEach(cuisine => {
     cuisineOptions.value.push({
-      label: cuisine.name,
+      label: formatCuisineName(cuisine),
       value: cuisine.id,
     });
-    cuisineMap.value[cuisine.id] = cuisine.name;
+    cuisineMap.value[cuisine.id] = formatCuisineName(cuisine);
   });
   cuisine.value = {
     label: cuisineMap.value[useAppStore.editingDish.cuisine],
     value: useAppStore.editingDish.cuisine,
   };
+};
+
+const formatCuisineName = (cuisine) => {
+  if (useAppStore.getLocal() === "cn") {
+    return cuisine.name;
+  } else if (useAppStore.getLocal() === "en") {
+    return cuisine.nameEn;
+  } else if (useAppStore.getLocal() === "tw") {
+    return cuisine.nameTw;
+  }
 };
 
 const inputNameToPara = {
@@ -136,6 +146,7 @@ const onSubmit = async (flag) => {
     cuisine: cuisine.value.value,
     steps: useAppStore.editingDish.steps,
     uuid: useAppStore.editingDish.uuid,
+    local: useAppStore.getLocal(),
   };
   if (useAppStore.editingDish.uuid === "" || flag === "create") {
     try {

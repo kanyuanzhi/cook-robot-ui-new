@@ -9,8 +9,8 @@
         <q-list separator padding>
           <q-scroll-area style="height: 400px; max-width: 300px;">
             <q-item dense v-for="shape in shapes" :key="shape.id" clickable v-ripple
-                    @click="onSelect($event, shape.name)">
-              <q-item-section>{{ shape.name }}</q-item-section>
+                    @click="onSelect($event, formatShapeName(shape))">
+              <q-item-section>{{ formatShapeName(shape) }}</q-item-section>
             </q-item>
           </q-scroll-area>
         </q-list>
@@ -22,8 +22,10 @@
 <script setup>
 import { ref } from "vue";
 import { getAPI } from "src/api";
+import { UseAppStore } from "stores/appStore";
 
 const emit = defineEmits(["select"]);
+const appStore = UseAppStore();
 
 const shown = ref(false);
 
@@ -36,6 +38,16 @@ const show = async () => {
     shapes.value = shapeData.data.ingredientShapes;
   } catch (e) {
     console.log(e.toString());
+  }
+};
+
+const formatShapeName = (shape) => {
+  if (appStore.getLocal() === "cn") {
+    return shape.name;
+  } else if (appStore.getLocal() === "en") {
+    return shape.nameEn;
+  } else if (appStore.getLocal() === "tw") {
+    return shape.nameTw;
   }
 };
 

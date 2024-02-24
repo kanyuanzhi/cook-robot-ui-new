@@ -145,7 +145,7 @@ const onShow = async () => {
   const uuid = useAppStore.dishDetailsCardUUID;
   const seasoningData = await getAPI("seasoning/list");
   seasoningData.data.seasonings.forEach((seasoning) => {
-    seasoningMap[seasoning.pump] = seasoning.name;
+    seasoningMap[seasoning.pump] = formatSeasoningName(seasoning);
   });
   const dishData = await getAPI("dish/get", { uuid: uuid });
   dish.value = dishData.data.dish;
@@ -225,7 +225,7 @@ const onAddCustomSteps = async () => {
     uuidToSteps.value[uuid] = customSteps;
     customStepsArray.value.push(customSteps);
     customUUIDs.value.push(uuid);
-    Notify.create(message);
+    Notify.create(t("dishDetails.successMsg"));
   } catch (e) {
     console.log(e.toString());
   }
@@ -243,7 +243,7 @@ const onDeleteCustomSteps = async (uuid) => {
     customStepsArray.value.splice(index, 1);
     delete uuidToSteps.value[uuid];
     taste.value = dish.value.uuid;
-    Notify.create(message);
+    Notify.create(t("dishDetails.successMsg"));
   } catch (e) {
     console.log(e.toString());
   }
@@ -256,17 +256,17 @@ const onSaveCustomSteps = async () => {
       for (let j = 0; j < customStepsArray.value[i].length; j++) {
         if (["water", "oil"].includes(customStepsArray.value[i][j].instructionType)) {
           customStepsArray.value[i][j].weight = customStepsArray.value[i][j].editingWeight;
-          customStepsArray.value[i][j].instructionName = "添加" +
+          customStepsArray.value[i][j].instructionName = t("dishDetails.add") +
               seasoningMap[customStepsArray.value[i][j].pumpNumber] +
-              customStepsArray.value[i][j].weight + "克";
+              customStepsArray.value[i][j].weight + t("dishDetails.unit");
         } else if (customStepsArray.value[i][j].instructionType === "seasoning") {
           const stepNames = [];
           for (let k = 0; k < customStepsArray.value[i][j].seasonings.length; k++) {
             customStepsArray.value[i][j].seasonings[k].weight = customStepsArray.value[i][j].seasonings[k].editingWeight;
             stepNames.push(seasoningMap[customStepsArray.value[i][j].seasonings[k].pumpNumber] +
-                customStepsArray.value[i][j].seasonings[k].weight + "克");
+                customStepsArray.value[i][j].seasonings[k].weight + t("dishDetails.unit"));
           }
-          customStepsArray.value[i][j].instructionName = "添加" + stepNames.join("，");
+          customStepsArray.value[i][j].instructionName = t("dishDetails.add") + stepNames.join("，");
         }
       }
       customStepsList[customUUIDs.value[i]] = customStepsArray.value[i];
@@ -275,7 +275,7 @@ const onSaveCustomSteps = async () => {
       id: dish.value.id,
       customStepsList: customStepsList,
     });
-    Notify.create(message);
+    Notify.create(t("dishDetails.successMsg"));
   } catch (e) {
     console.log(e.toString());
   }
@@ -295,12 +295,22 @@ const onEditCustomStepsCancel = () => {
   }
 };
 
+const formatSeasoningName = (seasoning) => {
+  if (useAppStore.getLocal() === "cn") {
+    return seasoning.name;
+  } else if (useAppStore.getLocal() === "en") {
+    return seasoning.nameEn;
+  } else if (useAppStore.getLocal() === "tw") {
+    return seasoning.nameTw;
+  }
+};
+
 const addToPersonals = async () => {
   try {
     const { message } = await postAPI("dish/add-to-personals", {
       id: dish.value.id,
     });
-    Notify.create(message);
+    Notify.create(t("dishDetails.successMsg"));
   } catch (e) {
     console.log(e.toString());
   }

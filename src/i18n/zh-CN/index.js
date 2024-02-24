@@ -35,6 +35,8 @@ export default {
     "浙菜": "浙菜",
     "徽菜": "徽菜",
     "其他": "其他",
+
+    space: "",
   },
   home: {
     base: {
@@ -205,6 +207,8 @@ export default {
     changeTemperatureWarningMsg: "未在炒制菜品不允许调整温度",
 
     heatingTemperature: "加热温度",
+
+    taste: "口味",
   },
   systemSettings: {
     base: {
@@ -345,13 +349,40 @@ export default {
       addSeasoning: "次加料",
     },
 
-    tasteWeightInput:{
+    tasteWeightInput: {
       minWarningMsg: "调料分量不能小于0",
     },
 
-    displayFormat:{
+    displayFormat: {
       unit: "克",
       comma: "，",
-    }
+    },
+
+    successMsg: "操作成功",
+  },
+
+  newStep: {
+    add: "添加",
+    ingredientLink: "克，使用",
+    slot: "号菜盒",
+    addAtLeastOneSeasoningMsg: "至少添加1种调料",
+
+    watchBottomTemperature: "持续监测锅底温度至",
+    watchTemperature: "持续监测温度至",
+    watchInfraredTemperature: "持续监测红外温度至",
+    last: "持续",
+    second: "秒",
+    noTemperatureWatch: "无温度监测",
+    temperatureJudgeError: "温度控制方式错误",
+    heat: "加热",
+
+    stirFry: "翻炒",
+    stirFryLink: "档，持续",
+
+    addWater: "添加纯净水",
+    kilogram: "克",
+
+    addOil: "添加食用油",
+    space: "",
   },
 };

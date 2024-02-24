@@ -10,7 +10,7 @@ export function ingredientFormat (steps) {
       //   "菜仓" + step.slotNumber + "：" + step.name + step.weight + "克")
       ingredientList.push({
         slotNumber: step.slotNumber,
-        format: step.name + step.weight + t("dishDetails.displayFormat.unit")
+        format: step.name + t("common.space") + step.weight + t("dishDetails.displayFormat.unit")
       });
     }
   }
@@ -39,7 +39,7 @@ export function seasoningFormat (steps, seasoningMap) {
   const seasoningList = [];
   for (let pumpNumber in seasoningInfo) {
     if (seasoningInfo[pumpNumber].weight.length !== 0) {
-      seasoningList.push(seasoningInfo[pumpNumber].label +
+      seasoningList.push(seasoningInfo[pumpNumber].label+ t("common.space") +
         sum(seasoningInfo[pumpNumber].weight) + t("dishDetails.displayFormat.unit"));
     }
   }

@@ -31,10 +31,12 @@ import { getSeasonings } from "src/api/seasoning";
 import { newSeasoningStep } from "pages/dishEdit/components/dialogs/newStep";
 import { getAPI } from "src/api";
 import { useI18n } from "vue-i18n";
+import { UseAppStore } from "stores/appStore";
 
 const {t} = useI18n();
 
 const emits = defineEmits(["update", "submit"]);
+const appStore = UseAppStore();
 
 const shown = ref(false);
 
@@ -64,7 +66,7 @@ const show = async (index = -1) => {
     if (![7, 8].includes(seasoning.pump)) {// 7、8号阀为自来水阀，不做调料阀
       seasoningOptionsTpl.push(
           {
-            label: seasoning.name,
+            label: formatSeasoningName(seasoning),
             pumpNumber: seasoning.pump,
           },
       );
@@ -84,13 +86,23 @@ const updateDialogShow = async (step, index) => {
     if (![7, 8].includes(seasoning.pump)) {// 7、8号阀为自来水阀，不做调料阀
       seasoningOptionsTpl.push(
           {
-            label: seasoning.name,
+            label: formatSeasoningName(seasoning),
             pumpNumber: seasoning.pump,
           },
       );
     }
   });
   generateSeasoningOptions();
+};
+
+const formatSeasoningName = (seasoning) => {
+  if (appStore.getLocal() === "cn") {
+    return seasoning.name;
+  } else if (appStore.getLocal() === "en") {
+    return seasoning.nameEn;
+  } else if (appStore.getLocal() === "tw") {
+    return seasoning.nameTw;
+  }
 };
 
 const onAdd = () => {

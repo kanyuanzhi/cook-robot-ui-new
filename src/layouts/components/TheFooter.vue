@@ -39,7 +39,7 @@ const statusBarDisplay = computed(() => {
   if (!useControllerStore.isPausingWithMovingBackFinished) return t("footer.status.pauseToAdd.resetting");
   switch (useControllerStore.currentCommandName) {
     case "cook":
-      return t("footer.status.firing") + useAppStore.runningDish.name + t("footer.ing");
+      return t("footer.status.firing") + useAppStore.runningDish.name + t("footer.status.ing");
     case "wash":
       return t("footer.status.washing");
     case "pour":

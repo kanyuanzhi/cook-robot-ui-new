@@ -5,7 +5,9 @@
 <script setup>
 import Keyboard from "simple-keyboard";
 import "simple-keyboard/build/css/index.css";
-import layout from "simple-keyboard-layouts/build/layouts/chinese";
+import layout_tw from "components/chinese-tw";
+import layout_cn from "simple-keyboard-layouts/build/layouts/chinese";
+import layout_en from "simple-keyboard-layouts/build/layouts/english";
 import { onMounted, ref } from "vue";
 
 const emit = defineEmits(["keyPress", "change", "clear", "enter"]);
@@ -17,6 +19,16 @@ const number = [
   "1 2 3",
   "{bksp} 0 {enter}"];
 
+let layout;
+
+if (useAppStore.getLocal() === "tw") {
+  layout = layout_tw;
+} else if (useAppStore.getLocal() === "en") {
+  layout = layout_en;
+} else {
+  layout = layout_cn;
+}
+
 layout.layout.number = number;
 
 let keyboard = null;
@@ -27,24 +39,24 @@ onMounted(() => {
     preventMouseDownDefault: true,
     ...layout,
     display: {
-      "{bksp}": "删除",
-      "{enter}": "提交",
+      "{bksp}": "del",
+      "{enter}": "enter",
       "{clear}": "clear",
       "{lock}": "caps",
       "{tab}": "tab",
       "{shift}": "shift",
-      "{space}": "空格",
+      "{space}": "space",
     },
   });
   if (props.default) {
     try {
       keyboard.setOptions({
-        layoutName: props.default
+        layoutName: props.default,
       });
-    }catch (e) {
-      console.error( "layoutName wrong")
+    } catch (e) {
+      console.error("layoutName wrong");
       keyboard.setOptions({
-        layoutName: "default"
+        layoutName: "default",
       });
     }
   }
@@ -52,7 +64,7 @@ onMounted(() => {
 
 const keyboardWidth = ref("100%");
 
-function setInputName(name) {
+function setInputName (name) {
   let layoutName;
   if (["weight", "min", "sec"].indexOf(name) > -1) {
     layoutName = "number";
@@ -67,15 +79,15 @@ function setInputName(name) {
   });
 }
 
-function setInput(value, name) {
+function setInput (value, name) {
   keyboard.setInput(value, name);
 }
 
-function onChange(input) {
+function onChange (input) {
   emit("change", input, keyboard.options.inputName);
 }
 
-function onKeyPress(button) {
+function onKeyPress (button) {
   emit("keyPress", button);
   if (button === "{enter}") {
     emit("enter");
@@ -87,7 +99,7 @@ function onKeyPress(button) {
   if (button === "{shift}" || button === "{lock}") handleShift();
 }
 
-function handleShift() {
+function handleShift () {
   let currentLayout = keyboard.options.layoutName;
   let shiftToggle = currentLayout === "default" ? "shift" : "default";
 

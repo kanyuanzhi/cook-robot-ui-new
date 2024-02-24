@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import { cloneDeep } from "lodash/lang";
+import { LocalStorage } from "quasar";
 
 export const UseAppStore = defineStore("app", {
   state: () => ({
@@ -43,9 +44,14 @@ export const UseAppStore = defineStore("app", {
     searchFilter: "", // search filter for dish list
 
     isTest: false,
+
+    local: "cn",
   }),
   getters: {
     // getCurrentDish: (state) => state.runningDish,
+    // getLocal: (state) => {
+    //   return LocalStorage.getItem("local");
+    // },
   },
   actions: {
     showRunningControl () {
@@ -128,6 +134,13 @@ export const UseAppStore = defineStore("app", {
     },
     shiftIsTest () {
       this.isTest = !this.isTest;
+    },
+    setLocal (local) {
+      this.local = local;
+      LocalStorage.set("local", local);
+    },
+    getLocal: (state) => {
+      return LocalStorage.getItem("local");
     }
   },
 });

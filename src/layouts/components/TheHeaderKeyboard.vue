@@ -5,8 +5,10 @@
 <script setup>
 import Keyboard from "simple-keyboard";
 import "simple-keyboard/build/css/index.css";
-import layout from "simple-keyboard-layouts/build/layouts/chinese";
-import { onMounted, onUnmounted, ref } from "vue";
+import layout_tw from "components/chinese-tw";
+import layout_cn from "simple-keyboard-layouts/build/layouts/chinese";
+import layout_en from "simple-keyboard-layouts/build/layouts/english";
+import { onMounted, onUnmounted } from "vue";
 import { UseAppStore } from "stores/appStore";
 
 const useAppStore = UseAppStore();
@@ -19,6 +21,16 @@ const number = [
   "4 5 6",
   "1 2 3",
   "{bksp} 0 {enter}"];
+
+let layout;
+
+if (useAppStore.getLocal() === "tw") {
+  layout = layout_tw;
+} else if (useAppStore.getLocal() === "en") {
+  layout = layout_en;
+} else {
+  layout = layout_cn;
+}
 
 layout.layout.number = number;
 
@@ -42,32 +54,32 @@ onMounted(() => {
   if (props.default) {
     try {
       keyboard.setOptions({
-        layoutName: props.default
+        layoutName: props.default,
       });
-    }catch (e) {
-      console.error( "layoutName wrong")
+    } catch (e) {
+      console.error("layoutName wrong");
       keyboard.setOptions({
-        layoutName: "default"
+        layoutName: "default",
       });
     }
   }
 });
 
-function setInputName(name) {
+function setInputName (name) {
   keyboard.setOptions({
     inputName: name,
   });
 }
 
-function setInput(value, name) {
+function setInput (value, name) {
   keyboard.setInput(value, name);
 }
 
-function onChange(input) {
+function onChange (input) {
   emit("change", input, keyboard.options.inputName);
 }
 
-function onKeyPress(button) {
+function onKeyPress (button) {
   emit("keyPress", button);
   if (button === "{enter}") {
     emit("enter");
@@ -79,7 +91,7 @@ function onKeyPress(button) {
   if (button === "{shift}" || button === "{lock}") handleShift();
 }
 
-function handleShift() {
+function handleShift () {
   let currentLayout = keyboard.options.layoutName;
   let shiftToggle = currentLayout === "default" ? "shift" : "default";
 

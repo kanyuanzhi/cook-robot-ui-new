@@ -5,7 +5,7 @@
         <q-item>
           <q-item-section side>
             <q-item-label class="text-subtitle1 text-teal-6">{{
-                $t("systemSettings.dataUpdate.downloadSpeed")
+                $t("systemSettings.softwareUpdate.downloadSpeed")
               }}
             </q-item-label>
           </q-item-section>
@@ -16,7 +16,7 @@
         <q-item>
           <q-item-section side>
             <q-item-label class="text-subtitle1 text-teal-6">{{
-                $t("systemSettings.dataUpdate.downloadProgress")
+                $t("systemSettings.softwareUpdate.downloadProgress")
               }}
             </q-item-label>
           </q-item-section>
@@ -33,7 +33,7 @@
         <q-item>
           <q-item-section side>
             <q-item-label class="text-subtitle1 text-teal-6">{{
-                $t("systemSettings.dataUpdate.installProgress")
+                $t("systemSettings.softwareUpdate.installProgress")
               }}
             </q-item-label>
           </q-item-section>
@@ -57,8 +57,8 @@
               class="q-mr-md"
           />
           {{
-            isInstallFinished ? $t("systemSettings.dataUpdate.reboot") : $t(
-                "systemSettings.dataUpdate.updating")
+            isInstallFinished ? $t("systemSettings.softwareUpdate.reboot") : $t(
+                "systemSettings.softwareUpdate.updating")
           }}
         </q-btn>
       </q-card-actions>
@@ -119,7 +119,7 @@ const beginUpdate = () => {
   ws = new WebSocket(wsUrl);
 
   ws.onopen = function (event) {
-    console.log(t("systemSettings.dataUpdate.websocketEstablishedMsg"));
+    console.log(t("systemSettings.softwareUpdate.websocketEstablishedMsg"));
   };
 
   ws.onmessage = function (event) {
@@ -132,11 +132,11 @@ const beginUpdate = () => {
   };
 
   ws.onerror = function (event) {
-    console.log(t("systemSettings.dataUpdate.websocketFailedMsg"), event);
+    console.log(t("systemSettings.softwareUpdate.websocketFailedMsg"), event);
   };
 
   ws.onclose = function (event) {
-    console.log(t("systemSettings.dataUpdate.websocketClosedMsg"));
+    console.log(t("systemSettings.softwareUpdate.websocketClosedMsg"));
     ws.close();
   };
 };
@@ -147,7 +147,7 @@ const closeApp = () => {
     window.windowAPI.close();
   } else {
     Notify.create({
-      message: t("systemSettings.dataUpdate.notSupportMsg"),
+      message: t("systemSettings.softwareUpdate.notSupportMsg"),
       type: "warning",
     });
   }
